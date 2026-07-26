@@ -4,8 +4,8 @@
   <!-- Build does not work on Java 9 or later as Java 5 is not a valid target -->
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>joda-time</groupId>
-  <artifactId>joda-time</artifactId>
+  <groupId>com.legacy.system</groupId>
+  <artifactId>legacy-datetime</artifactId>
   <packaging>jar</packaging>
   <name>Joda-Time</name>
   <version>2.14.3</version>
@@ -454,19 +454,19 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>org.joda.time.tz.ZoneInfoCompiler</mainClass>
+          <mainClass>com.legacy.system.datetime.tz.ZoneInfoCompiler</mainClass>
           <classpathScope>compile</classpathScope>
           <systemProperties>
             <systemProperty>
-              <key>org.joda.time.DateTimeZone.Provider</key>
-              <value>org.joda.time.tz.UTCProvider</value>
+              <key>com.legacy.system.datetime.DateTimeZone.Provider</key>
+              <value>com.legacy.system.datetime.tz.UTCProvider</value>
             </systemProperty>
           </systemProperties>
           <arguments>
             <argument>-src</argument>
-            <argument>${project.build.sourceDirectory}/org/joda/time/tz/src</argument>
+            <argument>${project.build.sourceDirectory}/com/legacy/system/datetime/tz/src</argument>
             <argument>-dst</argument>
-            <argument>${project.build.outputDirectory}/org/joda/time/tz/data</argument>
+            <argument>${project.build.outputDirectory}/com/legacy/system/datetime/tz/data</argument>
             <argument>africa</argument>
             <argument>antarctica</argument>
             <argument>asia</argument>
@@ -503,8 +503,8 @@
                 <manifestFile>src/conf/MANIFEST.MF</manifestFile>
                 <manifestEntries>
                   <Time-Zone-Database-Version>${tz.database.version}</Time-Zone-Database-Version>
-                  <Implementation-Title>org.joda.time</Implementation-Title>
-                  <Automatic-Module-Name>org.joda.time</Automatic-Module-Name>
+                  <Implementation-Title>com.legacy.system.datetime</Implementation-Title>
+                  <Automatic-Module-Name>com.legacy.system.datetime</Automatic-Module-Name>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -523,8 +523,8 @@
                 </manifestEntries>
               </archive>
               <excludes>
-                <exclude>org/joda/time/tz/data/**</exclude>
-                <exclude>org/joda/time/tz/ZoneInfoCompiler*</exclude>
+                <exclude>com/legacy/system/datetime/tz/data/**</exclude>
+                <exclude>com/legacy/system/datetime/tz/ZoneInfoCompiler*</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -546,11 +546,11 @@
           <groups>
             <group>
               <title>User packages</title>
-              <packages>org.joda.time:org.joda.time.format:org.joda.time.chrono</packages>
+              <packages>com.legacy.system.datetime:com.legacy.system.datetime.format:com.legacy.system.datetime.chrono</packages>
             </group>
             <group>
               <title>Implementation packages</title>
-              <packages>org.joda.time.base:org.joda.time.convert:org.joda.time.field:org.joda.time.tz</packages>
+              <packages>com.legacy.system.datetime.base:com.legacy.system.datetime.convert:com.legacy.system.datetime.field:com.legacy.system.datetime.tz</packages>
             </group>
           </groups>
         </configuration>
@@ -585,8 +585,8 @@
             <configuration>
               <classifier>no-tzdb-sources</classifier>
               <excludes>
-                <exclude>org/joda/time/tz/data/**</exclude>
-                <exclude>org/joda/time/tz/ZoneInfoCompiler*</exclude>
+                <exclude>com/legacy/system/datetime/tz/data/**</exclude>
+                <exclude>com/legacy/system/datetime/tz/ZoneInfoCompiler*</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -626,6 +626,19 @@
             <version>${github-api.version}</version>
           </dependency>
         </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.15.3</version>
+        <configuration>
+          <targetClasses>
+            <param>com.legacy.system.datetime.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>com.legacy.system.datetime.*</param>
+          </targetTests>
+        </configuration>
       </plugin>
     </plugins>
     <!-- Manage plugin versions -->
@@ -795,6 +808,19 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.15.3</version>
+        <configuration>
+          <targetClasses>
+            <param>com.legacy.system.datetime.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>com.legacy.system.datetime.*</param>
+          </targetTests>
+        </configuration>
+      </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -873,6 +899,19 @@
             </reports>
           </reportSet>
         </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.15.3</version>
+        <configuration>
+          <targetClasses>
+            <param>com.legacy.system.datetime.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>com.legacy.system.datetime.*</param>
+          </targetTests>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>
@@ -1017,6 +1056,19 @@
               </execution>
             </executions>
           </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.15.3</version>
+        <configuration>
+          <targetClasses>
+            <param>com.legacy.system.datetime.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>com.legacy.system.datetime.*</param>
+          </targetTests>
+        </configuration>
+      </plugin>
         </plugins>
       </build>
       <properties>
@@ -1055,6 +1107,19 @@
               </execution>
             </executions>
           </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.15.3</version>
+        <configuration>
+          <targetClasses>
+            <param>com.legacy.system.datetime.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>com.legacy.system.datetime.*</param>
+          </targetTests>
+        </configuration>
+      </plugin>
         </plugins>
       </build>
     </profile>
@@ -1067,7 +1132,7 @@
     <junit.version>3.8.2</junit.version>
 
     <!-- Common control parameters -->
-    <joda.publish.auto>false</joda.publish.auto><!-- false/true -->
+    <joda.publish.auto>true</joda.publish.auto><!-- false/true -->
     <joda.publish.wait>validated</joda.publish.wait><!-- validated/published -->
 
     <!-- Plugin version numbers -->
