@@ -287,7 +287,7 @@ public class ZoneInfoCompiler {
   }
 
   static String parseOptional(String str) {
-    return (str.equals("-")) ? null : str;
+    return str.equals("-") ? null : str;
   }
 
   static int parseTime(String str) {
@@ -995,7 +995,7 @@ public class ZoneInfoCompiler {
     }
 
     void addRule(Rule rule) {
-      if (!(rule.iName.equals(iRules.get(0).iName))) {
+      if (!rule.iName.equals(iRules.get(0).iName)) {
         throw new IllegalArgumentException("Rule name mismatch");
       }
       iRules.add(rule);

@@ -183,18 +183,18 @@ public class DateTimeZoneBuilder {
       case 1:
         // Form 01 (30 bits effective precision)
         v = (v << (32 - 6)) >> (32 - 30);
-        v |= (in.readUnsignedByte()) << 16;
-        v |= (in.readUnsignedByte()) << 8;
-        v |= (in.readUnsignedByte());
+        v |= in.readUnsignedByte() << 16;
+        v |= in.readUnsignedByte() << 8;
+        v |= in.readUnsignedByte();
         return v * 60000L;
 
       case 2:
         // Form 10 (38 bits effective precision)
         long w = (((long) v) << (64 - 6)) >> (64 - 38);
-        w |= (in.readUnsignedByte()) << 24;
-        w |= (in.readUnsignedByte()) << 16;
-        w |= (in.readUnsignedByte()) << 8;
-        w |= (in.readUnsignedByte());
+        w |= in.readUnsignedByte() << 24;
+        w |= in.readUnsignedByte() << 16;
+        w |= in.readUnsignedByte() << 8;
+        w |= in.readUnsignedByte();
         return w * 1000L;
 
       case 3:
@@ -961,7 +961,7 @@ public class DateTimeZoneBuilder {
       return iMillis > other.iMillis
           && (iWallOffset != other.iWallOffset
               || iStandardOffset != other.iStandardOffset
-              || !(iNameKey.equals(other.iNameKey)));
+              || !iNameKey.equals(other.iNameKey));
     }
 
     @Override
@@ -1688,7 +1688,7 @@ public class DateTimeZoneBuilder {
             && Arrays.equals(iStandardOffsets, other.iStandardOffsets)
             && ((iTailZone == null)
                 ? (null == other.iTailZone)
-                : (iTailZone.equals(other.iTailZone)));
+                : iTailZone.equals(other.iTailZone));
       }
       return false;
     }

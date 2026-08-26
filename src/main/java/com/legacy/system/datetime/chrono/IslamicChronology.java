@@ -504,7 +504,7 @@ public final class IslamicChronology extends BasicChronology {
   @Override
   long getApproxMillisAtEpochDividedByTwo() {
     // Epoch 1970-01-01 ISO = 1389-10-22 Islamic
-    return (-MILLIS_YEAR_1) / 2;
+    return -MILLIS_YEAR_1 / 2;
   }
 
   // -----------------------------------------------------------------------

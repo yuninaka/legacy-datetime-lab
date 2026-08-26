@@ -341,7 +341,7 @@ public class FieldUtils {
       return (value % wrapRange) + minValue;
     }
 
-    int remByRange = (-value) % wrapRange;
+    int remByRange = -value % wrapRange;
 
     if (remByRange == 0) {
       return 0 + minValue;

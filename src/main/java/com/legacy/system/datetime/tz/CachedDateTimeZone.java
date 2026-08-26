@@ -145,7 +145,7 @@ public class CachedDateTimeZone extends DateTimeZone {
     Info[] cache = iInfoCache;
     int index = period & cInfoCacheMask;
     Info info = cache[index];
-    if (info == null || (int) ((info.iPeriodStart >> 32)) != period) {
+    if (info == null || (int) (info.iPeriodStart >> 32) != period) {
       info = createInfo(millis);
       cache[index] = info;
     }

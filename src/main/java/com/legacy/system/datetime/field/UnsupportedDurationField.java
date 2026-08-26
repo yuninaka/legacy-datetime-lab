@@ -259,7 +259,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
       if (other.getName() == null) {
         return (getName() == null);
       }
-      return (other.getName().equals(getName()));
+      return other.getName().equals(getName());
     }
     return false;
   }

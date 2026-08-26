@@ -510,7 +510,7 @@ public class DateTimeParserBucket {
       Arrays.sort(array, 0, high);
     } else {
       for (int i = 0; i < high; i++) {
-        for (int j = i; j > 0 && (array[j - 1]).compareTo(array[j]) > 0; j--) {
+        for (int j = i; j > 0 && array[j - 1].compareTo(array[j]) > 0; j--) {
           SavedField t = array[j];
           array[j] = array[j - 1];
           array[j - 1] = t;
