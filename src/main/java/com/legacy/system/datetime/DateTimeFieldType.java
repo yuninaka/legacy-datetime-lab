@@ -522,7 +522,7 @@ public abstract class DateTimeFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public DurationFieldType getDurationType() {
@@ -530,7 +530,7 @@ public abstract class DateTimeFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public DurationFieldType getRangeDurationType() {
@@ -538,7 +538,7 @@ public abstract class DateTimeFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public boolean equals(Object obj) {
@@ -552,7 +552,7 @@ public abstract class DateTimeFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public int hashCode() {
@@ -560,7 +560,7 @@ public abstract class DateTimeFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public DateTimeField getField(Chronology chronology) {

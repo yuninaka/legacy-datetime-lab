@@ -2061,7 +2061,7 @@ public class DateTimeFormatterBuilder {
       if (iMaxFields == 1) {
         return;
       }
-      displayOffset -= hours * (int) DateTimeConstants.MILLIS_PER_HOUR;
+      displayOffset -= hours * DateTimeConstants.MILLIS_PER_HOUR;
       if (displayOffset == 0 && iMinFields <= 1) {
         return;
       }

@@ -233,6 +233,9 @@ public final class ConverterManager {
    *
    * @throws SecurityException if the user does not have the permission
    */
+  // SecurityManager is deprecated for removal (JDK 17+), but the permission check itself
+  // is intentional public-API behavior, not legacy cruft to delete.
+  @SuppressWarnings("removal")
   private void checkAlterInstantConverters() throws SecurityException {
     SecurityManager sm = System.getSecurityManager();
     if (sm != null) {
@@ -321,6 +324,9 @@ public final class ConverterManager {
    *
    * @throws SecurityException if the user does not have the permission
    */
+  // SecurityManager is deprecated for removal (JDK 17+), but the permission check itself
+  // is intentional public-API behavior, not legacy cruft to delete.
+  @SuppressWarnings("removal")
   private void checkAlterPartialConverters() throws SecurityException {
     SecurityManager sm = System.getSecurityManager();
     if (sm != null) {
@@ -410,6 +416,9 @@ public final class ConverterManager {
    *
    * @throws SecurityException if the user does not have the permission
    */
+  // SecurityManager is deprecated for removal (JDK 17+), but the permission check itself
+  // is intentional public-API behavior, not legacy cruft to delete.
+  @SuppressWarnings("removal")
   private void checkAlterDurationConverters() throws SecurityException {
     SecurityManager sm = System.getSecurityManager();
     if (sm != null) {
@@ -497,6 +506,9 @@ public final class ConverterManager {
    *
    * @throws SecurityException if the user does not have the permission
    */
+  // SecurityManager is deprecated for removal (JDK 17+), but the permission check itself
+  // is intentional public-API behavior, not legacy cruft to delete.
+  @SuppressWarnings("removal")
   private void checkAlterPeriodConverters() throws SecurityException {
     SecurityManager sm = System.getSecurityManager();
     if (sm != null) {
@@ -586,6 +598,9 @@ public final class ConverterManager {
    *
    * @throws SecurityException if the user does not have the permission
    */
+  // SecurityManager is deprecated for removal (JDK 17+), but the permission check itself
+  // is intentional public-API behavior, not legacy cruft to delete.
+  @SuppressWarnings("removal")
   private void checkAlterIntervalConverters() throws SecurityException {
     SecurityManager sm = System.getSecurityManager();
     if (sm != null) {

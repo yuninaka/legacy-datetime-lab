@@ -53,10 +53,12 @@ public abstract class BasePeriod extends AbstractPeriod implements ReadablePerio
   /** Serialization version */
   private static final ReadablePeriod DUMMY_PERIOD =
       new AbstractPeriod() {
+        @Override
         public int getValue(int index) {
           return 0;
         }
 
+        @Override
         public PeriodType getPeriodType() {
           return PeriodType.time();
         }
@@ -325,6 +327,7 @@ public abstract class BasePeriod extends AbstractPeriod implements ReadablePerio
    *
    * @return the period type
    */
+  @Override
   public PeriodType getPeriodType() {
     return iType;
   }
@@ -336,6 +339,7 @@ public abstract class BasePeriod extends AbstractPeriod implements ReadablePerio
    * @return the value of the field at the specified index
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     return iValues[index];
   }

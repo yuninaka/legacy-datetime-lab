@@ -222,7 +222,7 @@ public class ZoneInfoCompiler {
 
     short count = 0;
     for (Entry<String, DateTimeZone> entry : zimap.entrySet()) {
-      String id = (String) entry.getKey();
+      String id = entry.getKey();
       if (!idToIndex.containsKey(id)) {
         Short index = Short.valueOf(count);
         idToIndex.put(id, index);
@@ -231,7 +231,7 @@ public class ZoneInfoCompiler {
           throw new InternalError("Too many time zone ids");
         }
       }
-      id = ((DateTimeZone) entry.getValue()).getID();
+      id = entry.getValue().getID();
       if (!idToIndex.containsKey(id)) {
         Short index = Short.valueOf(count);
         idToIndex.put(id, index);

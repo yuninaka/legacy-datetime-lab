@@ -23,6 +23,7 @@ import com.legacy.system.datetime.ReadablePeriod;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Controls the printing and parsing of a time period to and from a string.
@@ -160,7 +161,7 @@ public class PeriodFormatter {
    * @return the new formatter
    */
   public PeriodFormatter withLocale(Locale locale) {
-    if (locale == getLocale() || (locale != null && locale.equals(getLocale()))) {
+    if (Objects.equals(locale, getLocale())) {
       return this;
     }
     return new PeriodFormatter(iPrinter, iParser, locale, iParseType);
@@ -188,7 +189,7 @@ public class PeriodFormatter {
    * @return the new formatter
    */
   public PeriodFormatter withParseType(PeriodType type) {
-    if (type == iParseType) {
+    if (Objects.equals(type, iParseType)) {
       return this;
     }
     return new PeriodFormatter(iPrinter, iParser, iLocale, type);
@@ -237,6 +238,9 @@ public class PeriodFormatter {
    * @param period the period to format, not null
    * @return the printed result
    */
+  // PeriodPrinter.printTo only accepts StringBuffer, not StringBuilder or Appendable;
+  // switching would require a new interface overload across all PeriodPrinter implementers.
+  @SuppressWarnings("JdkObsolete")
   public String print(ReadablePeriod period) {
     checkPrinter();
     checkPeriod(period);

@@ -74,7 +74,7 @@ class ConverterSet {
     // Do all updates on a copy: slots in iSelectEntries must not be
     // updated by multiple threads as this can allow all null slots to be
     // consumed.
-    entries = (Entry[]) entries.clone();
+    entries = entries.clone();
 
     // Add new entry.
     entries[index] = e;

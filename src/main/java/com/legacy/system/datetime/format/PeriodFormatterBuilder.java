@@ -138,7 +138,7 @@ public class PeriodFormatterBuilder {
         fieldFormatter.finish(iFieldFormatters);
       }
     }
-    iFieldFormatters = (FieldFormatter[]) iFieldFormatters.clone();
+    iFieldFormatters = iFieldFormatters.clone();
     return formatter;
   }
 

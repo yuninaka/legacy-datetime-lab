@@ -49,6 +49,7 @@ public abstract class AbstractPeriod implements ReadablePeriod {
    * @return the number of fields supported
    * @since 2.0 (previously on BasePeriod)
    */
+  @Override
   public int size() {
     return getPeriodType().size();
   }
@@ -61,6 +62,7 @@ public abstract class AbstractPeriod implements ReadablePeriod {
    * @throws IndexOutOfBoundsException if the index is invalid
    * @since 2.0 (previously on BasePeriod)
    */
+  @Override
   public DurationFieldType getFieldType(int index) {
     return getPeriodType().getFieldType(index);
   }
@@ -105,6 +107,7 @@ public abstract class AbstractPeriod implements ReadablePeriod {
    * @param type the field type to query, null returns zero
    * @return the value of that field, zero if field not supported
    */
+  @Override
   public int get(DurationFieldType type) {
     int index = indexOf(type);
     if (index == -1) {
@@ -119,6 +122,7 @@ public abstract class AbstractPeriod implements ReadablePeriod {
    * @param type the type to check, may be null which returns false
    * @return true if the field is supported
    */
+  @Override
   public boolean isSupported(DurationFieldType type) {
     return getPeriodType().isSupported(type);
   }
@@ -139,6 +143,7 @@ public abstract class AbstractPeriod implements ReadablePeriod {
    *
    * @return a Period using the same field set and values
    */
+  @Override
   public Period toPeriod() {
     return new Period(this);
   }
@@ -150,6 +155,7 @@ public abstract class AbstractPeriod implements ReadablePeriod {
    *
    * @return a MutablePeriod using the same field set and values
    */
+  @Override
   public MutablePeriod toMutablePeriod() {
     return new MutablePeriod(this);
   }

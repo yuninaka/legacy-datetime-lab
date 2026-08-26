@@ -273,7 +273,7 @@ public abstract class DurationFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public boolean equals(Object obj) {
@@ -287,7 +287,7 @@ public abstract class DurationFieldType implements Serializable {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     @Override
     public int hashCode() {

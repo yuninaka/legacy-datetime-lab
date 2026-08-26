@@ -123,6 +123,7 @@ public interface ReadablePartial extends Comparable<ReadablePartial> {
    * @param partial the object to compare to
    * @return true if equal
    */
+  @Override
   boolean equals(Object partial);
 
   /**
@@ -142,6 +143,7 @@ public interface ReadablePartial extends Comparable<ReadablePartial> {
    *
    * @return a suitable hash code
    */
+  @Override
   int hashCode();
 
   // -----------------------------------------------------------------------
@@ -177,5 +179,6 @@ public interface ReadablePartial extends Comparable<ReadablePartial> {
    *
    * @return the value as an ISO8601 string
    */
+  @Override
   String toString();
 }

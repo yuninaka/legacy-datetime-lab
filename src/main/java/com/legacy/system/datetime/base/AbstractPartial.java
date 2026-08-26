@@ -42,6 +42,10 @@ import com.legacy.system.datetime.format.DateTimeFormatter;
  * @author Stephen Colebourne
  * @since 1.0
  */
+// Comparable<ReadablePartial> (not <AbstractPartial>) is intentional: any two
+// ReadablePartial instances with matching field types are comparable, regardless of
+// concrete subclass (see compareTo's javadoc below).
+@SuppressWarnings("ComparableType")
 public abstract class AbstractPartial implements ReadablePartial, Comparable<ReadablePartial> {
 
   // -----------------------------------------------------------------------

@@ -157,7 +157,7 @@ public class DefaultNameProvider implements NameProvider {
   }
 
   // -----------------------------------------------------------------------
-  private HashMap createCache() {
-    return new HashMap(7);
+  private <K, V> HashMap<K, V> createCache() {
+    return new HashMap<>(7);
   }
 }

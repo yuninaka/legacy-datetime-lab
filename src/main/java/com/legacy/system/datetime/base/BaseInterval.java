@@ -210,6 +210,7 @@ public abstract class BaseInterval extends AbstractInterval
    *
    * @return the chronology
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }
@@ -219,6 +220,7 @@ public abstract class BaseInterval extends AbstractInterval
    *
    * @return the start of the time interval, millisecond instant from 1970-01-01T00:00:00Z
    */
+  @Override
   public long getStartMillis() {
     return iStartMillis;
   }
@@ -228,6 +230,7 @@ public abstract class BaseInterval extends AbstractInterval
    *
    * @return the end of the time interval, millisecond instant from 1970-01-01T00:00:00Z
    */
+  @Override
   public long getEndMillis() {
     return iEndMillis;
   }

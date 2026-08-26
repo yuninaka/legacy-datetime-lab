@@ -129,6 +129,7 @@ public interface ReadablePeriod {
    * @return true if all the field values and types are equal, false if not or the period is null or
    *     of an incorrect type
    */
+  @Override
   boolean equals(Object readablePeriod);
 
   /**
@@ -146,6 +147,7 @@ public interface ReadablePeriod {
    *
    * @return a hash code
    */
+  @Override
   int hashCode();
 
   // -----------------------------------------------------------------------
@@ -157,5 +159,6 @@ public interface ReadablePeriod {
    *
    * @return the value as an ISO8601 style string
    */
+  @Override
   String toString();
 }

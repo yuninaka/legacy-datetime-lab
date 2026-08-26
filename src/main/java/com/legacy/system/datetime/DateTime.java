@@ -555,7 +555,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
   @Override
   public DateTime toDateTime(DateTimeZone zone) {
     zone = DateTimeUtils.getZone(zone);
-    if (getZone() == zone) {
+    if (getZone().equals(zone)) {
       return this;
     }
     return super.toDateTime(zone);
@@ -643,7 +643,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
   public DateTime withZoneRetainFields(DateTimeZone newZone) {
     newZone = DateTimeUtils.getZone(newZone);
     DateTimeZone originalZone = DateTimeUtils.getZone(getZone());
-    if (newZone == originalZone) {
+    if (newZone.equals(originalZone)) {
       return this;
     }
 

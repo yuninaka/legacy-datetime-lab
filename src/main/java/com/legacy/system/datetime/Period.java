@@ -1359,7 +1359,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @since 2.1
    */
   public Period multipliedBy(int scalar) {
-    if (this == ZERO || scalar == 1) {
+    if (this.equals(ZERO) || scalar == 1) {
       return this;
     }
     int[] values = getValues(); // cloned

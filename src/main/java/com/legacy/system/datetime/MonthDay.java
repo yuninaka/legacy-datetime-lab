@@ -432,7 +432,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    */
   @Override
   public DateTimeFieldType[] getFieldTypes() {
-    return (DateTimeFieldType[]) FIELD_TYPES.clone();
+    return FIELD_TYPES.clone();
   }
 
   // -----------------------------------------------------------------------

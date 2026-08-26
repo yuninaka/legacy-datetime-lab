@@ -420,7 +420,7 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    */
   @Override
   public DateTimeFieldType[] getFieldTypes() {
-    return (DateTimeFieldType[]) FIELD_TYPES.clone();
+    return FIELD_TYPES.clone();
   }
 
   // -----------------------------------------------------------------------

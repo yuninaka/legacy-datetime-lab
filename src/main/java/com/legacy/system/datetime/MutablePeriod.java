@@ -419,6 +419,7 @@ public class MutablePeriod extends BasePeriod
 
   // -----------------------------------------------------------------------
   /** Clears the period, setting all values back to zero. */
+  @Override
   public void clear() {
     super.setValues(new int[size()]);
   }
@@ -444,6 +445,7 @@ public class MutablePeriod extends BasePeriod
    * @param value the new value for the field
    * @throws IllegalArgumentException if the field is null or not supported
    */
+  @Override
   public void set(DurationFieldType field, int value) {
     super.setField(field, value);
   }
@@ -485,6 +487,7 @@ public class MutablePeriod extends BasePeriod
    * @param interval the interval to set, null means zero length
    * @throws ArithmeticException if the set exceeds the capacity of the period
    */
+  @Override
   public void setPeriod(ReadableInterval interval) {
     if (interval == null) {
       setPeriod(0L);
@@ -607,6 +610,7 @@ public class MutablePeriod extends BasePeriod
    * @param value the value to add to the field
    * @throws IllegalArgumentException if the field is null or not supported
    */
+  @Override
   public void add(DurationFieldType field, int value) {
     super.addField(field, value);
   }
@@ -619,6 +623,7 @@ public class MutablePeriod extends BasePeriod
    *     this period
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void add(ReadablePeriod period) {
     super.addPeriod(period);
   }
@@ -638,6 +643,7 @@ public class MutablePeriod extends BasePeriod
    *     this period
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void add(
       int years, int months, int weeks, int days, int hours, int minutes, int seconds, int millis) {
     setPeriod(
@@ -658,6 +664,7 @@ public class MutablePeriod extends BasePeriod
    * @param interval the interval to add, null means add nothing
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void add(ReadableInterval interval) {
     if (interval != null) {
       add(interval.toPeriod(getPeriodType()));
@@ -801,6 +808,7 @@ public class MutablePeriod extends BasePeriod
    * @param years the number of years
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setYears(int years) {
     super.setField(DurationFieldType.years(), years);
   }
@@ -812,6 +820,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addYears(int years) {
     super.addField(DurationFieldType.years(), years);
   }
@@ -823,6 +832,7 @@ public class MutablePeriod extends BasePeriod
    * @param months the number of months
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setMonths(int months) {
     super.setField(DurationFieldType.months(), months);
   }
@@ -834,6 +844,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addMonths(int months) {
     super.addField(DurationFieldType.months(), months);
   }
@@ -845,6 +856,7 @@ public class MutablePeriod extends BasePeriod
    * @param weeks the number of weeks
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setWeeks(int weeks) {
     super.setField(DurationFieldType.weeks(), weeks);
   }
@@ -856,6 +868,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addWeeks(int weeks) {
     super.addField(DurationFieldType.weeks(), weeks);
   }
@@ -867,6 +880,7 @@ public class MutablePeriod extends BasePeriod
    * @param days the number of days
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setDays(int days) {
     super.setField(DurationFieldType.days(), days);
   }
@@ -878,6 +892,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addDays(int days) {
     super.addField(DurationFieldType.days(), days);
   }
@@ -889,6 +904,7 @@ public class MutablePeriod extends BasePeriod
    * @param hours the number of hours
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setHours(int hours) {
     super.setField(DurationFieldType.hours(), hours);
   }
@@ -900,6 +916,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addHours(int hours) {
     super.addField(DurationFieldType.hours(), hours);
   }
@@ -911,6 +928,7 @@ public class MutablePeriod extends BasePeriod
    * @param minutes the number of minutes
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setMinutes(int minutes) {
     super.setField(DurationFieldType.minutes(), minutes);
   }
@@ -922,6 +940,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addMinutes(int minutes) {
     super.addField(DurationFieldType.minutes(), minutes);
   }
@@ -933,6 +952,7 @@ public class MutablePeriod extends BasePeriod
    * @param seconds the number of seconds
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setSeconds(int seconds) {
     super.setField(DurationFieldType.seconds(), seconds);
   }
@@ -944,6 +964,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addSeconds(int seconds) {
     super.addField(DurationFieldType.seconds(), seconds);
   }
@@ -955,6 +976,7 @@ public class MutablePeriod extends BasePeriod
    * @param millis the number of millis
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    */
+  @Override
   public void setMillis(int millis) {
     super.setField(DurationFieldType.millis(), millis);
   }
@@ -966,6 +988,7 @@ public class MutablePeriod extends BasePeriod
    * @throws IllegalArgumentException if field is not supported and the value is non-zero
    * @throws ArithmeticException if the addition exceeds the capacity of the period
    */
+  @Override
   public void addMillis(int millis) {
     super.addField(DurationFieldType.millis(), millis);
   }

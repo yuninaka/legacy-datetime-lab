@@ -292,9 +292,9 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
       lastUnitField = loopUnitField;
     }
 
-    iTypes = (DateTimeFieldType[]) types.clone();
+    iTypes = types.clone();
     chronology.validate(this, values);
-    iValues = (int[]) values.clone();
+    iValues = values.clone();
   }
 
   /**
@@ -405,7 +405,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    */
   @Override
   public DateTimeFieldType[] getFieldTypes() {
-    return (DateTimeFieldType[]) iTypes.clone();
+    return iTypes.clone();
   }
 
   // -----------------------------------------------------------------------
@@ -430,7 +430,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    */
   @Override
   public int[] getValues() {
-    return (int[]) iValues.clone();
+    return iValues.clone();
   }
 
   // -----------------------------------------------------------------------

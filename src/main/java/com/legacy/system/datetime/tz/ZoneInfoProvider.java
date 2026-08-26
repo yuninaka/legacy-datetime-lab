@@ -195,7 +195,9 @@ public class ZoneInfoProvider implements Provider {
    * @return the input stream
    * @throws IOException if an error occurs
    */
-  @SuppressWarnings("resource")
+  // AccessController is deprecated for removal (JDK 17+), but the privileged resource
+  // load is intentional (keeps zone-data loading working under a SecurityManager).
+  @SuppressWarnings({"resource", "removal"})
   private InputStream openResource(String name) throws IOException {
     InputStream in;
     if (iFileDir != null) {

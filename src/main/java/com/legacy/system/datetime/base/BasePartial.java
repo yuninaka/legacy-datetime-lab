@@ -229,7 +229,7 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
    */
   @Override
   public int[] getValues() {
-    return (int[]) iValues.clone();
+    return iValues.clone();
   }
 
   /**

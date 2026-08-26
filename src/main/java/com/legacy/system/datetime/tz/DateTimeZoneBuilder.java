@@ -473,9 +473,9 @@ public class DateTimeZoneBuilder {
     static OfYear readFrom(DataInput in) throws IOException {
       return new OfYear(
           (char) in.readUnsignedByte(),
-          (int) in.readUnsignedByte(),
+          in.readUnsignedByte(),
           (int) in.readByte(),
-          (int) in.readUnsignedByte(),
+          in.readUnsignedByte(),
           in.readBoolean(),
           (int) readMillis(in));
     }

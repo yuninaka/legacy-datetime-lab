@@ -439,7 +439,7 @@ public class DateTimeParserBucket {
     int count = iSavedFieldsCount;
     if (iSavedFieldsShared) {
       // clone so that sort does not affect saved state
-      iSavedFields = savedFields = (SavedField[]) iSavedFields.clone();
+      iSavedFields = savedFields = iSavedFields.clone();
       iSavedFieldsShared = false;
     }
     sort(savedFields, count);

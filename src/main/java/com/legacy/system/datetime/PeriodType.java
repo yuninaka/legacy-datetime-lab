@@ -891,7 +891,7 @@ public class PeriodType implements Serializable {
       return false;
     }
     PeriodType other = (PeriodType) obj;
-    return (Arrays.equals(iTypes, other.iTypes));
+    return Arrays.equals(iTypes, other.iTypes);
   }
 
   /**

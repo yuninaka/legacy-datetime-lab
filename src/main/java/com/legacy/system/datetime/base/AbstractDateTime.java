@@ -70,6 +70,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the era
    */
+  @Override
   public int getEra() {
     return getChronology().era().get(getMillis());
   }
@@ -79,6 +80,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the year of era
    */
+  @Override
   public int getCenturyOfEra() {
     return getChronology().centuryOfEra().get(getMillis());
   }
@@ -88,6 +90,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the year of era
    */
+  @Override
   public int getYearOfEra() {
     return getChronology().yearOfEra().get(getMillis());
   }
@@ -97,6 +100,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the year of century
    */
+  @Override
   public int getYearOfCentury() {
     return getChronology().yearOfCentury().get(getMillis());
   }
@@ -106,6 +110,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the year
    */
+  @Override
   public int getYear() {
     return getChronology().year().get(getMillis());
   }
@@ -120,6 +125,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the year of a week based year
    */
+  @Override
   public int getWeekyear() {
     return getChronology().weekyear().get(getMillis());
   }
@@ -129,6 +135,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the month of year
    */
+  @Override
   public int getMonthOfYear() {
     return getChronology().monthOfYear().get(getMillis());
   }
@@ -142,6 +149,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the week of a week based year
    */
+  @Override
   public int getWeekOfWeekyear() {
     return getChronology().weekOfWeekyear().get(getMillis());
   }
@@ -151,6 +159,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the day of year
    */
+  @Override
   public int getDayOfYear() {
     return getChronology().dayOfYear().get(getMillis());
   }
@@ -162,6 +171,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the day of month
    */
+  @Override
   public int getDayOfMonth() {
     return getChronology().dayOfMonth().get(getMillis());
   }
@@ -173,6 +183,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the day of week
    */
+  @Override
   public int getDayOfWeek() {
     return getChronology().dayOfWeek().get(getMillis());
   }
@@ -183,6 +194,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the hour of day
    */
+  @Override
   public int getHourOfDay() {
     return getChronology().hourOfDay().get(getMillis());
   }
@@ -192,6 +204,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the minute of day
    */
+  @Override
   public int getMinuteOfDay() {
     return getChronology().minuteOfDay().get(getMillis());
   }
@@ -201,6 +214,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the minute of hour
    */
+  @Override
   public int getMinuteOfHour() {
     return getChronology().minuteOfHour().get(getMillis());
   }
@@ -210,6 +224,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the second of day
    */
+  @Override
   public int getSecondOfDay() {
     return getChronology().secondOfDay().get(getMillis());
   }
@@ -219,6 +234,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the second of minute
    */
+  @Override
   public int getSecondOfMinute() {
     return getChronology().secondOfMinute().get(getMillis());
   }
@@ -228,6 +244,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the millis of day
    */
+  @Override
   public int getMillisOfDay() {
     return getChronology().millisOfDay().get(getMillis());
   }
@@ -237,6 +254,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    *
    * @return the millis of second
    */
+  @Override
   public int getMillisOfSecond() {
     return getChronology().millisOfSecond().get(getMillis());
   }
@@ -310,6 +328,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    * @return the formatted string, not null
    * @see org.joda.time.format.DateTimeFormat
    */
+  @Override
   public String toString(String pattern) {
     if (pattern == null) {
       return toString();
@@ -325,6 +344,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    * @return the formatted string, not null
    * @see org.joda.time.format.DateTimeFormat
    */
+  @Override
   public String toString(String pattern, Locale locale) throws IllegalArgumentException {
     if (pattern == null) {
       return toString();
