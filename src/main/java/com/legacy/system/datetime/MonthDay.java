@@ -200,7 +200,8 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    * @throws IllegalArgumentException if the monthOfYear or dayOfMonth is invalid for the ISO
    *     chronology
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public static MonthDay fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");

@@ -256,7 +256,8 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    * @throws IllegalArgumentException if the calendar is null
    * @throws IllegalArgumentException if the date is invalid for the ISO chronology
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public static LocalTime fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");

@@ -188,7 +188,8 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @throws IllegalArgumentException if the calendar is null
    * @throws IllegalArgumentException if the year or month is invalid for the ISO chronology
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public static YearMonth fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");

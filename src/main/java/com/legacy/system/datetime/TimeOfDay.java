@@ -141,6 +141,8 @@ public final class TimeOfDay extends BasePartial implements ReadablePartial, Ser
    * @throws IllegalArgumentException if the date is invalid for the ISO chronology
    * @since 1.2
    */
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings("JavaUtilDate")
   public static TimeOfDay fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");

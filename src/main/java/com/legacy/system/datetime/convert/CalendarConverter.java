@@ -84,6 +84,8 @@ final class CalendarConverter extends AbstractConverter
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the object is an invalid type
    */
+  // java.util.Calendar/Date interop is this converter's entire purpose.
+  @SuppressWarnings("JavaUtilDate")
   @Override
   public Chronology getChronology(Object object, DateTimeZone zone) {
     if (object.getClass().getName().endsWith(".BuddhistCalendar")) {
@@ -111,6 +113,8 @@ final class CalendarConverter extends AbstractConverter
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the object is an invalid type
    */
+  // java.util.Calendar/Date interop is this converter's entire purpose.
+  @SuppressWarnings("JavaUtilDate")
   @Override
   public long getInstantMillis(Object object, Chronology chrono) {
     Calendar calendar = (Calendar) object;

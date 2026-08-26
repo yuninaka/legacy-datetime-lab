@@ -235,7 +235,8 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
    * @throws IllegalArgumentException if the calendar is null
    * @throws IllegalArgumentException if the date is invalid for the ISO chronology
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public static LocalDate fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");
@@ -976,7 +977,8 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
    * @return a Date initialised with this date, never null
    * @since 2.0
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public Date toDate() {
     int dom = getDayOfMonth();
     var date = new Date(getYear() - 1900, getMonthOfYear() - 1, dom);
