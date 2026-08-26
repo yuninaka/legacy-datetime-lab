@@ -999,7 +999,7 @@ public class DateTimeFormatterBuilder {
    * @return this DateTimeFormatterBuilder, for chaining
    */
   public DateTimeFormatterBuilder appendTimeZoneName(Map<String, DateTimeZone> parseLookup) {
-    TimeZoneName pp = new TimeZoneName(TimeZoneName.LONG_NAME, parseLookup);
+    var pp = new TimeZoneName(TimeZoneName.LONG_NAME, parseLookup);
     return append0(pp, pp);
   }
 
@@ -1025,7 +1025,7 @@ public class DateTimeFormatterBuilder {
    * @return this DateTimeFormatterBuilder, for chaining
    */
   public DateTimeFormatterBuilder appendTimeZoneShortName(Map<String, DateTimeZone> parseLookup) {
-    TimeZoneName pp = new TimeZoneName(TimeZoneName.SHORT_NAME, parseLookup);
+    var pp = new TimeZoneName(TimeZoneName.SHORT_NAME, parseLookup);
     return append0(pp, pp);
   }
 
@@ -1730,7 +1730,7 @@ public class DateTimeFormatterBuilder {
       Object[] array = innerMap.get(iFieldType);
       if (array == null) {
         validValues = new ConcurrentHashMap<String, Boolean>(32); // use map as no concurrent Set
-        MutableDateTime dt = new MutableDateTime(0L, DateTimeZone.UTC);
+        var dt = new MutableDateTime(0L, DateTimeZone.UTC);
         Property property = dt.property(iFieldType);
         int min = property.getMinimumValueOverall();
         int max = property.getMaximumValueOverall();

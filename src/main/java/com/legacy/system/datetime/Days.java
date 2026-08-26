@@ -86,30 +86,19 @@ public final class Days extends BaseSingleFieldPeriod {
    * @return the instance of Days
    */
   public static Days days(int days) {
-    switch (days) {
-      case 0:
-        return ZERO;
-      case 1:
-        return ONE;
-      case 2:
-        return TWO;
-      case 3:
-        return THREE;
-      case 4:
-        return FOUR;
-      case 5:
-        return FIVE;
-      case 6:
-        return SIX;
-      case 7:
-        return SEVEN;
-      case Integer.MAX_VALUE:
-        return MAX_VALUE;
-      case Integer.MIN_VALUE:
-        return MIN_VALUE;
-      default:
-        return new Days(days);
-    }
+    return switch (days) {
+      case 0 -> ZERO;
+      case 1 -> ONE;
+      case 2 -> TWO;
+      case 3 -> THREE;
+      case 4 -> FOUR;
+      case 5 -> FIVE;
+      case 6 -> SIX;
+      case 7 -> SEVEN;
+      case Integer.MAX_VALUE -> MAX_VALUE;
+      case Integer.MIN_VALUE -> MIN_VALUE;
+      default -> new Days(days);
+    };
   }
 
   // -----------------------------------------------------------------------

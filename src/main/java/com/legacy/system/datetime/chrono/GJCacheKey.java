@@ -48,10 +48,9 @@ class GJCacheKey {
     if (obj == null) {
       return false;
     }
-    if (!(obj instanceof GJCacheKey)) {
+    if (!(obj instanceof GJCacheKey other)) {
       return false;
     }
-    GJCacheKey other = (GJCacheKey) obj;
     if (cutoverInstant == null) {
       if (other.cutoverInstant != null) {
         return false;

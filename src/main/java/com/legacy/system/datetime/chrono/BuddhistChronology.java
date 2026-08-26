@@ -112,7 +112,7 @@ public final class BuddhistChronology extends AssembledChronology {
       // First create without a lower limit.
       chrono = new BuddhistChronology(GJChronology.getInstance(zone, null), null);
       // Impose lower limit and make another BuddhistChronology.
-      DateTime lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
+      var lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
       chrono = new BuddhistChronology(LimitChronology.getInstance(chrono, lowerLimit, null), "");
       BuddhistChronology oldChrono = cCache.putIfAbsent(zone, chrono);
       if (oldChrono != null) {
@@ -182,8 +182,7 @@ public final class BuddhistChronology extends AssembledChronology {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof BuddhistChronology) {
-      BuddhistChronology chrono = (BuddhistChronology) obj;
+    if (obj instanceof BuddhistChronology chrono) {
       return getZone().equals(chrono.getZone());
     }
     return false;

@@ -583,7 +583,7 @@ public class DateTimeFormat {
    * @return the parsed token
    */
   private static String parseToken(String pattern, int[] indexRef) {
-    StringBuilder buf = new StringBuilder();
+    var buf = new StringBuilder();
 
     int i = indexRef[0];
     int length = pattern.length();
@@ -687,7 +687,7 @@ public class DateTimeFormat {
     }
     DateTimeFormatter formatter = cPatternCache.get(pattern);
     if (formatter == null) {
-      DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+      var builder = new DateTimeFormatterBuilder();
       parsePatternTo(builder, pattern);
       formatter = builder.toFormatter();
       if (cPatternCache.size() < PATTERN_CACHE_SIZE) {
@@ -760,7 +760,7 @@ public class DateTimeFormat {
     } else if (timeStyle == NONE) {
       type = DATE;
     }
-    StyleFormatter llf = new StyleFormatter(dateStyle, timeStyle, type);
+    var llf = new StyleFormatter(dateStyle, timeStyle, type);
     return new DateTimeFormatter(llf, llf);
   }
 
@@ -897,10 +897,9 @@ public class DateTimeFormat {
       if (obj == null) {
         return false;
       }
-      if (!(obj instanceof StyleFormatterCacheKey)) {
+      if (!(obj instanceof StyleFormatterCacheKey other)) {
         return false;
       }
-      StyleFormatterCacheKey other = (StyleFormatterCacheKey) obj;
       if (combinedTypeAndStyle != other.combinedTypeAndStyle) {
         return false;
       }

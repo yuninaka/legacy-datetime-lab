@@ -113,8 +113,7 @@ class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter
     if (obj == this) {
       return true;
     }
-    if (obj instanceof InternalPrinterDateTimePrinter) {
-      InternalPrinterDateTimePrinter other = (InternalPrinterDateTimePrinter) obj;
+    if (obj instanceof InternalPrinterDateTimePrinter other) {
       return underlying.equals(other.underlying);
     }
     return false;

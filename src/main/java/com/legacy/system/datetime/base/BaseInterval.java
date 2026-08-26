@@ -195,7 +195,7 @@ public abstract class BaseInterval extends AbstractInterval
     } else if (this instanceof ReadWritableInterval) {
       converter.setInto((ReadWritableInterval) this, interval, chrono);
     } else {
-      MutableInterval mi = new MutableInterval();
+      var mi = new MutableInterval();
       converter.setInto(mi, interval, chrono);
       iChronology = mi.getChronology();
       iStartMillis = mi.getStartMillis();

@@ -229,7 +229,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
     }
     if (date.getTime() < 0) {
       // handle years in era BC
-      GregorianCalendar cal = new GregorianCalendar();
+      var cal = new GregorianCalendar();
       cal.setTime(date);
       return fromCalendarFields(cal);
     }
@@ -555,18 +555,13 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    */
   @Override
   protected DateTimeField getField(int index, Chronology chrono) {
-    switch (index) {
-      case YEAR:
-        return chrono.year();
-      case MONTH_OF_YEAR:
-        return chrono.monthOfYear();
-      case DAY_OF_MONTH:
-        return chrono.dayOfMonth();
-      case MILLIS_OF_DAY:
-        return chrono.millisOfDay();
-      default:
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-    }
+    return switch (index) {
+      case YEAR -> chrono.year();
+      case MONTH_OF_YEAR -> chrono.monthOfYear();
+      case DAY_OF_MONTH -> chrono.dayOfMonth();
+      case MILLIS_OF_DAY -> chrono.millisOfDay();
+      default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
+    };
   }
 
   /**

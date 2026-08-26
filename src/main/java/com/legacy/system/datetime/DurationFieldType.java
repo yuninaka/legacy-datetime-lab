@@ -280,8 +280,8 @@ public abstract class DurationFieldType implements Serializable {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof StandardDurationFieldType) {
-        return iOrdinal == ((StandardDurationFieldType) obj).iOrdinal;
+      if (obj instanceof StandardDurationFieldType other) {
+        return iOrdinal == other.iOrdinal;
       }
       return false;
     }
@@ -298,35 +298,21 @@ public abstract class DurationFieldType implements Serializable {
     public DurationField getField(Chronology chronology) {
       chronology = DateTimeUtils.getChronology(chronology);
 
-      switch (iOrdinal) {
-        case ERAS:
-          return chronology.eras();
-        case CENTURIES:
-          return chronology.centuries();
-        case WEEKYEARS:
-          return chronology.weekyears();
-        case YEARS:
-          return chronology.years();
-        case MONTHS:
-          return chronology.months();
-        case WEEKS:
-          return chronology.weeks();
-        case DAYS:
-          return chronology.days();
-        case HALFDAYS:
-          return chronology.halfdays();
-        case HOURS:
-          return chronology.hours();
-        case MINUTES:
-          return chronology.minutes();
-        case SECONDS:
-          return chronology.seconds();
-        case MILLIS:
-          return chronology.millis();
-        default:
-          // Shouldn't happen.
-          throw new InternalError();
-      }
+      return switch (iOrdinal) {
+        case ERAS -> chronology.eras();
+        case CENTURIES -> chronology.centuries();
+        case WEEKYEARS -> chronology.weekyears();
+        case YEARS -> chronology.years();
+        case MONTHS -> chronology.months();
+        case WEEKS -> chronology.weeks();
+        case DAYS -> chronology.days();
+        case HALFDAYS -> chronology.halfdays();
+        case HOURS -> chronology.hours();
+        case MINUTES -> chronology.minutes();
+        case SECONDS -> chronology.seconds();
+        case MILLIS -> chronology.millis();
+        default -> throw new InternalError(); // Shouldn't happen.
+      };
     }
 
     /**
@@ -335,35 +321,21 @@ public abstract class DurationFieldType implements Serializable {
      * @return the singleton type
      */
     private Object readResolve() {
-      switch (iOrdinal) {
-        case ERAS:
-          return ERAS_TYPE;
-        case CENTURIES:
-          return CENTURIES_TYPE;
-        case WEEKYEARS:
-          return WEEKYEARS_TYPE;
-        case YEARS:
-          return YEARS_TYPE;
-        case MONTHS:
-          return MONTHS_TYPE;
-        case WEEKS:
-          return WEEKS_TYPE;
-        case DAYS:
-          return DAYS_TYPE;
-        case HALFDAYS:
-          return HALFDAYS_TYPE;
-        case HOURS:
-          return HOURS_TYPE;
-        case MINUTES:
-          return MINUTES_TYPE;
-        case SECONDS:
-          return SECONDS_TYPE;
-        case MILLIS:
-          return MILLIS_TYPE;
-        default:
-          // Shouldn't happen.
-          return this;
-      }
+      return switch (iOrdinal) {
+        case ERAS -> ERAS_TYPE;
+        case CENTURIES -> CENTURIES_TYPE;
+        case WEEKYEARS -> WEEKYEARS_TYPE;
+        case YEARS -> YEARS_TYPE;
+        case MONTHS -> MONTHS_TYPE;
+        case WEEKS -> WEEKS_TYPE;
+        case DAYS -> DAYS_TYPE;
+        case HALFDAYS -> HALFDAYS_TYPE;
+        case HOURS -> HOURS_TYPE;
+        case MINUTES -> MINUTES_TYPE;
+        case SECONDS -> SECONDS_TYPE;
+        case MILLIS -> MILLIS_TYPE;
+        default -> this; // Shouldn't happen.
+      };
     }
   }
 }

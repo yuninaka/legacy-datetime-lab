@@ -131,8 +131,8 @@ public class CachedDateTimeZone extends DateTimeZone {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof CachedDateTimeZone) {
-      return iZone.equals(((CachedDateTimeZone) obj).iZone);
+    if (obj instanceof CachedDateTimeZone other) {
+      return iZone.equals(other.iZone);
     }
     return false;
   }
@@ -154,7 +154,7 @@ public class CachedDateTimeZone extends DateTimeZone {
 
   private Info createInfo(long millis) {
     long periodStart = millis & (0xffffffffL << 32);
-    Info info = new Info(iZone, periodStart);
+    var info = new Info(iZone, periodStart);
 
     long end = periodStart | 0xffffffffL;
     Info chain = info;

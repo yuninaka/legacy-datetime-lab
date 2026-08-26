@@ -355,7 +355,7 @@ public abstract class AssembledChronology extends BaseChronology {
   }
 
   private void setFields() {
-    Fields fields = new Fields();
+    var fields = new Fields();
     if (iBase != null) {
       fields.copyFieldsFrom(iBase);
     }

@@ -665,7 +665,7 @@ public class DateTimeFormatter {
    * @return the printed result
    */
   public String print(ReadableInstant instant) {
-    StringBuilder buf = new StringBuilder(requirePrinter().estimatePrintedLength());
+    var buf = new StringBuilder(requirePrinter().estimatePrintedLength());
     try {
       printTo((Appendable) buf, instant);
     } catch (IOException ex) {
@@ -684,7 +684,7 @@ public class DateTimeFormatter {
    * @return the printed result
    */
   public String print(long instant) {
-    StringBuilder buf = new StringBuilder(requirePrinter().estimatePrintedLength());
+    var buf = new StringBuilder(requirePrinter().estimatePrintedLength());
     try {
       printTo((Appendable) buf, instant);
     } catch (IOException ex) {
@@ -702,7 +702,7 @@ public class DateTimeFormatter {
    * @return the printed result
    */
   public String print(ReadablePartial partial) {
-    StringBuilder buf = new StringBuilder(requirePrinter().estimatePrintedLength());
+    var buf = new StringBuilder(requirePrinter().estimatePrintedLength());
     try {
       printTo((Appendable) buf, partial);
     } catch (IOException ex) {
@@ -927,7 +927,7 @@ public class DateTimeFormatter {
         } else if (bucket.getZone() != null) {
           chrono = chrono.withZone(bucket.getZone());
         }
-        DateTime dt = new DateTime(millis, chrono);
+        var dt = new DateTime(millis, chrono);
         if (iZone != null) {
           dt = dt.withZone(iZone);
         }
@@ -972,7 +972,7 @@ public class DateTimeFormatter {
         } else if (bucket.getZone() != null) {
           chrono = chrono.withZone(bucket.getZone());
         }
-        MutableDateTime dt = new MutableDateTime(millis, chrono);
+        var dt = new MutableDateTime(millis, chrono);
         if (iZone != null) {
           dt.setZone(iZone);
         }

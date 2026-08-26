@@ -140,8 +140,7 @@ public class ScaledDurationField extends DecoratedDurationField {
   public boolean equals(Object obj) {
     if (this == obj) {
       return true;
-    } else if (obj instanceof ScaledDurationField) {
-      ScaledDurationField other = (ScaledDurationField) obj;
+    } else if (obj instanceof ScaledDurationField other) {
       return (getWrappedField().equals(other.getWrappedField()))
           && (getType() == other.getType())
           && (iScalar == other.iScalar);

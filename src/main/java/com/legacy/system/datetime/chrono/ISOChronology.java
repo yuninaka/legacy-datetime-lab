@@ -185,8 +185,7 @@ public final class ISOChronology extends AssembledChronology {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof ISOChronology) {
-      ISOChronology chrono = (ISOChronology) obj;
+    if (obj instanceof ISOChronology chrono) {
       return getZone().equals(chrono.getZone());
     }
     return false;

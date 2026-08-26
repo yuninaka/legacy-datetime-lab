@@ -242,7 +242,7 @@ public class PeriodFormatter {
     checkPeriod(period);
 
     PeriodPrinter printer = getPrinter();
-    StringBuffer buf = new StringBuffer(printer.calculatePrintedLength(period, iLocale));
+    var buf = new StringBuffer(printer.calculatePrintedLength(period, iLocale));
     printer.printTo(buf, period, iLocale);
     return buf.toString();
   }
@@ -318,7 +318,7 @@ public class PeriodFormatter {
   public MutablePeriod parseMutablePeriod(String text) {
     checkParser();
 
-    MutablePeriod period = new MutablePeriod(0, iParseType);
+    var period = new MutablePeriod(0, iParseType);
     int newPos = getParser().parseInto(period, text, 0, iLocale);
     if (newPos >= 0) {
       if (newPos >= text.length()) {

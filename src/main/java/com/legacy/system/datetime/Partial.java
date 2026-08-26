@@ -454,7 +454,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
     if (newChronology == getChronology()) {
       return this;
     } else {
-      Partial newPartial = new Partial(newChronology, iTypes, iValues);
+      var newPartial = new Partial(newChronology, iTypes, iValues);
       newChronology.validate(newPartial, iValues);
       return newPartial;
     }
@@ -519,7 +519,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
       System.arraycopy(iValues, i, newValues, i + 1, newValues.length - i - 1);
       // use public constructor to ensure full validation
       // this isn't overly efficient, but is safe
-      Partial newPartial = new Partial(newTypes, newValues, iChronology);
+      var newPartial = new Partial(newTypes, newValues, iChronology);
       iChronology.validate(newPartial, newValues);
       return newPartial;
     }
@@ -548,7 +548,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
       System.arraycopy(iTypes, index + 1, newTypes, index, newTypes.length - index);
       System.arraycopy(iValues, 0, newValues, 0, index);
       System.arraycopy(iValues, index + 1, newValues, index, newValues.length - index);
-      Partial newPartial = new Partial(iChronology, newTypes, newValues);
+      var newPartial = new Partial(iChronology, newTypes, newValues);
       iChronology.validate(newPartial, newValues);
       return newPartial;
     }
@@ -815,7 +815,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    */
   public String toStringList() {
     int size = size();
-    StringBuilder buf = new StringBuilder(20 * size);
+    var buf = new StringBuilder(20 * size);
     buf.append('[');
     for (int i = 0; i < size; i++) {
       if (i > 0) {

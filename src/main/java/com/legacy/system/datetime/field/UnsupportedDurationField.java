@@ -254,8 +254,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
   public boolean equals(Object obj) {
     if (this == obj) {
       return true;
-    } else if (obj instanceof UnsupportedDurationField) {
-      UnsupportedDurationField other = (UnsupportedDurationField) obj;
+    } else if (obj instanceof UnsupportedDurationField other) {
       if (other.getName() == null) {
         return (getName() == null);
       }

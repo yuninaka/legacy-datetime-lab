@@ -200,7 +200,7 @@ public abstract class AbstractDuration implements ReadableDuration {
   @ToString
   public String toString() {
     long millis = getMillis();
-    StringBuffer buf = new StringBuffer();
+    var buf = new StringBuffer();
     buf.append("PT");
     boolean negative = (millis < 0);
     FormatUtils.appendUnpaddedInteger(buf, millis);

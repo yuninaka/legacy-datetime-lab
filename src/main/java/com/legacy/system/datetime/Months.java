@@ -102,40 +102,24 @@ public final class Months extends BaseSingleFieldPeriod {
    * @return the instance of Months
    */
   public static Months months(int months) {
-    switch (months) {
-      case 0:
-        return ZERO;
-      case 1:
-        return ONE;
-      case 2:
-        return TWO;
-      case 3:
-        return THREE;
-      case 4:
-        return FOUR;
-      case 5:
-        return FIVE;
-      case 6:
-        return SIX;
-      case 7:
-        return SEVEN;
-      case 8:
-        return EIGHT;
-      case 9:
-        return NINE;
-      case 10:
-        return TEN;
-      case 11:
-        return ELEVEN;
-      case 12:
-        return TWELVE;
-      case Integer.MAX_VALUE:
-        return MAX_VALUE;
-      case Integer.MIN_VALUE:
-        return MIN_VALUE;
-      default:
-        return new Months(months);
-    }
+    return switch (months) {
+      case 0 -> ZERO;
+      case 1 -> ONE;
+      case 2 -> TWO;
+      case 3 -> THREE;
+      case 4 -> FOUR;
+      case 5 -> FIVE;
+      case 6 -> SIX;
+      case 7 -> SEVEN;
+      case 8 -> EIGHT;
+      case 9 -> NINE;
+      case 10 -> TEN;
+      case 11 -> ELEVEN;
+      case 12 -> TWELVE;
+      case Integer.MAX_VALUE -> MAX_VALUE;
+      case Integer.MIN_VALUE -> MIN_VALUE;
+      default -> new Months(months);
+    };
   }
 
   // -----------------------------------------------------------------------

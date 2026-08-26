@@ -1652,7 +1652,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     millis += (((long) getHours()) * ((long) DateTimeConstants.MILLIS_PER_HOUR));
     millis += (((long) getDays()) * ((long) DateTimeConstants.MILLIS_PER_DAY));
     millis += (((long) getWeeks()) * ((long) DateTimeConstants.MILLIS_PER_WEEK));
-    Period result = new Period(millis, type, ISOChronology.getInstanceUTC());
+    var result = new Period(millis, type, ISOChronology.getInstanceUTC());
     int years = getYears();
     int months = getMonths();
     if (years != 0 || months != 0) {

@@ -160,7 +160,7 @@ public class ISODateTimeFormat {
     Set<DateTimeFieldType> workingFields = new HashSet<DateTimeFieldType>(fields);
     int inputSize = workingFields.size();
     boolean reducedPrec = false;
-    DateTimeFormatterBuilder bld = new DateTimeFormatterBuilder();
+    var bld = new DateTimeFormatterBuilder();
     // date
     if (workingFields.contains(DateTimeFieldType.monthOfYear())) {
       reducedPrec = dateByMonth(bld, workingFields, extended, strictISO);

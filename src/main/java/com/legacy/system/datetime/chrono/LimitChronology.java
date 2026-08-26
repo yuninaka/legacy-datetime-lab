@@ -210,7 +210,7 @@ public final class LimitChronology extends AssembledChronology {
   protected void assemble(Fields fields) {
     // Keep a local cache of converted fields so as not to create redundant
     // objects.
-    HashMap<Object, Object> converted = new HashMap<Object, Object>();
+    var converted = new HashMap<Object, Object>();
 
     // Convert duration fields...
 
@@ -263,7 +263,7 @@ public final class LimitChronology extends AssembledChronology {
     if (converted.containsKey(field)) {
       return (DurationField) converted.get(field);
     }
-    LimitDurationField limitField = new LimitDurationField(field);
+    var limitField = new LimitDurationField(field);
     converted.put(field, limitField);
     return limitField;
   }
@@ -366,7 +366,7 @@ public final class LimitChronology extends AssembledChronology {
 
     @Override
     public String getMessage() {
-      StringBuffer buf = new StringBuffer(85);
+      var buf = new StringBuffer(85);
       buf.append("The");
       String desc = super.getMessage();
       if (desc != null) {

@@ -491,7 +491,7 @@ public abstract class AbstractInterval implements ReadableInterval {
   public String toString() {
     DateTimeFormatter printer = ISODateTimeFormat.dateTime();
     printer = printer.withChronology(getChronology());
-    StringBuffer buf = new StringBuffer(48);
+    var buf = new StringBuffer(48);
     printer.printTo(buf, getStartMillis());
     buf.append('/');
     printer.printTo(buf, getEndMillis());

@@ -131,8 +131,7 @@ public class PreciseDurationField extends BaseDurationField {
   public boolean equals(Object obj) {
     if (this == obj) {
       return true;
-    } else if (obj instanceof PreciseDurationField) {
-      PreciseDurationField other = (PreciseDurationField) obj;
+    } else if (obj instanceof PreciseDurationField other) {
       return (getType() == other.getType()) && (iUnitMillis == other.iUnitMillis);
     }
     return false;

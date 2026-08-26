@@ -180,7 +180,7 @@ public class ZoneInfoCompiler {
     }
 
     ZoneInfoLogger.set(verbose);
-    ZoneInfoCompiler zic = new ZoneInfoCompiler();
+    var zic = new ZoneInfoCompiler();
     zic.compile(outputDir, sources);
   }
 
@@ -218,7 +218,7 @@ public class ZoneInfoCompiler {
 
     // Build the string pool.
     Map<String, Short> idToIndex = new HashMap<String, Short>(zimap.size());
-    TreeMap<Short, String> indexToId = new TreeMap<Short, String>();
+    var indexToId = new TreeMap<Short, String>();
 
     short count = 0;
     for (Entry<String, DateTimeZone> entry : zimap.entrySet()) {
@@ -297,7 +297,7 @@ public class ZoneInfoCompiler {
       return 0;
     }
     DateTimeFormatter p = ISODateTimeFormat.hourMinuteSecondFraction();
-    MutableDateTime mdt = new MutableDateTime(0, getLenientISOChronology());
+    var mdt = new MutableDateTime(0, getLenientISOChronology());
     int pos = 0;
     if (str.startsWith("-")) {
       pos = 1;
@@ -486,7 +486,7 @@ public class ZoneInfoCompiler {
     // write out the standard entries
     for (int i = 0; i < iZones.size(); i++) {
       Zone zone = iZones.get(i);
-      DateTimeZoneBuilder builder = new DateTimeZoneBuilder();
+      var builder = new DateTimeZoneBuilder();
       zone.addToBuilder(builder, iRuleSets);
       DateTimeZone tz = builder.toDateTimeZone(zone.iName, true);
       if (test(tz.getID(), tz)) {
@@ -507,7 +507,7 @@ public class ZoneInfoCompiler {
         System.out.println(
             "Cannot find source zone '" + baseId + "' to link alias '" + alias + "' to");
       } else {
-        DateTimeZoneBuilder builder = new DateTimeZoneBuilder();
+        var builder = new DateTimeZoneBuilder();
         sourceZone.addToBuilder(builder, iRuleSets);
         DateTimeZone revived = builder.toDateTimeZone(alias, true);
         if (test(revived.getID(), revived)) {
@@ -546,13 +546,13 @@ public class ZoneInfoCompiler {
     // write map that unites the time-zone data, pointing aliases and real zones at files
     if (outputDir != null) {
       System.out.println("Writing ZoneInfoMap");
-      File file = new File(outputDir, "ZoneInfoMap");
+      var file = new File(outputDir, "ZoneInfoMap");
       if (!file.getParentFile().exists()) {
         file.getParentFile().mkdirs();
       }
 
       OutputStream out = new FileOutputStream(file);
-      DataOutputStream dout = new DataOutputStream(out);
+      var dout = new DataOutputStream(out);
       try {
         // Sort and filter out any duplicates that match case.
         Map<String, DateTimeZone> zimap =
@@ -572,7 +572,7 @@ public class ZoneInfoCompiler {
     if (ZoneInfoLogger.verbose()) {
       System.out.println("Writing " + tz.getID());
     }
-    File file = new File(outputDir, tz.getID());
+    var file = new File(outputDir, tz.getID());
     if (!file.getParentFile().exists()) {
       file.getParentFile().mkdirs();
     }
@@ -618,7 +618,7 @@ public class ZoneInfoCompiler {
       // another by one or more white space characters.  The white space
       // characters are space, form feed, carriage return, newline, tab,
       // and vertical tab.
-      StringTokenizer st = new StringTokenizer(line, " \f\r\t\u000b");
+      var st = new StringTokenizer(line, " \f\r\t\u000b");
 
       if (Character.isWhitespace(line.charAt(0)) && st.hasMoreTokens()) {
         if (zone != null) {
@@ -641,7 +641,7 @@ public class ZoneInfoCompiler {
       if (st.hasMoreTokens()) {
         String token = st.nextToken().toLowerCase(Locale.ENGLISH);
         if (RULE_LOOKUP.contains(token)) {
-          Rule r = new Rule(st);
+          var r = new Rule(st);
           RuleSet rs = iRuleSets.get(r.iName);
           if (rs == null) {
             rs = new RuleSet(r);
@@ -1036,7 +1036,7 @@ public class ZoneInfoCompiler {
 
       // add a fake rule that predates all other rules to ensure standard=summer (see Namibia)
       if (negativeSave < 0) {
-        Rule rule = new Rule(iRules.get(0));
+        var rule = new Rule(iRules.get(0));
         rule.addRecurring(builder, standardMillis, negativeSave, nameFormat);
       }
 
@@ -1093,7 +1093,7 @@ public class ZoneInfoCompiler {
 
     /*
     public DateTimeZone buildDateTimeZone(Map ruleSets) {
-        DateTimeZoneBuilder builder = new DateTimeZoneBuilder();
+        var builder = new DateTimeZoneBuilder();
         addToBuilder(builder, ruleSets);
         return builder.toDateTimeZone(iName);
     }
