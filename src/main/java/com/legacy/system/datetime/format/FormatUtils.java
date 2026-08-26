@@ -416,7 +416,9 @@ public final class FormatUtils {
         ? 1
         : (value < 100
             ? 2
-            : (value < 1000 ? 3 : (value < 10000 ? 4 : ((int) (Math.log((double) value) / LOG_10) + 1)))));
+            : (value < 1000
+                ? 3
+                : (value < 10000 ? 4 : ((int) (Math.log((double) value) / LOG_10) + 1)))));
   }
 
   static int parseTwoDigits(CharSequence text, int position) {
