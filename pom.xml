@@ -483,9 +483,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <!-- Explicit version to override the java8plus profile's 2.21.0 (predates JUnit 5 support). -->
+        <version>3.2.5</version>
         <configuration>
           <includes>
-            <include>**/TestAllPackages.java</include>
+            <include>**/*Test.java</include>
           </includes>
           <!-- disable fork to allow project to run locally -->
           <forkCount>0</forkCount>
@@ -835,8 +837,8 @@
       <optional>true</optional><!-- mandatory in Scala -->
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
@@ -1129,7 +1131,7 @@
   <properties>
     <!-- Dependencies -->
     <joda-convert.version>1.9.2</joda-convert.version>
-    <junit.version>3.8.2</junit.version>
+    <junit.version>5.10.2</junit.version>
 
     <!-- Common control parameters -->
     <joda.publish.auto>true</joda.publish.auto><!-- false/true -->
@@ -1166,9 +1168,10 @@
     <github-release-plugin.version>1.6.0</github-release-plugin.version>
 
     <!-- Properties for maven-compiler-plugin -->
-    <maven.compiler.compilerVersion>1.5</maven.compiler.compilerVersion>
-    <maven.compiler.source>1.5</maven.compiler.source>
-    <maven.compiler.target>1.5</maven.compiler.target>
+    <!-- NOTE: bumped from 1.5 to 17 for this environment; the original target of Java 5 is
+         no longer accepted by javac 17+ ("Source/Target option 5 is no longer supported"). -->
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.fork>true</maven.compiler.fork>
     <maven.compiler.verbose>false</maven.compiler.verbose>
     <maven.compiler.debug>true</maven.compiler.debug>
