@@ -287,7 +287,6 @@ public abstract class AbstractInstant implements ReadableInstant {
    *
    * @param other a readable instant to check against
    * @return negative value if this is less, 0 if equal, or positive value if greater
-   @Override
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the object type is not supported
    */
@@ -335,7 +334,6 @@ public abstract class AbstractInstant implements ReadableInstant {
   /**
    * Is this instant strictly after the instant passed in comparing solely by millisecond.
    *
-   @Override
    * @param instant an instant to check against, null means now
    * @return true if the instant is strictly after the instant passed in
    */
@@ -369,7 +367,6 @@ public abstract class AbstractInstant implements ReadableInstant {
   /**
    * Is this instant strictly before the instant passed in comparing solely by millisecond.
    *
-   @Override
    * @param instant an instant to check against, null means now
    * @return true if the instant is strictly before the instant passed in
    */
@@ -402,7 +399,6 @@ public abstract class AbstractInstant implements ReadableInstant {
   /**
    * Is this instant equal to the instant passed in comparing solely by millisecond.
    *
-   @Override
    * @param instant an instant to check against, null means now
    * @return true if the instant is equal to the instant passed in
    */

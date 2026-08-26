@@ -341,6 +341,8 @@ public class ZoneInfoCompiler {
   }
 
   /**
+   * Tests the given time zone against the JDK's TimeZone for the given id.
+   *
    * @return false if error.
    */
   static boolean test(String id, DateTimeZone tz) {

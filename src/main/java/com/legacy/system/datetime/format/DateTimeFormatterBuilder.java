@@ -1663,7 +1663,8 @@ public class DateTimeFormatterBuilder {
             year = -year;
           }
           return year % 100;
-        } catch (RuntimeException e) {
+        } catch (@SuppressWarnings("EmptyCatch") RuntimeException e) {
+          // Field not gettable on this partial; fall through to -1 below.
         }
       }
       return -1;

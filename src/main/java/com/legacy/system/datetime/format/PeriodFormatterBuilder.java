@@ -934,6 +934,8 @@ public class PeriodFormatterBuilder {
     void printTo(Writer out, int value) throws IOException;
 
     /**
+     * Parses the affix at the given position.
+     *
      * @param periodStr the period
      * @param position the position
      * @return new position after parsing affix, or ~position of failure
@@ -941,6 +943,8 @@ public class PeriodFormatterBuilder {
     int parse(String periodStr, int position);
 
     /**
+     * Scans for the affix starting at or after the given position.
+     *
      * @param periodStr the period
      * @param position the position
      * @return position where affix starts, or original ~position if not found
@@ -948,6 +952,8 @@ public class PeriodFormatterBuilder {
     int scan(String periodStr, int position);
 
     /**
+     * Gets a copy of the array of affixes.
+     *
      * @return a copy of array of affixes
      */
     String[] getAffixes();
@@ -1746,6 +1752,8 @@ public class PeriodFormatterBuilder {
     }
 
     /**
+     * Gets the field's value for printing.
+     *
      * @return Long.MAX_VALUE if nothing to print, otherwise value
      */
     long getFieldValue(ReadablePeriod period) {
