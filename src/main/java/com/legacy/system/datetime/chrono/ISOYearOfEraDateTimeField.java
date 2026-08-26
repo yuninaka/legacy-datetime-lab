@@ -30,7 +30,7 @@ import com.legacy.system.datetime.field.FieldUtils;
  * @see GJYearOfEraDateTimeField
  * @since 1.0
  */
-class ISOYearOfEraDateTimeField extends DecoratedDateTimeField {
+final class ISOYearOfEraDateTimeField extends DecoratedDateTimeField {
 
   @SuppressWarnings("unused")
   private static final long serialVersionUID = 7037524068969447317L;

@@ -26,7 +26,7 @@ import java.io.Writer;
  * @author Brian S O'Neill
  * @since 1.0
  */
-public class FormatUtils {
+public final class FormatUtils {
 
   private static final double LOG_10 = Math.log(10);
 

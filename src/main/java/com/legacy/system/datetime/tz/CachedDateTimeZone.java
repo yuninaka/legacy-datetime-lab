@@ -27,7 +27,7 @@ import com.legacy.system.datetime.DateTimeZone;
  * @author Brian S O'Neill
  * @since 1.0
  */
-public class CachedDateTimeZone extends DateTimeZone {
+public final class CachedDateTimeZone extends DateTimeZone {
 
   private static final long serialVersionUID = 5472298452022250685L;
 

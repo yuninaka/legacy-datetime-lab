@@ -98,7 +98,9 @@ public class IllegalFieldValueException extends IllegalArgumentException {
   private final String iStringValue;
   private final Number iLowerBound;
   private final Number iUpperBound;
-  private String iMessage;
+  // Not final: prependMessage() below intentionally mutates this after construction
+  // (documented public API since 1.3).
+  private String iMessage; // CSIGNORE
 
   /**
    * Constructor.

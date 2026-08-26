@@ -75,7 +75,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
   // intended to perform calculations throw an UnsupportedOperationException.
 
   @Override
-  public final DurationFieldType getType() {
+  public DurationFieldType getType() {
     return iType;
   }
 

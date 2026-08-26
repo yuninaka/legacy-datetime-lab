@@ -88,8 +88,8 @@ public class PeriodFormat {
    * org.joda.time.format.messages}. This can be added to via the normal classpath resource bundle
    * mechanisms.
    *
-   * <p>You can add your own translation by creating messages_<locale>.properties file and adding it
-   * to the {@code org.joda.time.format.messages} path.
+   * <p>You can add your own translation by creating a {@code messages_<locale>.properties} file and
+   * adding it to the {@code org.joda.time.format.messages} path.
    *
    * <p>Simple example (1 -> singular suffix, not 1 -> plural suffix):
    *

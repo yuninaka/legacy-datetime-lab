@@ -2416,7 +2416,7 @@ public class DateTimeFormatterBuilder {
   }
 
   // -----------------------------------------------------------------------
-  static enum TimeZoneId implements InternalPrinter, InternalParser {
+  enum TimeZoneId implements InternalPrinter, InternalParser {
     INSTANCE;
     private static final List<String> ALL_IDS;
     // groups are "Europe/A", "Europe/B", "Europe/C", etc

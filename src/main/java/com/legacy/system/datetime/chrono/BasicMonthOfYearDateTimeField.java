@@ -166,9 +166,9 @@ class BasicMonthOfYearDateTimeField extends ImpreciseDateTimeField {
   // -----------------------------------------------------------------------
   @Override
   public long add(long instant, long months) {
-    int i_months = (int) months;
-    if (i_months == months) {
-      return add(instant, i_months);
+    int iMonths = (int) months;
+    if (iMonths == months) {
+      return add(instant, iMonths);
     }
 
     // Copied from add(long, int) and modified slightly:
@@ -201,16 +201,16 @@ class BasicMonthOfYearDateTimeField extends ImpreciseDateTimeField {
       throw new IllegalArgumentException("Magnitude of add amount is too large: " + months);
     }
 
-    int i_yearToUse = (int) yearToUse;
-    int i_monthToUse = (int) monthToUse;
+    int iYearToUse = (int) yearToUse;
+    int iMonthToUse = (int) monthToUse;
 
     int dayToUse = iChronology.getDayOfMonth(instant, thisYear, thisMonth);
-    int maxDay = iChronology.getDaysInYearMonth(i_yearToUse, i_monthToUse);
+    int maxDay = iChronology.getDaysInYearMonth(iYearToUse, iMonthToUse);
     if (dayToUse > maxDay) {
       dayToUse = maxDay;
     }
 
-    long datePart = iChronology.getYearMonthDayMillis(i_yearToUse, i_monthToUse, dayToUse);
+    long datePart = iChronology.getYearMonthDayMillis(iYearToUse, iMonthToUse, dayToUse);
     return datePart + timePart;
   }
 

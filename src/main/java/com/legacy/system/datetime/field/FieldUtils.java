@@ -29,7 +29,7 @@ import java.math.RoundingMode;
  * @author Stephen Colebourne
  * @since 1.0
  */
-public class FieldUtils {
+public final class FieldUtils {
 
   /** Restricted constructor. */
   private FieldUtils() {

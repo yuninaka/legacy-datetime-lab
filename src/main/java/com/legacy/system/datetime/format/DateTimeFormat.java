@@ -879,7 +879,7 @@ public class DateTimeFormat {
     private final int combinedTypeAndStyle;
     private final Locale locale;
 
-    public StyleFormatterCacheKey(int iType, int iDateStyle, int iTimeStyle, Locale locale) {
+    StyleFormatterCacheKey(int iType, int iDateStyle, int iTimeStyle, Locale locale) {
       this.locale = locale;
       // keeping old key generation logic of shifting type and style
       this.combinedTypeAndStyle = iType + (iDateStyle << 4) + (iTimeStyle << 8);

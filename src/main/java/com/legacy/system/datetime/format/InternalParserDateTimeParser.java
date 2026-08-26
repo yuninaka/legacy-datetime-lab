@@ -21,7 +21,7 @@ package com.legacy.system.datetime.format;
  * @author Stephen Colebourne
  * @since 2.4
  */
-class InternalParserDateTimeParser implements DateTimeParser, InternalParser {
+final class InternalParserDateTimeParser implements DateTimeParser, InternalParser {
 
   private final InternalParser underlying;
 

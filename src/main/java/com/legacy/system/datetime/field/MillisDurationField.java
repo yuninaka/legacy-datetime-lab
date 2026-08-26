@@ -67,7 +67,7 @@ public final class MillisDurationField extends DurationField implements Serializ
    * @return true always
    */
   @Override
-  public final boolean isPrecise() {
+  public boolean isPrecise() {
     return true;
   }
 
@@ -77,7 +77,7 @@ public final class MillisDurationField extends DurationField implements Serializ
    * @return one always
    */
   @Override
-  public final long getUnitMillis() {
+  public long getUnitMillis() {
     return 1;
   }
 

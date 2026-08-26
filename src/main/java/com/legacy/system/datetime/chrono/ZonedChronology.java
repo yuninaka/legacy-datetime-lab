@@ -569,12 +569,12 @@ public final class ZonedChronology extends AssembledChronology {
     }
 
     @Override
-    public final DurationField getDurationField() {
+    public DurationField getDurationField() {
       return iDurationField;
     }
 
     @Override
-    public final DurationField getRangeDurationField() {
+    public DurationField getRangeDurationField() {
       return iRangeDurationField;
     }
 
@@ -591,7 +591,7 @@ public final class ZonedChronology extends AssembledChronology {
     }
 
     @Override
-    public final DurationField getLeapDurationField() {
+    public DurationField getLeapDurationField() {
       return iLeapDurationField;
     }
 

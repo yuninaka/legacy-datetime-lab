@@ -28,7 +28,7 @@ import java.util.Locale;
  * @author Stephen Colebourne
  * @since 2.4
  */
-class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter {
+final class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter {
 
   private final InternalPrinter underlying;
 

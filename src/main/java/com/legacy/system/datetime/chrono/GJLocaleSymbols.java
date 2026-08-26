@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Brian S O'Neill
  * @since 1.0
  */
-class GJLocaleSymbols {
+final class GJLocaleSymbols {
 
   private static ConcurrentMap<Locale, GJLocaleSymbols> cCache =
       new ConcurrentHashMap<Locale, GJLocaleSymbols>();
