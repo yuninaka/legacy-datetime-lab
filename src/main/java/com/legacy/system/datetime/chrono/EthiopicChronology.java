@@ -132,7 +132,7 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
       synchronized (chronos) {
         chrono = chronos[minDaysInFirstWeek - 1];
         if (chrono == null) {
-          if (zone == DateTimeZone.UTC) {
+          if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
             chrono = new EthiopicChronology(null, null, minDaysInFirstWeek);
             // Impose lower limit and make another EthiopicChronology.
@@ -193,7 +193,7 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);

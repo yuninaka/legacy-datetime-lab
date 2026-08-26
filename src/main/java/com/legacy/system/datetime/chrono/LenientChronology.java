@@ -63,7 +63,7 @@ public final class LenientChronology extends AssembledChronology {
   @Override
   public Chronology withUTC() {
     if (iWithUTC == null) {
-      if (getZone() == DateTimeZone.UTC) {
+      if (getZone().equals(DateTimeZone.UTC)) {
         iWithUTC = this;
       } else {
         iWithUTC = LenientChronology.getInstance(getBase().withUTC());
@@ -77,10 +77,10 @@ public final class LenientChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == DateTimeZone.UTC) {
+    if (zone.equals(DateTimeZone.UTC)) {
       return withUTC();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return LenientChronology.getInstance(getBase().withZone(zone));

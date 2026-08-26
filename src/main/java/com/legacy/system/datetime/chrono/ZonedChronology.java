@@ -101,7 +101,7 @@ public final class ZonedChronology extends AssembledChronology {
     if (zone == getParam()) {
       return this;
     }
-    if (zone == DateTimeZone.UTC) {
+    if (zone.equals(DateTimeZone.UTC)) {
       return getBase();
     }
     return new ZonedChronology(getBase(), zone);

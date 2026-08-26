@@ -186,7 +186,7 @@ public final class GJChronology extends AssembledChronology {
     var cacheKey = new GJCacheKey(zone, cutoverInstant, minDaysInFirstWeek);
     GJChronology chrono = cCache.get(cacheKey);
     if (chrono == null) {
-      if (zone == DateTimeZone.UTC) {
+      if (zone.equals(DateTimeZone.UTC)) {
         chrono =
             new GJChronology(
                 JulianChronology.getInstance(zone, minDaysInFirstWeek),
@@ -294,7 +294,7 @@ public final class GJChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone, iCutoverInstant, getMinimumDaysInFirstWeek());

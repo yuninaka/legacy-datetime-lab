@@ -323,7 +323,7 @@ public abstract class BaseSingleFieldPeriod
       return false;
     }
     ReadablePeriod other = (ReadablePeriod) period;
-    return (other.getPeriodType() == getPeriodType() && other.getValue(0) == getValue());
+    return other.getPeriodType().equals(getPeriodType()) && other.getValue(0) == getValue();
   }
 
   /**

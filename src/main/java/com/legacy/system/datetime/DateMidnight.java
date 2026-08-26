@@ -390,7 +390,7 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
   public DateMidnight withZoneRetainFields(DateTimeZone newZone) {
     newZone = DateTimeUtils.getZone(newZone);
     DateTimeZone originalZone = DateTimeUtils.getZone(getZone());
-    if (newZone == originalZone) {
+    if (newZone.equals(originalZone)) {
       return this;
     }
 

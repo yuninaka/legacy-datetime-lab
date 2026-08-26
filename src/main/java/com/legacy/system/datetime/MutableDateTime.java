@@ -583,7 +583,7 @@ public class MutableDateTime extends BaseDateTime
   public void setZone(DateTimeZone newZone) {
     newZone = DateTimeUtils.getZone(newZone);
     Chronology chrono = getChronology();
-    if (chrono.getZone() != newZone) {
+    if (!chrono.getZone().equals(newZone)) {
       setChronology(chrono.withZone(newZone)); // set via this class not super
     }
   }
@@ -603,7 +603,7 @@ public class MutableDateTime extends BaseDateTime
   public void setZoneRetainFields(DateTimeZone newZone) {
     newZone = DateTimeUtils.getZone(newZone);
     DateTimeZone originalZone = DateTimeUtils.getZone(getZone());
-    if (newZone == originalZone) {
+    if (newZone.equals(originalZone)) {
       return;
     }
 

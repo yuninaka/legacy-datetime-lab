@@ -131,11 +131,11 @@ public final class LimitChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
 
-    if (zone == DateTimeZone.UTC && iWithUTC != null) {
+    if (zone.equals(DateTimeZone.UTC) && iWithUTC != null) {
       return iWithUTC;
     }
 
@@ -155,7 +155,7 @@ public final class LimitChronology extends AssembledChronology {
 
     LimitChronology chrono = getInstance(getBase().withZone(zone), lowerLimit, upperLimit);
 
-    if (zone == DateTimeZone.UTC) {
+    if (zone.equals(DateTimeZone.UTC)) {
       iWithUTC = chrono;
     }
 

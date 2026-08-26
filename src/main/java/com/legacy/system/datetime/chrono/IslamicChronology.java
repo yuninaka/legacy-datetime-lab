@@ -207,7 +207,7 @@ public final class IslamicChronology extends BasicChronology {
       synchronized (chronos) {
         chrono = chronos[leapYears.index];
         if (chrono == null) {
-          if (zone == DateTimeZone.UTC) {
+          if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
             chrono = new IslamicChronology(null, null, leapYears);
             // Impose lower limit and make another IslamicChronology.
@@ -274,7 +274,7 @@ public final class IslamicChronology extends BasicChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);

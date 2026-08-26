@@ -29,6 +29,7 @@ import com.legacy.system.datetime.ReadablePartial;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Controls the printing and parsing of a datetime to and from a string.
@@ -225,7 +226,7 @@ public class DateTimeFormatter {
    * @return the new formatter
    */
   public DateTimeFormatter withLocale(Locale locale) {
-    if (locale == getLocale() || (locale != null && locale.equals(getLocale()))) {
+    if (Objects.equals(locale, getLocale())) {
       return this;
     }
     return new DateTimeFormatter(
@@ -352,7 +353,7 @@ public class DateTimeFormatter {
    * @return the new formatter
    */
   public DateTimeFormatter withZone(DateTimeZone zone) {
-    if (iZone == zone) {
+    if (Objects.equals(iZone, zone)) {
       return this;
     }
     return new DateTimeFormatter(

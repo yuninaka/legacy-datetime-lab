@@ -63,7 +63,7 @@ public final class StrictChronology extends AssembledChronology {
   @Override
   public Chronology withUTC() {
     if (iWithUTC == null) {
-      if (getZone() == DateTimeZone.UTC) {
+      if (getZone().equals(DateTimeZone.UTC)) {
         iWithUTC = this;
       } else {
         iWithUTC = StrictChronology.getInstance(getBase().withUTC());
@@ -77,10 +77,10 @@ public final class StrictChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == DateTimeZone.UTC) {
+    if (zone.equals(DateTimeZone.UTC)) {
       return withUTC();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return StrictChronology.getInstance(getBase().withZone(zone));

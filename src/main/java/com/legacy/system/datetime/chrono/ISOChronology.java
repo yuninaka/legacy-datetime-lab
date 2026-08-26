@@ -129,7 +129,7 @@ public final class ISOChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);
@@ -154,7 +154,7 @@ public final class ISOChronology extends AssembledChronology {
 
   @Override
   protected void assemble(Fields fields) {
-    if (getBase().getZone() == DateTimeZone.UTC) {
+    if (getBase().getZone().equals(DateTimeZone.UTC)) {
       // Use zero based century and year of century.
       fields.centuryOfEra =
           new DividedDateTimeField(

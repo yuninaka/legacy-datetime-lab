@@ -134,7 +134,7 @@ public final class CopticChronology extends BasicFixedMonthChronology {
       synchronized (chronos) {
         chrono = chronos[minDaysInFirstWeek - 1];
         if (chrono == null) {
-          if (zone == DateTimeZone.UTC) {
+          if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
             chrono = new CopticChronology(null, null, minDaysInFirstWeek);
             // Impose lower limit and make another CopticChronology.
@@ -197,7 +197,7 @@ public final class CopticChronology extends BasicFixedMonthChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);

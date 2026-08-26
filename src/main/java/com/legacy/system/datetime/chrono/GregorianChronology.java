@@ -125,7 +125,7 @@ public final class GregorianChronology extends BasicGJChronology {
       synchronized (chronos) {
         chrono = chronos[minDaysInFirstWeek - 1];
         if (chrono == null) {
-          if (zone == DateTimeZone.UTC) {
+          if (zone.equals(DateTimeZone.UTC)) {
             chrono = new GregorianChronology(null, null, minDaysInFirstWeek);
           } else {
             chrono = getInstance(DateTimeZone.UTC, minDaysInFirstWeek);
@@ -181,7 +181,7 @@ public final class GregorianChronology extends BasicGJChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);
