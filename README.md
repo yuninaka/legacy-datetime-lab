@@ -20,13 +20,18 @@ Claude Codeが復元した仕様書はこちら: [SPECIFICATION.md](./SPECIFICAT
 
 ## 2. 実験構成・リポジトリ履歴
 
-本リポジトリは、検証の再現性と透明性を保つため、以下の明確な2段階のコミット構成をとっています。
+本リポジトリは、**Joda-Time の実際の Git リポジトリ**（CVSリポジトリ時代からの開発履歴を含む、本家 [JodaOrg/joda-time](https://github.com/JodaOrg/joda-time) 由来）をベースとし、`SPECIFICATION.md` および既存テストコードを全削除した状態を検証のスタート地点としています。今回の実験は、その履歴の上に主要コミットを積み重ねる形で構成しています。
 
-- **`Initial commit of legacy datetime platform` (`648646f3`)**
-  - **初期状態**: Joda-Time 2.14.3 をベースにしたレガシーコード基盤。
-  - **条件**: 仕様書なし、既存テストコード全削除済み、一部に意図的な不具合（トラップ仕様）を付与。
-- **`cbb00f17` (Claude Code による生成と環境補正)**
-  - Claude Code が自律的にコード解析を行い生成した成果物（`SPECIFICATION.md`、JUnit 5 テストコード 186 件、`pom.xml` 調整）。
+### 実験の主要コミット
+
+| コミット | 位置づけ | 内容 |
+| :--- | :--- | :--- |
+| [`648646f3`](https://github.com/yuninaka/legacy-datetime-lab/commit/648646f3) | ベースライン | Joda-Time 2.14.3 をベースにしたレガシーコード基盤。仕様書なし、既存テストコード全削除済み。 |
+| [`cbb00f17`](https://github.com/yuninaka/legacy-datetime-lab/commit/cbb00f17) | Step 1 | Claude Code による仕様復元（`SPECIFICATION.md`）＆初代テスト自動生成（JUnit 5、186件）。 |
+| [`1bd756e3`](https://github.com/yuninaka/legacy-datetime-lab/commit/1bd756e3) | Step 2 | JaCoCo / PIT のフィードバックによるテスト補強（186件 → 530件、Line Coverage 93.65% 達成）。 |
+| [`11f625b5`](https://github.com/yuninaka/legacy-datetime-lab/commit/11f625b5) | Step 3 | ドキュメント・導線整備（実測値の記録、SPECIFICATION.mdへのリンク整備）。 |
+
+このように、Joda-Time の実開発履歴の上に、今回の実験を **3 Step の主要コミット**として載せる形で構成しています（各Step間には、上記表に含まれない細かな修正コミットも存在します）。
 
 ---
 
