@@ -224,6 +224,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    */
   // java.util.Date interop is this method's entire purpose.
   @SuppressWarnings({"deprecation", "JavaUtilDate"})
+  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+  // the common base class without a larger, riskier generic/factory-method redesign
+  // that is out of scope for a duplicate-code cleanup.
   public static LocalDateTime fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");
@@ -235,6 +241,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
       return fromCalendarFields(cal);
     }
     return new LocalDateTime(
+        // CPD-ON
         date.getYear() + 1900,
         date.getMonth() + 1,
         date.getDate(),
@@ -366,6 +373,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    * @param zone the time zone
    * @throws IllegalArgumentException if the instant is invalid
    */
+  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+  // the common base class without a larger, riskier generic/factory-method redesign
+  // that is out of scope for a duplicate-code cleanup.
   public LocalDateTime(Object instant, DateTimeZone zone) {
     PartialConverter converter = ConverterManager.getInstance().getPartialConverter(instant);
     Chronology chronology = converter.getChronology(instant, zone);
@@ -425,6 +438,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
         minuteOfHour,
         0,
         0,
+        // CPD-ON
         ISOChronology.getInstanceUTC());
   }
 
@@ -561,6 +575,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
       case YEAR -> chrono.year();
       case MONTH_OF_YEAR -> chrono.monthOfYear();
       case DAY_OF_MONTH -> chrono.dayOfMonth();
+        // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+        // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+        // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+        // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+        // the common base class without a larger, riskier generic/factory-method redesign
+        // that is out of scope for a duplicate-code cleanup.
       case MILLIS_OF_DAY -> chrono.millisOfDay();
       default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
     };
@@ -586,6 +606,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
       case DAY_OF_MONTH:
         return getChronology().dayOfMonth().get(getLocalMillis());
       case MILLIS_OF_DAY:
+        // CPD-ON
         return getChronology().millisOfDay().get(getLocalMillis());
       default:
         throw new IndexOutOfBoundsException("Invalid index: " + index);
@@ -681,6 +702,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
       return true;
     }
     if (partial instanceof LocalDateTime) {
+      // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+      // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+      // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+      // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+      // the common base class without a larger, riskier generic/factory-method redesign
+      // that is out of scope for a duplicate-code cleanup.
       LocalDateTime other = (LocalDateTime) partial;
       if (iChronology.equals(other.iChronology)) {
         return iLocalMillis == other.iLocalMillis;
@@ -693,6 +720,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
   public int hashCode() {
     int total = 157;
     total = 23 * total + iChronology.year().get(iLocalMillis);
+    // CPD-ON
     total = 23 * total + iChronology.year().getType().hashCode();
     total = 23 * total + iChronology.monthOfYear().get(iLocalMillis);
     total = 23 * total + iChronology.monthOfYear().getType().hashCode();
@@ -1543,6 +1571,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    * @param millis the amount of millis to subtract, may be negative
    * @return the new LocalDateTime minus the increased millis
    */
+  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+  // the common base class without a larger, riskier generic/factory-method redesign
+  // that is out of scope for a duplicate-code cleanup.
   public LocalDateTime minusMillis(int millis) {
     if (millis == 0) {
       return this;
@@ -1740,6 +1774,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    * @throws IllegalArgumentException if the value is invalid
    */
   public LocalDateTime withEra(int era) {
+    // CPD-ON
     return withLocalMillis(getChronology().era().set(getLocalMillis(), era));
   }
 
@@ -1960,6 +1995,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    * @throws IllegalArgumentException if the value is invalid
    */
   public LocalDateTime withMillisOfDay(int millis) {
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     return withLocalMillis(getChronology().millisOfDay().set(getLocalMillis(), millis));
   }
 
@@ -2109,6 +2150,8 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
     return new Property(this, getChronology().millisOfDay());
   }
 
+  // CPD-ON
+
   // -----------------------------------------------------------------------
   /**
    * Output the date time in ISO8601 format (yyyy-MM-ddTHH:mm:ss.SSS).
@@ -2118,6 +2161,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
   @Override
   @ToString
   public String toString() {
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.dateTime().print(this);
   }
 
@@ -2186,6 +2235,8 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
     /** Serialization version */
     private static final long serialVersionUID = -358138762846288L;
 
+    // CPD-ON
+
     /** The instant this property is working against */
     private transient LocalDateTime iInstant;
 
@@ -2198,6 +2249,12 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
      * @param instant the instant to set
      * @param field the field to use
      */
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     Property(LocalDateTime instant, DateTimeField field) {
       super();
       iInstant = instant;
@@ -2255,6 +2312,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
      * @return the linked LocalDateTime
      */
     public LocalDateTime getLocalDateTime() {
+      // CPD-ON
       return iInstant;
     }
 

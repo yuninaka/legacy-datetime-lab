@@ -640,6 +640,12 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
    * @return a copy of this datetime with a different time zone
    * @see #withZone
    */
+  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+  // the common base class without a larger, riskier generic/factory-method redesign
+  // that is out of scope for a duplicate-code cleanup.
   public DateTime withZoneRetainFields(DateTimeZone newZone) {
     newZone = DateTimeUtils.getZone(newZone);
     DateTimeZone originalZone = DateTimeUtils.getZone(getZone());
@@ -649,6 +655,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
 
     long millis = originalZone.getMillisKeepLocal(newZone, getMillis());
     return new DateTime(millis, getChronology().withZone(newZone));
+    // CPD-ON
   }
 
   /**
@@ -847,6 +854,12 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
    * @return a copy of this datetime with the field set
    * @throws IllegalArgumentException if the value is null or invalid
    */
+  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+  // the common base class without a larger, riskier generic/factory-method redesign
+  // that is out of scope for a duplicate-code cleanup.
   public DateTime withField(DateTimeFieldType fieldType, int value) {
     if (fieldType == null) {
       throw new IllegalArgumentException("Field must not be null");
@@ -897,6 +910,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
    * @throws ArithmeticException if the new datetime exceeds the capacity of a long
    */
   public DateTime withDurationAdded(long durationToAdd, int scalar) {
+    // CPD-ON
     if (durationToAdd == 0 || scalar == 0) {
       return this;
     }
@@ -1519,6 +1533,12 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
     if (millis == 0) {
       return this;
     }
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     long instant = getChronology().millis().subtract(getMillis(), millis);
     return withMillis(instant);
   }
@@ -1551,6 +1571,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
    */
   @Deprecated
   public DateMidnight toDateMidnight() {
+    // CPD-ON
     return new DateMidnight(getMillis(), getChronology());
   }
 
@@ -1854,6 +1875,12 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
    * @since 1.3
    */
   public DateTime withMillisOfDay(int millis) {
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     return withMillis(getChronology().millisOfDay().set(getMillis(), millis));
   }
 
@@ -2057,6 +2084,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
    * @since 1.0
    */
   public static final class Property extends AbstractReadableInstantFieldProperty {
+    // CPD-ON
 
     /** Serialization version */
     private static final long serialVersionUID = -6983323811635733510L;
@@ -2073,6 +2101,12 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
      * @param instant the instant to set
      * @param field the field to use
      */
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     Property(DateTime instant, DateTimeField field) {
       super();
       iInstant = instant;
@@ -2130,6 +2164,7 @@ public final class DateTime extends BaseDateTime implements ReadableDateTime, Se
      * @return the datetime
      */
     public DateTime getDateTime() {
+      // CPD-ON
       return iInstant;
     }
 

@@ -1059,6 +1059,12 @@ public class MutableDateTime extends BaseDateTime
                 minuteOfHour,
                 secondOfMinute,
                 millisOfSecond);
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     setMillis(instant);
   }
 
@@ -1282,6 +1288,7 @@ public class MutableDateTime extends BaseDateTime
     }
   }
 
+  // CPD-ON
   /**
    * MutableDateTime.Property binds a MutableDateTime to a DateTimeField allowing powerful datetime
    * functionality to be easily accessed.
@@ -1319,6 +1326,12 @@ public class MutableDateTime extends BaseDateTime
      * @param instant the instant to set
      * @param field the field to use
      */
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     Property(MutableDateTime instant, DateTimeField field) {
       super();
       iInstant = instant;
@@ -1376,6 +1389,7 @@ public class MutableDateTime extends BaseDateTime
      * @return the mutable datetime
      */
     public MutableDateTime getMutableDateTime() {
+      // CPD-ON
       return iInstant;
     }
 

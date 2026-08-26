@@ -357,6 +357,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       PeriodType type) {
     super(years, months, weeks, days, hours, minutes, seconds, millis, type);
   }
+
   // CPD-ON
 
   /**
@@ -807,6 +808,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
   public int getMillis() {
     return getPeriodType().getIndexedField(this, PeriodType.milliIndex);
   }
+
   // CPD-ON
 
   // -----------------------------------------------------------------------

@@ -154,6 +154,7 @@ public class MutablePeriod extends BasePeriod
       PeriodType type) {
     super(years, months, weeks, days, hours, minutes, seconds, millis, type);
   }
+
   // CPD-ON
 
   /**
@@ -805,6 +806,7 @@ public class MutablePeriod extends BasePeriod
   public int getMillis() {
     return getPeriodType().getIndexedField(this, PeriodType.milliIndex);
   }
+
   // CPD-ON
 
   // -----------------------------------------------------------------------
