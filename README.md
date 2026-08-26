@@ -1,5 +1,7 @@
 # Legacy Datetime Reverse-Migration Lab with Claude Code
 
+[![Test](https://github.com/yuninaka/legacy-datetime-lab/actions/workflows/test.yml/badge.svg)](https://github.com/yuninaka/legacy-datetime-lab/actions/workflows/test.yml)
+
 AIコーディングツール（Claude Code）を活用し、仕様書およびテストコードが存在しないレガシーコードから「仕様の静的解析・復元（`SPECIFICATION.md`）」および「回帰テスト群（JUnit 5）の自動生成」を行う再現実験リポジトリです。
 
 Claude Codeが復元した仕様書はこちら: [SPECIFICATION.md](./SPECIFICATION.md)
