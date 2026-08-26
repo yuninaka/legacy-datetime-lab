@@ -2148,6 +2148,10 @@ public class DateTimeFormatterBuilder {
     }
 
     @Override
+    // Uses labeled blocks (zeroOffset:/parse:) with break-to-exit for structured
+    // early exit inside this dense offset-parsing logic; restructuring into a
+    // separate method with early returns risks subtly changing the control flow.
+    @SuppressWarnings("LabelledBreakTarget")
     public int parseInto(DateTimeParserBucket bucket, CharSequence text, int position) {
       int limit = text.length() - position;
 

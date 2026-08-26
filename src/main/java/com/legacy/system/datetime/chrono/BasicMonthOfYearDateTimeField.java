@@ -190,7 +190,7 @@ class BasicMonthOfYearDateTimeField extends ImpreciseDateTimeField {
       if (remMonthToUse == 0) {
         remMonthToUse = iMax;
       }
-      monthToUse = iMax - remMonthToUse + 1;
+      monthToUse = (long) iMax - remMonthToUse + 1;
       if (monthToUse == 1) {
         yearToUse += 1;
       }

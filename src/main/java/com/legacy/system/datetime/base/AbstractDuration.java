@@ -202,6 +202,9 @@ public abstract class AbstractDuration implements ReadableDuration {
    *
    * @return the value as an ISO8601 string
    */
+  // FormatUtils.appendUnpaddedInteger has no StringBuilder overload; would fall back to
+  // the Appendable overload and require handling a spurious checked IOException.
+  @SuppressWarnings("JdkObsolete")
   @Override
   @ToString
   public String toString() {

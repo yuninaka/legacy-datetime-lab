@@ -442,7 +442,7 @@ public final class GJChronology extends AssembledChronology {
    */
   @Override
   public String toString() {
-    var sb = new StringBuffer(60);
+    var sb = new StringBuilder(60);
     sb.append("GJChronology");
     sb.append('[');
     sb.append(getZone().getID());

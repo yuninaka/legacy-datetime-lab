@@ -316,7 +316,7 @@ public abstract class BaseDateTimeField extends DateTimeField {
 
     while (valueToAdd > 0) {
       int max = getMaximumValue(instant, values);
-      long proposed = values[fieldIndex] + valueToAdd;
+      long proposed = (long) values[fieldIndex] + valueToAdd;
       if (proposed <= max) {
         values[fieldIndex] = (int) proposed;
         break;
@@ -337,7 +337,7 @@ public abstract class BaseDateTimeField extends DateTimeField {
     }
     while (valueToAdd < 0) {
       int min = getMinimumValue(instant, values);
-      long proposed = values[fieldIndex] + valueToAdd;
+      long proposed = (long) values[fieldIndex] + valueToAdd;
       if (proposed >= min) {
         values[fieldIndex] = (int) proposed;
         break;
@@ -398,7 +398,7 @@ public abstract class BaseDateTimeField extends DateTimeField {
 
     while (valueToAdd > 0) {
       int max = getMaximumValue(instant, values);
-      long proposed = values[fieldIndex] + valueToAdd;
+      long proposed = (long) values[fieldIndex] + valueToAdd;
       if (proposed <= max) {
         values[fieldIndex] = (int) proposed;
         break;
@@ -423,7 +423,7 @@ public abstract class BaseDateTimeField extends DateTimeField {
     }
     while (valueToAdd < 0) {
       int min = getMinimumValue(instant, values);
-      long proposed = values[fieldIndex] + valueToAdd;
+      long proposed = (long) values[fieldIndex] + valueToAdd;
       if (proposed >= min) {
         values[fieldIndex] = (int) proposed;
         break;

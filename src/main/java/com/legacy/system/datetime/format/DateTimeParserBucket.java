@@ -93,6 +93,10 @@ public class DateTimeParserBucket {
    * @param locale the locale to use
    * @deprecated Use longer constructor
    */
+  // Not @InlineMe: that annotation needs error_prone_annotations as a compile
+  // dependency, not just an annotation-processor path; not worth adding for a
+  // deprecated-constructor tooling hint.
+  @SuppressWarnings("InlineMeSuggester")
   @Deprecated
   public DateTimeParserBucket(long instantLocal, Chronology chrono, Locale locale) {
     this(instantLocal, chrono, locale, null, 2000);
@@ -108,6 +112,10 @@ public class DateTimeParserBucket {
    * @since 1.1
    * @deprecated Use longer constructor
    */
+  // Not @InlineMe: that annotation needs error_prone_annotations as a compile
+  // dependency, not just an annotation-processor path; not worth adding for a
+  // deprecated-constructor tooling hint.
+  @SuppressWarnings("InlineMeSuggester")
   @Deprecated
   public DateTimeParserBucket(
       long instantLocal, Chronology chrono, Locale locale, Integer pivotYear) {

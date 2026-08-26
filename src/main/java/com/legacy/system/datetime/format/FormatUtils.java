@@ -159,7 +159,7 @@ public class FormatUtils {
           return;
         }
       }
-      int digits = (int) (Math.log(value) / LOG_10) + 1;
+      int digits = (int) (Math.log((double) value) / LOG_10) + 1;
       for (; size > digits; size--) {
         appendable.append('0');
       }
@@ -253,7 +253,7 @@ public class FormatUtils {
           return;
         }
       }
-      int digits = (int) (Math.log(value) / LOG_10) + 1;
+      int digits = (int) (Math.log((double) value) / LOG_10) + 1;
       for (; size > digits; size--) {
         out.write('0');
       }
@@ -416,7 +416,7 @@ public class FormatUtils {
         ? 1
         : (value < 100
             ? 2
-            : (value < 1000 ? 3 : (value < 10000 ? 4 : ((int) (Math.log(value) / LOG_10) + 1)))));
+            : (value < 1000 ? 3 : (value < 10000 ? 4 : ((int) (Math.log((double) value) / LOG_10) + 1)))));
   }
 
   static int parseTwoDigits(CharSequence text, int position) {

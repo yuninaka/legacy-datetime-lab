@@ -76,7 +76,7 @@ public class IllegalFieldValueException extends IllegalArgumentException {
    * @return the message
    */
   private static String createMessage(String fieldName, String value) {
-    var buf = new StringBuffer().append("Value ");
+    var buf = new StringBuilder().append("Value ");
 
     if (value == null) {
       buf.append("null");

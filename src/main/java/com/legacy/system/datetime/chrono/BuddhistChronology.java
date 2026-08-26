@@ -228,7 +228,6 @@ public final class BuddhistChronology extends AssembledChronology {
           new OffsetDateTimeField(new SkipUndoDateTimeField(this, field), BUDDHIST_OFFSET);
 
       // one era, so yearOfEra is the same
-      field = fields.yearOfEra;
       fields.yearOfEra =
           new DelegatedDateTimeField(fields.year, fields.eras, DateTimeFieldType.yearOfEra());
 

@@ -216,6 +216,10 @@ abstract class BasicChronology extends AssembledChronology {
    * @return true if equal
    * @since 1.6
    */
+  // getClass() (not instanceof) is intentional: distinct concrete subclasses (Gregorian,
+  // Julian, Coptic, Islamic, ...) represent different calendar systems and must never
+  // compare equal to each other even if they share the same zone/minDaysInFirstWeek.
+  @SuppressWarnings("EqualsGetClass")
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
