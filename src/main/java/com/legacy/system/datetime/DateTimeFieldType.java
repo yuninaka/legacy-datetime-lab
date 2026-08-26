@@ -566,57 +566,32 @@ public abstract class DateTimeFieldType implements Serializable {
     public DateTimeField getField(Chronology chronology) {
       chronology = DateTimeUtils.getChronology(chronology);
 
-      switch (iOrdinal) {
-        case ERA:
-          return chronology.era();
-        case YEAR_OF_ERA:
-          return chronology.yearOfEra();
-        case CENTURY_OF_ERA:
-          return chronology.centuryOfEra();
-        case YEAR_OF_CENTURY:
-          return chronology.yearOfCentury();
-        case YEAR:
-          return chronology.year();
-        case DAY_OF_YEAR:
-          return chronology.dayOfYear();
-        case MONTH_OF_YEAR:
-          return chronology.monthOfYear();
-        case DAY_OF_MONTH:
-          return chronology.dayOfMonth();
-        case WEEKYEAR_OF_CENTURY:
-          return chronology.weekyearOfCentury();
-        case WEEKYEAR:
-          return chronology.weekyear();
-        case WEEK_OF_WEEKYEAR:
-          return chronology.weekOfWeekyear();
-        case DAY_OF_WEEK:
-          return chronology.dayOfWeek();
-        case HALFDAY_OF_DAY:
-          return chronology.halfdayOfDay();
-        case HOUR_OF_HALFDAY:
-          return chronology.hourOfHalfday();
-        case CLOCKHOUR_OF_HALFDAY:
-          return chronology.clockhourOfHalfday();
-        case CLOCKHOUR_OF_DAY:
-          return chronology.clockhourOfDay();
-        case HOUR_OF_DAY:
-          return chronology.hourOfDay();
-        case MINUTE_OF_DAY:
-          return chronology.minuteOfDay();
-        case MINUTE_OF_HOUR:
-          return chronology.minuteOfHour();
-        case SECOND_OF_DAY:
-          return chronology.secondOfDay();
-        case SECOND_OF_MINUTE:
-          return chronology.secondOfMinute();
-        case MILLIS_OF_DAY:
-          return chronology.millisOfDay();
-        case MILLIS_OF_SECOND:
-          return chronology.millisOfSecond();
-        default:
-          // Shouldn't happen.
-          throw new InternalError();
-      }
+      return switch (iOrdinal) {
+        case ERA -> chronology.era();
+        case YEAR_OF_ERA -> chronology.yearOfEra();
+        case CENTURY_OF_ERA -> chronology.centuryOfEra();
+        case YEAR_OF_CENTURY -> chronology.yearOfCentury();
+        case YEAR -> chronology.year();
+        case DAY_OF_YEAR -> chronology.dayOfYear();
+        case MONTH_OF_YEAR -> chronology.monthOfYear();
+        case DAY_OF_MONTH -> chronology.dayOfMonth();
+        case WEEKYEAR_OF_CENTURY -> chronology.weekyearOfCentury();
+        case WEEKYEAR -> chronology.weekyear();
+        case WEEK_OF_WEEKYEAR -> chronology.weekOfWeekyear();
+        case DAY_OF_WEEK -> chronology.dayOfWeek();
+        case HALFDAY_OF_DAY -> chronology.halfdayOfDay();
+        case HOUR_OF_HALFDAY -> chronology.hourOfHalfday();
+        case CLOCKHOUR_OF_HALFDAY -> chronology.clockhourOfHalfday();
+        case CLOCKHOUR_OF_DAY -> chronology.clockhourOfDay();
+        case HOUR_OF_DAY -> chronology.hourOfDay();
+        case MINUTE_OF_DAY -> chronology.minuteOfDay();
+        case MINUTE_OF_HOUR -> chronology.minuteOfHour();
+        case SECOND_OF_DAY -> chronology.secondOfDay();
+        case SECOND_OF_MINUTE -> chronology.secondOfMinute();
+        case MILLIS_OF_DAY -> chronology.millisOfDay();
+        case MILLIS_OF_SECOND -> chronology.millisOfSecond();
+        default -> throw new InternalError(); // Shouldn't happen.
+      };
     }
 
     /**
@@ -625,57 +600,32 @@ public abstract class DateTimeFieldType implements Serializable {
      * @return the singleton type
      */
     private Object readResolve() {
-      switch (iOrdinal) {
-        case ERA:
-          return ERA_TYPE;
-        case YEAR_OF_ERA:
-          return YEAR_OF_ERA_TYPE;
-        case CENTURY_OF_ERA:
-          return CENTURY_OF_ERA_TYPE;
-        case YEAR_OF_CENTURY:
-          return YEAR_OF_CENTURY_TYPE;
-        case YEAR:
-          return YEAR_TYPE;
-        case DAY_OF_YEAR:
-          return DAY_OF_YEAR_TYPE;
-        case MONTH_OF_YEAR:
-          return MONTH_OF_YEAR_TYPE;
-        case DAY_OF_MONTH:
-          return DAY_OF_MONTH_TYPE;
-        case WEEKYEAR_OF_CENTURY:
-          return WEEKYEAR_OF_CENTURY_TYPE;
-        case WEEKYEAR:
-          return WEEKYEAR_TYPE;
-        case WEEK_OF_WEEKYEAR:
-          return WEEK_OF_WEEKYEAR_TYPE;
-        case DAY_OF_WEEK:
-          return DAY_OF_WEEK_TYPE;
-        case HALFDAY_OF_DAY:
-          return HALFDAY_OF_DAY_TYPE;
-        case HOUR_OF_HALFDAY:
-          return HOUR_OF_HALFDAY_TYPE;
-        case CLOCKHOUR_OF_HALFDAY:
-          return CLOCKHOUR_OF_HALFDAY_TYPE;
-        case CLOCKHOUR_OF_DAY:
-          return CLOCKHOUR_OF_DAY_TYPE;
-        case HOUR_OF_DAY:
-          return HOUR_OF_DAY_TYPE;
-        case MINUTE_OF_DAY:
-          return MINUTE_OF_DAY_TYPE;
-        case MINUTE_OF_HOUR:
-          return MINUTE_OF_HOUR_TYPE;
-        case SECOND_OF_DAY:
-          return SECOND_OF_DAY_TYPE;
-        case SECOND_OF_MINUTE:
-          return SECOND_OF_MINUTE_TYPE;
-        case MILLIS_OF_DAY:
-          return MILLIS_OF_DAY_TYPE;
-        case MILLIS_OF_SECOND:
-          return MILLIS_OF_SECOND_TYPE;
-        default:
-          // Shouldn't happen.
-          return this;
-      }
+      return switch (iOrdinal) {
+        case ERA -> ERA_TYPE;
+        case YEAR_OF_ERA -> YEAR_OF_ERA_TYPE;
+        case CENTURY_OF_ERA -> CENTURY_OF_ERA_TYPE;
+        case YEAR_OF_CENTURY -> YEAR_OF_CENTURY_TYPE;
+        case YEAR -> YEAR_TYPE;
+        case DAY_OF_YEAR -> DAY_OF_YEAR_TYPE;
+        case MONTH_OF_YEAR -> MONTH_OF_YEAR_TYPE;
+        case DAY_OF_MONTH -> DAY_OF_MONTH_TYPE;
+        case WEEKYEAR_OF_CENTURY -> WEEKYEAR_OF_CENTURY_TYPE;
+        case WEEKYEAR -> WEEKYEAR_TYPE;
+        case WEEK_OF_WEEKYEAR -> WEEK_OF_WEEKYEAR_TYPE;
+        case DAY_OF_WEEK -> DAY_OF_WEEK_TYPE;
+        case HALFDAY_OF_DAY -> HALFDAY_OF_DAY_TYPE;
+        case HOUR_OF_HALFDAY -> HOUR_OF_HALFDAY_TYPE;
+        case CLOCKHOUR_OF_HALFDAY -> CLOCKHOUR_OF_HALFDAY_TYPE;
+        case CLOCKHOUR_OF_DAY -> CLOCKHOUR_OF_DAY_TYPE;
+        case HOUR_OF_DAY -> HOUR_OF_DAY_TYPE;
+        case MINUTE_OF_DAY -> MINUTE_OF_DAY_TYPE;
+        case MINUTE_OF_HOUR -> MINUTE_OF_HOUR_TYPE;
+        case SECOND_OF_DAY -> SECOND_OF_DAY_TYPE;
+        case SECOND_OF_MINUTE -> SECOND_OF_MINUTE_TYPE;
+        case MILLIS_OF_DAY -> MILLIS_OF_DAY_TYPE;
+        case MILLIS_OF_SECOND -> MILLIS_OF_SECOND_TYPE;
+        default -> this; // Shouldn't happen.
+      };
     }
   }
 }

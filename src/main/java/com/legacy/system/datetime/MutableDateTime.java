@@ -456,25 +456,16 @@ public class MutableDateTime extends BaseDateTime
    */
   @Override
   public void setMillis(long instant) {
-    switch (iRoundingMode) {
-      case ROUND_NONE:
-        break;
-      case ROUND_FLOOR:
-        instant = iRoundingField.roundFloor(instant);
-        break;
-      case ROUND_CEILING:
-        instant = iRoundingField.roundCeiling(instant);
-        break;
-      case ROUND_HALF_FLOOR:
-        instant = iRoundingField.roundHalfFloor(instant);
-        break;
-      case ROUND_HALF_CEILING:
-        instant = iRoundingField.roundHalfCeiling(instant);
-        break;
-      case ROUND_HALF_EVEN:
-        instant = iRoundingField.roundHalfEven(instant);
-        break;
-    }
+    instant =
+        switch (iRoundingMode) {
+          case ROUND_NONE -> instant;
+          case ROUND_FLOOR -> iRoundingField.roundFloor(instant);
+          case ROUND_CEILING -> iRoundingField.roundCeiling(instant);
+          case ROUND_HALF_FLOOR -> iRoundingField.roundHalfFloor(instant);
+          case ROUND_HALF_CEILING -> iRoundingField.roundHalfCeiling(instant);
+          case ROUND_HALF_EVEN -> iRoundingField.roundHalfEven(instant);
+          default -> instant;
+        };
     super.setMillis(instant);
   }
 
