@@ -74,22 +74,15 @@ public final class Years extends BaseSingleFieldPeriod {
    * @return the instance of Years
    */
   public static Years years(int years) {
-    switch (years) {
-      case 0:
-        return ZERO;
-      case 1:
-        return ONE;
-      case 2:
-        return TWO;
-      case 3:
-        return THREE;
-      case Integer.MAX_VALUE:
-        return MAX_VALUE;
-      case Integer.MIN_VALUE:
-        return MIN_VALUE;
-      default:
-        return new Years(years);
-    }
+    return switch (years) {
+      case 0 -> ZERO;
+      case 1 -> ONE;
+      case 2 -> TWO;
+      case 3 -> THREE;
+      case Integer.MAX_VALUE -> MAX_VALUE;
+      case Integer.MIN_VALUE -> MIN_VALUE;
+      default -> new Years(years);
+    };
   }
 
   // -----------------------------------------------------------------------

@@ -183,7 +183,7 @@ public final class GJChronology extends AssembledChronology {
       }
     }
 
-    GJCacheKey cacheKey = new GJCacheKey(zone, cutoverInstant, minDaysInFirstWeek);
+    var cacheKey = new GJCacheKey(zone, cutoverInstant, minDaysInFirstWeek);
     GJChronology chrono = cCache.get(cacheKey);
     if (chrono == null) {
       if (zone == DateTimeZone.UTC) {
@@ -443,7 +443,7 @@ public final class GJChronology extends AssembledChronology {
    */
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer(60);
+    var sb = new StringBuffer(60);
     sb.append("GJChronology");
     sb.append('[');
     sb.append(getZone().getID());
@@ -594,7 +594,7 @@ public final class GJChronology extends AssembledChronology {
     // These fields require basic cutover support, except they must link to
     // imprecise durations.
     {
-      CutoverField cf = new CutoverField(julian.dayOfMonth(), fields.dayOfMonth, iCutoverMillis);
+      var cf = new CutoverField(julian.dayOfMonth(), fields.dayOfMonth, iCutoverMillis);
       cf.iRangeDurationField = fields.months;
       fields.dayOfMonth = cf;
     }

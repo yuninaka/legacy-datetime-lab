@@ -211,7 +211,7 @@ public final class IslamicChronology extends BasicChronology {
             // First create without a lower limit.
             chrono = new IslamicChronology(null, null, leapYears);
             // Impose lower limit and make another IslamicChronology.
-            DateTime lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
+            var lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
             chrono =
                 new IslamicChronology(
                     LimitChronology.getInstance(chrono, lowerLimit, null), null, leapYears);
@@ -574,24 +574,19 @@ public final class IslamicChronology extends BasicChronology {
      * @return the singleton instance
      */
     private Object readResolve() {
-      switch (index) {
-        case 0:
-          return LEAP_YEAR_15_BASED;
-        case 1:
-          return LEAP_YEAR_16_BASED;
-        case 2:
-          return LEAP_YEAR_INDIAN;
-        case 3:
-          return LEAP_YEAR_HABASH_AL_HASIB;
-        default:
-          return this;
-      }
+      return switch (index) {
+        case 0 -> LEAP_YEAR_15_BASED;
+        case 1 -> LEAP_YEAR_16_BASED;
+        case 2 -> LEAP_YEAR_INDIAN;
+        case 3 -> LEAP_YEAR_HABASH_AL_HASIB;
+        default -> this;
+      };
     }
 
     @Override
     public boolean equals(Object obj) {
-      if (obj instanceof LeapYearPatternType) {
-        return index == ((LeapYearPatternType) obj).index;
+      if (obj instanceof LeapYearPatternType other) {
+        return index == other.index;
       }
       return false;
     }

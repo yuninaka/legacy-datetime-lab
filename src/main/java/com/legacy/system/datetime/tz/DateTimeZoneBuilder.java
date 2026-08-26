@@ -298,8 +298,8 @@ public class DateTimeZoneBuilder {
     if (fromYear <= toYear) {
       OfYear ofYear =
           new OfYear(mode, monthOfYear, dayOfMonth, dayOfWeek, advanceDayOfWeek, millisOfDay);
-      Recurrence recurrence = new Recurrence(ofYear, nameKey, saveMillis);
-      Rule rule = new Rule(recurrence, fromYear, toYear);
+      var recurrence = new Recurrence(ofYear, nameKey, saveMillis);
+      var rule = new Rule(recurrence, fromYear, toYear);
       getLastRuleSet().addRule(rule);
     }
     return this;
@@ -325,7 +325,7 @@ public class DateTimeZoneBuilder {
 
     // Discover where all the transitions occur and store the results in
     // these lists.
-    ArrayList<Transition> transitions = new ArrayList<Transition>();
+    var transitions = new ArrayList<Transition>();
 
     // Tail zone picks up remaining transitions in the form of an endless
     // DST cycle.
@@ -435,7 +435,7 @@ public class DateTimeZoneBuilder {
     if (out instanceof DataOutput) {
       writeTo(zoneID, (DataOutput) out);
     } else {
-      DataOutputStream dout = new DataOutputStream(out);
+      var dout = new DataOutputStream(out);
       writeTo(zoneID, (DataOutput) dout);
       dout.flush();
     }
@@ -1050,7 +1050,7 @@ public class DateTimeZoneBuilder {
       }
 
       // Make a copy before we destroy the rules.
-      ArrayList<Rule> copy = new ArrayList<Rule>(iRules);
+      var copy = new ArrayList<Rule>(iRules);
 
       // Iterate through all the transitions until firstMillis is
       // reached. Use the name key and savings for whatever rule reaches
@@ -1481,7 +1481,7 @@ public class DateTimeZoneBuilder {
         long nextOffset = wallOffsets[i + 1];
         long curStdOffset = standardOffsets[i];
         long nextStdOffset = standardOffsets[i + 1];
-        Period p = new Period(trans[i], trans[i + 1], PeriodType.yearMonthDay(), chrono);
+        var p = new Period(trans[i], trans[i + 1], PeriodType.yearMonthDay(), chrono);
         if (curOffset != nextOffset
             && curStdOffset == nextStdOffset
             && curNameKey.equals(nextNameKey)

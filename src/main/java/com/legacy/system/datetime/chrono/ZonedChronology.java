@@ -178,7 +178,7 @@ public final class ZonedChronology extends AssembledChronology {
   protected void assemble(Fields fields) {
     // Keep a local cache of converted fields so as not to create redundant
     // objects.
-    HashMap<Object, Object> converted = new HashMap<Object, Object>();
+    var converted = new HashMap<Object, Object>();
 
     // Convert duration fields...
 
@@ -231,7 +231,7 @@ public final class ZonedChronology extends AssembledChronology {
     if (converted.containsKey(field)) {
       return (DurationField) converted.get(field);
     }
-    ZonedDurationField zonedField = new ZonedDurationField(field, getZone());
+    var zonedField = new ZonedDurationField(field, getZone());
     converted.put(field, zonedField);
     return zonedField;
   }
@@ -533,7 +533,7 @@ public final class ZonedChronology extends AssembledChronology {
       localInstant = iField.set(localInstant, value);
       long result = iZone.convertLocalToUTC(localInstant, false, instant);
       if (get(result) != value) {
-        IllegalInstantException cause = new IllegalInstantException(localInstant, iZone.getID());
+        var cause = new IllegalInstantException(localInstant, iZone.getID());
         IllegalFieldValueException ex =
             new IllegalFieldValueException(
                 iField.getType(), Integer.valueOf(value), cause.getMessage());

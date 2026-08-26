@@ -291,7 +291,7 @@ public abstract class BaseSingleFieldPeriod
    * @return a MutablePeriod using the same field set and values
    */
   public MutablePeriod toMutablePeriod() {
-    MutablePeriod period = new MutablePeriod();
+    var period = new MutablePeriod();
     period.add(this);
     return period;
   }

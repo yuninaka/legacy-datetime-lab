@@ -242,7 +242,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
     }
     if (date.getTime() < 0) {
       // handle years in era BC
-      GregorianCalendar cal = new GregorianCalendar();
+      var cal = new GregorianCalendar();
       cal.setTime(date);
       return fromCalendarFields(cal);
     }
@@ -980,7 +980,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
   @SuppressWarnings("deprecation")
   public Date toDate() {
     int dom = getDayOfMonth();
-    Date date = new Date(getYear() - 1900, getMonthOfYear() - 1, dom);
+    var date = new Date(getYear() - 1900, getMonthOfYear() - 1, dom);
     LocalDate check = LocalDate.fromDateFields(date);
     if (check.isBefore(this)) {
       // DST gap (no midnight)
@@ -997,7 +997,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
       date.setTime(date.getTime() + 1000);
     } else if (check.equals(this)) {
       // check for DST overlap (two midnights)
-      Date earlier = new Date(date.getTime() - TimeZone.getDefault().getDSTSavings());
+      var earlier = new Date(date.getTime() - TimeZone.getDefault().getDSTSavings());
       if (earlier.getDate() == dom) {
         date = earlier;
       }

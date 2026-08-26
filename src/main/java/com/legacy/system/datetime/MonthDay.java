@@ -404,14 +404,11 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    */
   @Override
   protected DateTimeField getField(int index, Chronology chrono) {
-    switch (index) {
-      case MONTH_OF_YEAR:
-        return chrono.monthOfYear();
-      case DAY_OF_MONTH:
-        return chrono.dayOfMonth();
-      default:
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-    }
+    return switch (index) {
+      case MONTH_OF_YEAR -> chrono.monthOfYear();
+      case DAY_OF_MONTH -> chrono.dayOfMonth();
+      default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
+    };
   }
 
   /**
@@ -459,7 +456,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
     if (newChronology == getChronology()) {
       return this;
     } else {
-      MonthDay newMonthDay = new MonthDay(this, newChronology);
+      var newMonthDay = new MonthDay(this, newChronology);
       newChronology.validate(newMonthDay, getValues());
       return newMonthDay;
     }

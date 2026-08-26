@@ -287,7 +287,7 @@ class ConverterSet {
     // Class c implements a, b {}
     // Converters exist only for a and b. Which is better? Neither.
 
-    StringBuilder msg = new StringBuilder();
+    var msg = new StringBuilder();
     msg.append("Unable to find best converter for type \"");
     msg.append(type.getName());
     msg.append("\" from remaining set: ");

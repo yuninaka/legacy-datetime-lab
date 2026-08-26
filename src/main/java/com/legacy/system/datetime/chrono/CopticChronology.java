@@ -138,7 +138,7 @@ public final class CopticChronology extends BasicFixedMonthChronology {
             // First create without a lower limit.
             chrono = new CopticChronology(null, null, minDaysInFirstWeek);
             // Impose lower limit and make another CopticChronology.
-            DateTime lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
+            var lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
             chrono =
                 new CopticChronology(
                     LimitChronology.getInstance(chrono, lowerLimit, null),

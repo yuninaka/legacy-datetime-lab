@@ -281,7 +281,7 @@ public abstract class AbstractDateTime extends AbstractInstant implements Readab
    */
   public GregorianCalendar toGregorianCalendar() {
     DateTimeZone zone = getZone();
-    GregorianCalendar cal = new GregorianCalendar(zone.toTimeZone());
+    var cal = new GregorianCalendar(zone.toTimeZone());
     cal.setTime(toDate());
     return cal;
   }

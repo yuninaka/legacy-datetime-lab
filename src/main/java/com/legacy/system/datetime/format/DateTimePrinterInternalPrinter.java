@@ -71,7 +71,7 @@ class DateTimePrinterInternalPrinter implements InternalPrinter {
       Writer out = (Writer) appendable;
       underlying.printTo(out, instant, chrono, displayOffset, displayZone, locale);
     } else {
-      StringBuffer buf = new StringBuffer(estimatePrintedLength());
+      var buf = new StringBuffer(estimatePrintedLength());
       underlying.printTo(buf, instant, chrono, displayOffset, displayZone, locale);
       appendable.append(buf);
     }
@@ -86,7 +86,7 @@ class DateTimePrinterInternalPrinter implements InternalPrinter {
       Writer out = (Writer) appendable;
       underlying.printTo(out, partial, locale);
     } else {
-      StringBuffer buf = new StringBuffer(estimatePrintedLength());
+      var buf = new StringBuffer(estimatePrintedLength());
       underlying.printTo(buf, partial, locale);
       appendable.append(buf);
     }

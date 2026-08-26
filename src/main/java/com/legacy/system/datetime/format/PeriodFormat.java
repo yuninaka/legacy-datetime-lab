@@ -193,7 +193,7 @@ public class PeriodFormat {
   public static PeriodFormatter wordBased(Locale locale) {
     PeriodFormatter pf = FORMATTERS.get(locale);
     if (pf == null) {
-      DynamicWordBased dynamic = new DynamicWordBased(buildWordBased(locale));
+      var dynamic = new DynamicWordBased(buildWordBased(locale));
       pf = new PeriodFormatter(dynamic, dynamic, locale, null);
       PeriodFormatter existing = FORMATTERS.putIfAbsent(locale, pf);
       if (existing != null) {
@@ -217,7 +217,7 @@ public class PeriodFormat {
     String[] variants = retrieveVariants(b);
     String regExSeparator = b.getString("PeriodFormat.regex.separator");
 
-    PeriodFormatterBuilder builder = new PeriodFormatterBuilder();
+    var builder = new PeriodFormatterBuilder();
     builder.appendYears();
     if (containsKey(b, "PeriodFormat.years.regex")) {
       builder.appendSuffix(

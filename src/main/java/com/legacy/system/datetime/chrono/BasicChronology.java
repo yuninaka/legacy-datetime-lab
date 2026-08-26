@@ -251,7 +251,7 @@ abstract class BasicChronology extends AssembledChronology {
    */
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder(60);
+    var sb = new StringBuilder(60);
     String name = getClass().getName();
     int index = name.lastIndexOf('.');
     if (index >= 0) {

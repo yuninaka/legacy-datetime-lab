@@ -229,7 +229,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
     }
     if (date.getTime() < 0) {
       // handle years in era BC
-      GregorianCalendar cal = new GregorianCalendar();
+      var cal = new GregorianCalendar();
       cal.setTime(date);
       return fromCalendarFields(cal);
     }

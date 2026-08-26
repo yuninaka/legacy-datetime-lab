@@ -262,7 +262,7 @@ public class ZoneInfoProvider implements Provider {
    */
   private static Map<String, Object> loadZoneInfoMap(InputStream in) throws IOException {
     Map<String, Object> map = new ConcurrentHashMap<String, Object>();
-    DataInputStream din = new DataInputStream(in);
+    var din = new DataInputStream(in);
     try {
       readZoneInfoMap(din, map);
     } finally {

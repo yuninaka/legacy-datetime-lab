@@ -420,7 +420,7 @@ public abstract class DateTimeZone implements Serializable {
   }
 
   private static String convertToAsciiNumber(String convId) {
-    StringBuilder buf = new StringBuilder(convId);
+    var buf = new StringBuilder(convId);
     for (int i = 0; i < buf.length(); i++) {
       char ch = buf.charAt(i);
       int digit = Character.digit(ch, 10);
@@ -692,7 +692,7 @@ public abstract class DateTimeZone implements Serializable {
    * @return the time zone string
    */
   private static String printOffset(int offset) {
-    StringBuffer buf = new StringBuffer();
+    var buf = new StringBuffer();
     if (offset >= 0) {
       buf.append('+');
     } else {

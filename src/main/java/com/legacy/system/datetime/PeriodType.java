@@ -550,8 +550,8 @@ public class PeriodType implements Serializable {
     if (types == null || types.length == 0) {
       throw new IllegalArgumentException("Types array must not be null or empty");
     }
-    for (int i = 0; i < types.length; i++) {
-      if (types[i] == null) {
+    for (DurationFieldType type : types) {
+      if (type == null) {
         throw new IllegalArgumentException("Types array must not contain null");
       }
     }
@@ -575,7 +575,7 @@ public class PeriodType implements Serializable {
       cache.put(seconds(), seconds());
       cache.put(millis(), millis());
     }
-    PeriodType inPartType = new PeriodType(null, types, null);
+    var inPartType = new PeriodType(null, types, null);
     Object cached = cache.get(inPartType);
     if (cached instanceof PeriodType) {
       return (PeriodType) cached;
@@ -614,7 +614,7 @@ public class PeriodType implements Serializable {
       throw new IllegalArgumentException("PeriodType does not support fields: " + list);
     }
     // recheck cache in case initial array order was wrong
-    PeriodType checkPartType = new PeriodType(null, type.iTypes, null);
+    var checkPartType = new PeriodType(null, type.iTypes, null);
     PeriodType checkedType = (PeriodType) cache.get(checkPartType);
     if (checkedType != null) {
       cache.put(checkPartType, checkedType);
@@ -902,8 +902,8 @@ public class PeriodType implements Serializable {
   @Override
   public int hashCode() {
     int hash = 0;
-    for (int i = 0; i < iTypes.length; i++) {
-      hash += iTypes[i].hashCode();
+    for (DurationFieldType type : iTypes) {
+      hash += type.hashCode();
     }
     return hash;
   }

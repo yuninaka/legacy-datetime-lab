@@ -242,7 +242,7 @@ public class PeriodFormatterBuilder {
       throw new IllegalArgumentException("Literal must not be null");
     }
     clearPrefix();
-    Literal literal = new Literal(text);
+    var literal = new Literal(text);
     append0(literal, literal);
     return this;
   }
@@ -702,7 +702,7 @@ public class PeriodFormatterBuilder {
     }
 
     clearPrefix();
-    FieldFormatter newField = new FieldFormatter((FieldFormatter) originalPrinter, suffix);
+    var newField = new FieldFormatter((FieldFormatter) originalPrinter, suffix);
     iElementPairs.set(iElementPairs.size() - 2, newField);
     iElementPairs.set(iElementPairs.size() - 1, newField);
     iFieldFormatters[newField.getFieldType()] = newField;
@@ -916,7 +916,7 @@ public class PeriodFormatterBuilder {
       case 1:
         return new Object[] {elementPairs.get(0), elementPairs.get(1)};
       default:
-        Composite comp = new Composite(elementPairs);
+        var comp = new Composite(elementPairs);
         return new Object[] {comp, comp};
     }
   }
@@ -1941,7 +1941,7 @@ public class PeriodFormatterBuilder {
         iParsedForms = new String[] {text};
       } else {
         // Filter and reverse sort the parsed forms.
-        TreeSet<String> parsedSet = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        var parsedSet = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         parsedSet.add(text);
         parsedSet.add(finalText);
         if (variants != null) {
@@ -1949,7 +1949,7 @@ public class PeriodFormatterBuilder {
             parsedSet.add(variants[i]);
           }
         }
-        ArrayList<String> parsedList = new ArrayList<String>(parsedSet);
+        var parsedList = new ArrayList<String>(parsedSet);
         Collections.reverse(parsedList);
         iParsedForms = parsedList.toArray(new String[parsedList.size()]);
       }
