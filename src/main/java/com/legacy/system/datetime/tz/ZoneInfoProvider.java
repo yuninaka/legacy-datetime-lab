@@ -253,7 +253,9 @@ public class ZoneInfoProvider implements Provider {
         if (in != null) {
           in.close();
         }
-      } catch (@SuppressWarnings("EmptyCatch") IOException ex) {
+      } catch (
+          @SuppressWarnings("EmptyCatch")
+          IOException ex) {
         // Nothing useful to do if closing an already-finished stream fails.
       }
     }
@@ -274,7 +276,9 @@ public class ZoneInfoProvider implements Provider {
     } finally {
       try {
         din.close();
-      } catch (@SuppressWarnings("EmptyCatch") IOException ex) {
+      } catch (
+          @SuppressWarnings("EmptyCatch")
+          IOException ex) {
         // Nothing useful to do if closing an already-finished stream fails.
       }
     }

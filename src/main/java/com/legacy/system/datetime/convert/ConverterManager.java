@@ -99,7 +99,7 @@ public final class ConverterManager {
   private ConverterSet iIntervalConverters;
 
   /** Restricted constructor. */
-  protected ConverterManager() {
+  ConverterManager() {
     super();
 
     iInstantConverters =

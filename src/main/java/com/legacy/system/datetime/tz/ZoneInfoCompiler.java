@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -461,7 +462,7 @@ public class ZoneInfoCompiler {
       for (int i = 0; i < sources.length; i++) {
         BufferedReader in = null;
         try {
-          in = new BufferedReader(new FileReader(sources[i]));
+          in = new BufferedReader(new FileReader(sources[i], StandardCharsets.UTF_8));
           parseDataFile(in, "backward".equals(sources[i].getName()));
         } finally {
           if (in != null) {

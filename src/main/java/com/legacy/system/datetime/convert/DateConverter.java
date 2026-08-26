@@ -31,7 +31,7 @@ final class DateConverter extends AbstractConverter implements InstantConverter,
   static final DateConverter INSTANCE = new DateConverter();
 
   /** Restricted constructor. */
-  protected DateConverter() {
+  DateConverter() {
     super();
   }
 

@@ -272,9 +272,7 @@ public abstract class DurationFieldType implements Serializable {
       iOrdinal = ordinal;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
       if (this == obj) {
@@ -286,9 +284,7 @@ public abstract class DurationFieldType implements Serializable {
       return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
       return (1 << iOrdinal);

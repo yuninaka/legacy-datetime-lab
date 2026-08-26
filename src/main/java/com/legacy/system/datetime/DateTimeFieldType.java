@@ -521,25 +521,19 @@ public abstract class DateTimeFieldType implements Serializable {
       iRangeType = rangeType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public DurationFieldType getDurationType() {
       return iUnitType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public DurationFieldType getRangeDurationType() {
       return iRangeType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
       if (this == obj) {
@@ -551,17 +545,13 @@ public abstract class DateTimeFieldType implements Serializable {
       return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
       return (1 << iOrdinal);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public DateTimeField getField(Chronology chronology) {
       chronology = DateTimeUtils.getChronology(chronology);

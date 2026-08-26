@@ -33,8 +33,8 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class DefaultNameProvider implements NameProvider {
   // locale -> (id -> (nameKey -> [shortName, name]))
-  private HashMap<Locale, Map<String, Map<String, Object>>> iByLocaleCache = createCache();
-  private HashMap<Locale, Map<String, Map<Boolean, Object>>> iByLocaleCache2 = createCache();
+  private Map<Locale, Map<String, Map<String, Object>>> iByLocaleCache = createCache();
+  private Map<Locale, Map<String, Map<Boolean, Object>>> iByLocaleCache2 = createCache();
 
   public DefaultNameProvider() {}
 
@@ -159,7 +159,7 @@ public class DefaultNameProvider implements NameProvider {
   }
 
   // -----------------------------------------------------------------------
-  private <K, V> HashMap<K, V> createCache() {
+  private <K, V> Map<K, V> createCache() {
     return new HashMap<>(7);
   }
 }

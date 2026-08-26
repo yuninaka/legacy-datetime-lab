@@ -39,7 +39,7 @@ final class CalendarConverter extends AbstractConverter
   static final CalendarConverter INSTANCE = new CalendarConverter();
 
   /** Restricted constructor. */
-  protected CalendarConverter() {
+  CalendarConverter() {
     super();
   }
 

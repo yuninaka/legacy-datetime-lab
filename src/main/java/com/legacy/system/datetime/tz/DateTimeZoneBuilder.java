@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -386,7 +387,7 @@ public class DateTimeZoneBuilder {
     return zone;
   }
 
-  private boolean addTransition(ArrayList<Transition> transitions, Transition tr) {
+  private boolean addTransition(List<Transition> transitions, Transition tr) {
     int size = transitions.size();
     if (size == 0) {
       //            System.out.println("Adding   " + tr);
@@ -1431,7 +1432,7 @@ public class DateTimeZoneBuilder {
      * @param tailZone optional zone for getting info beyond precalculated tables
      */
     static PrecalculatedZone create(
-        String id, boolean outputID, ArrayList<Transition> transitions, DSTZone tailZone) {
+        String id, boolean outputID, List<Transition> transitions, DSTZone tailZone) {
       int size = transitions.size();
       if (size == 0) {
         throw new IllegalArgumentException();

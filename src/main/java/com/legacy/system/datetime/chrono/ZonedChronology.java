@@ -27,6 +27,7 @@ import com.legacy.system.datetime.field.BaseDateTimeField;
 import com.legacy.system.datetime.field.BaseDurationField;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Wraps another Chronology to add support for time zones.
@@ -224,7 +225,7 @@ public final class ZonedChronology extends AssembledChronology {
     fields.halfdayOfDay = convertField(fields.halfdayOfDay, converted);
   }
 
-  private DurationField convertField(DurationField field, HashMap<Object, Object> converted) {
+  private DurationField convertField(DurationField field, Map<Object, Object> converted) {
     if (field == null || !field.isSupported()) {
       return field;
     }
@@ -236,7 +237,7 @@ public final class ZonedChronology extends AssembledChronology {
     return zonedField;
   }
 
-  private DateTimeField convertField(DateTimeField field, HashMap<Object, Object> converted) {
+  private DateTimeField convertField(DateTimeField field, Map<Object, Object> converted) {
     if (field == null || !field.isSupported()) {
       return field;
     }

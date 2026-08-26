@@ -29,6 +29,7 @@ import com.legacy.system.datetime.format.DateTimeFormatter;
 import com.legacy.system.datetime.format.ISODateTimeFormat;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Wraps another Chronology to impose limits on the range of instants that the fields within a
@@ -256,7 +257,7 @@ public final class LimitChronology extends AssembledChronology {
     fields.halfdayOfDay = convertField(fields.halfdayOfDay, converted);
   }
 
-  private DurationField convertField(DurationField field, HashMap<Object, Object> converted) {
+  private DurationField convertField(DurationField field, Map<Object, Object> converted) {
     if (field == null || !field.isSupported()) {
       return field;
     }
@@ -268,7 +269,7 @@ public final class LimitChronology extends AssembledChronology {
     return limitField;
   }
 
-  private DateTimeField convertField(DateTimeField field, HashMap<Object, Object> converted) {
+  private DateTimeField convertField(DateTimeField field, Map<Object, Object> converted) {
     if (field == null || !field.isSupported()) {
       return field;
     }
@@ -366,7 +367,7 @@ public final class LimitChronology extends AssembledChronology {
 
     @Override
     public String getMessage() {
-      var buf = new StringBuffer(85);
+      var buf = new StringBuilder(85);
       buf.append("The");
       String desc = super.getMessage();
       if (desc != null) {
