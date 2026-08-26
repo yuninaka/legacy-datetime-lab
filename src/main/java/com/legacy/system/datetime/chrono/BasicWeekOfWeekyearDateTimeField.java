@@ -122,6 +122,9 @@ final class BasicWeekOfWeekyearDateTimeField extends PreciseDurationDateTimeFiel
   }
 
   /** Serialization singleton */
+  // Invoked reflectively by ObjectInputStream during deserialization; never called
+  // directly, but required to preserve the singleton contract on deserialize.
+  @SuppressWarnings("UnusedMethod")
   private Object readResolve() {
     return iChronology.weekOfWeekyear();
   }
