@@ -1,133 +1,71 @@
-Joda-Time
----------
+# Legacy Datetime Reverse-Migration Lab with Claude Code
 
-Joda-Time provides a quality replacement for the Java date and time classes.
-The design allows for multiple calendar systems, while still providing a simple API.
-The 'default' calendar is the ISO8601 standard which is used by XML.
-The Gregorian, Julian, Buddhist, Coptic, Ethiopic and Islamic systems are also included.
-Supporting classes include time zone, duration, format and parsing. 
+AIコーディングツール（Claude Code）を活用し、仕様書およびテストコードが存在しないレガシーコードから「仕様の静的解析・復元（`SPECIFICATION.md`）」および「回帰テスト群（JUnit 5）の自動生成」を行う再現実験リポジトリです。
 
-**Joda-time is no longer in active development except to keep timezone data up to date.**
-From Java SE 8 onwards, users are asked to migrate to `java.time` (JSR-310) - a core part of the JDK which replaces this project.
-For Android users, `java.time` is [added in API 26+](https://developer.android.com/reference/java/time/package-summary).
-Projects needing to support lower API levels can use [the ThreeTenABP library](https://github.com/JakeWharton/ThreeTenABP).
+---
 
-As a flavour of Joda-Time, here's some example code:
+## 1. 背景と目的
 
-```java
-public boolean isAfterPayDay(DateTime datetime) {
-  if (datetime.getMonthOfYear() == 2) {   // February is month 2!!
-    return datetime.getDayOfMonth() > 26;
-  }
-  return datetime.getDayOfMonth() > 28;
-}
+システム開発の現場では、仕様書が失われ、テストコードも存在しない「ブラックボックス化したレガシーコード」の保守・リプレイスが大きな課題となっています。
 
-public Days daysToNewYear(LocalDate fromDate) {
-  LocalDate newYear = fromDate.plusYears(1).withDayOfYear(1);
-  return Days.daysBetween(fromDate, newYear);
-}
+本検証プロジェクトの目的は以下の通りです。
 
-public boolean isRentalOverdue(DateTime datetimeRented) {
-  Period rentalPeriod = new Period().withDays(2).withHours(12);
-  return datetimeRented.plus(rentalPeriod).isBeforeNow();
-}
+- **仕様復元の自動化検証**: 既存ソースコードを「唯一の正（絶対の仕様）」とし、AIがコード全体から仕様やエッジケース（非互換な挙動や潜在バグを含む）を正しく読み解き、ドキュメント化（`SPECIFICATION.md`）できるかを検証する。
+- **セーフティネット（回帰テスト）の構築**: リバースエンジニアリングによって現行挙動を担保するテストコードを自動生成し、今後のリファクタリングやマイグレーションの基盤（セーフティネット）とできるかを評価する。
+- **自律的環境修復の評価**: 古いビルド定義や環境依存の問題（古いJavaバージョンやテストフレームワークの不在など）に対し、AIが自律的に問題解決を行えるかを検証する。
 
-public String getBirthMonthText(LocalDate dateOfBirth) {
-  return dateOfBirth.monthOfYear().getAsText(Locale.ENGLISH);
-}
+---
+
+## 2. 実験構成・リポジトリ履歴
+
+本リポジトリは、検証の再現性と透明性を保つため、以下の明確な2段階のコミット構成をとっています。
+
+- **`Initial commit of legacy datetime platform` (`648646f3`)**
+  - **初期状態**: Joda-Time 2.14.3 をベースにしたレガシーコード基盤。
+  - **条件**: 仕様書なし、既存テストコード全削除済み、一部に意図的な不具合（トラップ仕様）を付与。
+- **`cbb00f17` (Claude Code による生成と環境補正)**
+  - Claude Code が自律的にコード解析を行い生成した成果物（`SPECIFICATION.md`、JUnit 5 テストコード 186 件、`pom.xml` 調整）。
+
+---
+
+## 3. Claude Code による生成結果と評価
+
+### 実行プロンプト（指示内容）
+> 現在 `src/main/java/com/legacy/system/datetime` 配下に存在するソースコードを【絶対の唯一の正（仕様）】として扱ってください。
+> 本プロジェクトには仕様書およびテストコードが存在しません。以下を実施してください。
+> 1. ソースコードの挙動を静的解析し、主要クラスの入出力仕様やエッジケースの挙動を整理した `SPECIFICATION.md` を作成してください。
+> 2. 現状のコード挙動を担保する JUnit 5 テストコードを作成してください。
+> 3. `mvn test` を実行し、作成したテストが全件 PASS することを確認してください。
+
+---
+
+### 成果物の概要
+
+#### ① 静的解析と仕様の抽出 (`SPECIFICATION.md`)
+コード全体のデータモデル、時間計算ロジック、境界値を整理してドキュメント化。
+- **エッジケースの精度**: `equals` と `isEqual` における Chronology（暦体系）感度の違い、`Interval.overlaps` の境界値仕様（隣接する区間は重複と判定しない挙動）、DST（夏時間）跨ぎ処理など、既存コードの細部仕様を正確に抽出。
+
+#### ② テストコード自動生成
+- **規模**: 13 テストクラス / **計 186 件のテストケース**
+- **カバレッジ範囲**: コア演算（`DateTime`, `Period`, `GregorianChronology` 等）およびタイムゾーン（`DateTimeZone`）処理を網羅。
+
+#### ③ 自律的なビルド環境の解決
+- 実行環境（JREのみ/Java 5指定の古い `pom.xml`）の制約に対し、ポータブル JDK 17 の配置、JUnit 3 から **JUnit 5 (`junit-jupiter:5.10.2`)** へのマイグレーション、Surefire プラグイン設定の調整を自動で完遂。
+
+---
+
+## 4. テストの網羅性と実効性（JaCoCo & PIT）
+
+本リポジトリでは、Claude Code が自動生成したテストの「網羅性（量）」と「実効性（質）」を二重で評価します。
+
+### ① カバレッジ計測 (JaCoCo)
+C0（行）/ C1（分岐）カバレッジを計測し、未通過の処理経路を可視化します。
+
+### ② ミューテーションテスト (PIT)
+生成されたテストが「単に実行ラインを通っているだけ（Weak Mutation）」か「挙動の検証まで適切に行えているか（Strong Mutation）」を評価するため、PIT（Mutation Testing）による検証環境をセットアップしています。
+
+#### ミューテーションテスト実行方法
+
+```bash
+mvn pitest:mutationCoverage
 ```
-
-Joda-Time is licensed under the business-friendly [Apache 2.0 licence](https://www.joda.org/joda-time/licenses.html).
-
-![Tidelift dependency check](https://tidelift.com/badges/github/JodaOrg/joda-time)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6310/badge)](https://bestpractices.coreinfrastructure.org/projects/6310)
-
-
-### Documentation
-Various documentation is available:
-
-* The [home page](https://www.joda.org/joda-time/)
-* Two user guides - [quick](https://www.joda.org/joda-time/quickstart.html) and [full](https://www.joda.org/joda-time/userguide.html)
-* The [Javadoc](https://www.joda.org/joda-time/apidocs/index.html)
-* The [FAQ](https://www.joda.org/joda-time/faq.html) list
-* Information on [downloading and installing](https://www.joda.org/joda-time/installation.html) Joda-Time including release notes
-
-
-### Releases
-[Release 2.14.3](https://www.joda.org/joda-time/download.html) is the current latest release.
-This release is considered stable and worthy of the 2.x tag.
-It depends on JDK 1.5 or later.
-
-Available in the [Maven Central repository](https://search.maven.org/search?q=g:joda-time%20AND%20a:joda-time&core=gav)
-
-**Maven configuration:**
-```xml
-<dependency>
-  <groupId>joda-time</groupId>
-  <artifactId>joda-time</artifactId>
-  <version>2.14.3</version>
-</dependency>
-```
-
-**Gradle configuration:**
-```groovy
-compile 'joda-time:joda-time:2.14.3'
-```
-
-
-### Related projects
-Related projects at GitHub:
-- https://github.com/JodaOrg/joda-time-hibernate
-- https://github.com/JodaOrg/joda-time-jsptags
-- https://github.com/JodaOrg/joda-time-i18n
-
-Other related projects:
-- https://www.joda.org/joda-time/related.html
-
-
-### For enterprise
-Available as part of the Tidelift Subscription.
-
-Joda and the maintainers of thousands of other packages are working with Tidelift to deliver one enterprise subscription that covers all of the open source you use.
-
-If you want the flexibility of open source and the confidence of commercial-grade software, this is for you.
-
-[Learn more](https://tidelift.com/subscription/pkg/maven-joda-time-joda-time?utm_source=maven-joda-time-joda-time&utm_medium=github)
-
-
-### Support
-Please use [Stack Overflow](https://stackoverflow.com/questions/tagged/jodatime) for general usage questions.
-GitHub [issues](https://github.com/JodaOrg/joda-time/issues) and [pull requests](https://github.com/JodaOrg/joda-time/pulls)
-should be used when you want to help advance the project.
-
-Any donations to support the project are accepted via [OpenCollective](https://opencollective.com/joda).
-
-To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security).
-Tidelift will coordinate the fix and disclosure.
-
-
-### Development and Contributions
-Joda-Time is developed using standard [GitHub tools](https://github.com/JodaOrg/joda-time).
-A [checkstyle](https://checkstyle.sourceforge.io/) file is available, and PRs must comply with it.
-The project can be built using [Apache Maven](https://maven.apache.org/), such as <code>mvn clean install</code>.
-Continuous Integration takes place using [GitHub Actions](https://github.com/JodaOrg/joda-time/actions).
-Units tests are written in [JUnit](https://junit.org/) and run as part of the build and continuous integration.
-Changes via PR must include appropriate test coverage.
-
-Note that Joda-Time is considered to be a largely “finished” project. No major enhancements are planned. If using Java SE 8, please migrate to java.time (JSR-310).
-
-
-### Release process
-
-* Update version (pom.xml, README.md, index.md, MANIFEST.MF, changes.xml)
-* Commit and push
-* `git push origin HEAD:refs/tags/release`
-* Code and Website will be built and released by GitHub Actions
-
-Release from local:
-
-* Ensure `gpg-agent` is running
-* Ensure on Java SE 8
-* `mvn clean deploy -Doss.repo -Dgpg.passphrase=""`
-* Website will be built and released by GitHub Actions
-* If the GitHub stage fails, use `mvn clean deploy -Doss.repo -DskipRemoteStaging=true` to re-run
