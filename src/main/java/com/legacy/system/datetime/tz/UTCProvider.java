@@ -16,7 +16,6 @@
 package com.legacy.system.datetime.tz;
 
 import com.legacy.system.datetime.DateTimeZone;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Set;
 public final class UTCProvider implements Provider {
 
   /** The available IDs. */
-  private static final Set<String> AVAILABLE_IDS = Collections.singleton("UTC");
+  private static final Set<String> AVAILABLE_IDS = Set.of("UTC");
 
   /** Constructor. */
   public UTCProvider() {
