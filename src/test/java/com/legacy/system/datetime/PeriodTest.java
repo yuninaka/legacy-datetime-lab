@@ -3,6 +3,7 @@ package com.legacy.system.datetime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -193,5 +194,269 @@ class PeriodTest {
         Period b = Period.days(2);
         assertTrue(a.equals(b));
         assertFalse(a.equals(Period.days(3)));
+    }
+
+    // -- constructors ---------------------------------------------------------
+    @Test
+    void constructor_fourInts_isHoursMinutesSecondsMillis() {
+        Period p = new Period(1, 2, 3, 4);
+        assertEquals(1, p.getHours());
+        assertEquals(2, p.getMinutes());
+        assertEquals(3, p.getSeconds());
+        assertEquals(4, p.getMillis());
+    }
+
+    @Test
+    void constructor_startEndInstants_withPeriodType() {
+        DateTime start = new DateTime(2020, 1, 1, 0, 0, DateTimeZone.UTC);
+        DateTime end = new DateTime(2020, 1, 3, 0, 0, DateTimeZone.UTC);
+        Period p = new Period(start, end, PeriodType.days());
+        assertEquals(2, p.getDays());
+    }
+
+    @Test
+    void constructor_startInstantPlusDuration() {
+        DateTime start = new DateTime(2020, 1, 1, 0, 0, DateTimeZone.UTC);
+        Period p = new Period(start, Duration.standardDays(1));
+        assertEquals(1, p.getDays());
+    }
+
+    @Test
+    void constructor_durationPlusEndInstant() {
+        DateTime end = new DateTime(2020, 1, 2, 0, 0, DateTimeZone.UTC);
+        Period p = new Period(Duration.standardDays(1), end);
+        assertEquals(1, p.getDays());
+    }
+
+    @Test
+    void constructor_startEndInstants_withoutType_usesStandardType() {
+        DateTime start = new DateTime(2020, 1, 1, 0, 0, DateTimeZone.UTC);
+        DateTime end = new DateTime(2020, 1, 3, 0, 0, DateTimeZone.UTC);
+        Period p = new Period((ReadableInstant) start, (ReadableInstant) end);
+        assertEquals(2, p.getDays());
+    }
+
+    @Test
+    void constructor_startPartialEndPartial() {
+        LocalDate start = new LocalDate(2020, 1, 1);
+        LocalDate end = new LocalDate(2020, 1, 3);
+        Period p = new Period((ReadablePartial) start, (ReadablePartial) end);
+        assertEquals(2, p.getDays());
+        Period pTyped = new Period((ReadablePartial) start, (ReadablePartial) end, PeriodType.days());
+        assertEquals(2, pTyped.getDays());
+    }
+
+    @Test
+    void constructor_startEndInstants_withType() {
+        DateTime start = new DateTime(2020, 1, 1, 0, 0, DateTimeZone.UTC);
+        DateTime end = new DateTime(2020, 1, 3, 0, 0, DateTimeZone.UTC);
+        Period p = new Period((ReadableInstant) start, (ReadableInstant) end, PeriodType.days());
+        assertEquals(2, p.getDays());
+    }
+
+    @Test
+    void constructor_startInstantPlusDuration_withType() {
+        DateTime start = new DateTime(2020, 1, 1, 0, 0, DateTimeZone.UTC);
+        Period p = new Period((ReadableInstant) start, (ReadableDuration) Duration.standardDays(1), PeriodType.days());
+        assertEquals(1, p.getDays());
+    }
+
+    @Test
+    void constructor_durationPlusEndInstant_withType() {
+        DateTime end = new DateTime(2020, 1, 2, 0, 0, DateTimeZone.UTC);
+        Period p = new Period((ReadableDuration) Duration.standardDays(1), (ReadableInstant) end, PeriodType.days());
+        assertEquals(1, p.getDays());
+    }
+
+    @Test
+    void constructor_millisWithType() {
+        Period p = new Period(90_000L, PeriodType.standard());
+        assertEquals(1, p.getMinutes());
+        assertEquals(30, p.getSeconds());
+    }
+
+    @Test
+    void constructor_millisWithChronology() {
+        Period p = new Period(DateTimeConstants.MILLIS_PER_DAY, (Chronology) com.legacy.system.datetime.chrono.ISOChronology.getInstanceUTC());
+        assertTrue(p.getHours() > 0 || p.getDays() > 0);
+    }
+
+    @Test
+    void constructor_startEndLongsWithChronology() {
+        long start = 0L;
+        long end = DateTimeConstants.MILLIS_PER_DAY * 2L;
+        Period p = new Period(start, end, (Chronology) com.legacy.system.datetime.chrono.ISOChronology.getInstanceUTC());
+        assertEquals(2, p.getDays());
+    }
+
+    @Test
+    void constructor_startEndLongsWithTypeAndChronology() {
+        long start = 0L;
+        long end = DateTimeConstants.MILLIS_PER_DAY * 2L;
+        Period p = new Period(start, end, PeriodType.days(), com.legacy.system.datetime.chrono.ISOChronology.getInstanceUTC());
+        assertEquals(2, p.getDays());
+    }
+
+    @Test
+    void constructor_fromObject_parsesIsoString() {
+        Period p = new Period((Object) "P1Y2M3D");
+        assertEquals(1, p.getYears());
+        assertEquals(2, p.getMonths());
+        assertEquals(3, p.getDays());
+    }
+
+    // -- withXxx per field ------------------------------------------------------
+    @Test
+    void withXxx_everyStandardField() {
+        Period p = Period.ZERO;
+        assertEquals(1, p.withYears(1).getYears());
+        assertEquals(2, p.withMonths(2).getMonths());
+        assertEquals(3, p.withWeeks(3).getWeeks());
+        assertEquals(4, p.withDays(4).getDays());
+        assertEquals(5, p.withHours(5).getHours());
+        assertEquals(6, p.withMinutes(6).getMinutes());
+        assertEquals(7, p.withSeconds(7).getSeconds());
+        assertEquals(8, p.withMillis(8).getMillis());
+    }
+
+    @Test
+    void withField_setsFieldByDurationType() {
+        Period p = Period.ZERO.withField(DurationFieldType.days(), 5);
+        assertEquals(5, p.getDays());
+    }
+
+    @Test
+    void withFieldAdded_addsFieldByDurationType() {
+        Period p = Period.days(2).withFieldAdded(DurationFieldType.days(), 3);
+        assertEquals(5, p.getDays());
+    }
+
+    @Test
+    void withPeriodType_changesSupportedFields() {
+        Period p = Period.days(2).withPeriodType(PeriodType.days());
+        assertEquals(PeriodType.days(), p.getPeriodType());
+        assertEquals(2, p.getDays());
+    }
+
+    // -- plusXxx / minusXxx per field ----------------------------------------
+    @Test
+    void plusXxx_everyStandardField() {
+        Period p = Period.ZERO;
+        assertEquals(1, p.plusYears(1).getYears());
+        assertEquals(1, p.plusMonths(1).getMonths());
+        assertEquals(1, p.plusWeeks(1).getWeeks());
+        assertEquals(1, p.plusDays(1).getDays());
+        assertEquals(1, p.plusHours(1).getHours());
+        assertEquals(1, p.plusMinutes(1).getMinutes());
+        assertEquals(1, p.plusSeconds(1).getSeconds());
+        assertEquals(1, p.plusMillis(1).getMillis());
+    }
+
+    @Test
+    void minusXxx_everyStandardField() {
+        Period p = Period.years(5).withMonths(5).withWeeks(5).withDays(5)
+                .withHours(5).withMinutes(5).withSeconds(5).withMillis(5);
+        assertEquals(4, p.minusYears(1).getYears());
+        assertEquals(4, p.minusMonths(1).getMonths());
+        assertEquals(4, p.minusWeeks(1).getWeeks());
+        assertEquals(4, p.minusDays(1).getDays());
+        assertEquals(4, p.minusHours(1).getHours());
+        assertEquals(4, p.minusMinutes(1).getMinutes());
+        assertEquals(4, p.minusSeconds(1).getSeconds());
+        assertEquals(4, p.minusMillis(1).getMillis());
+    }
+
+    @Test
+    void minus_readablePeriod_subtractsFieldsIndependently() {
+        Period a = Period.years(5).withMonths(3);
+        Period b = Period.years(2).withMonths(1);
+        Period diff = a.minus(b);
+        assertEquals(3, diff.getYears());
+        assertEquals(2, diff.getMonths());
+    }
+
+    // -- toStandardXxx ------------------------------------------------------------
+    @Test
+    void toStandardMinutesHoursDaysWeeksSeconds() {
+        Period p = new Period(0, 0, 0, 15, 0, 0, 0, 0); // 15 days, standard type
+        assertEquals(2, p.toStandardWeeks().getWeeks());
+        assertEquals(360, p.toStandardHours().getHours());
+        assertEquals(360 * 60, p.toStandardMinutes().getMinutes());
+        assertEquals(360 * 60 * 60, p.toStandardSeconds().getSeconds());
+        assertEquals(15, p.toStandardDays().getDays());
+    }
+
+    // -- null-argument / zero-amount / same-value fast paths --------------------------
+    @Test
+    void nullAndZero_fastPaths_returnSameInstance() {
+        Period p = Period.years(1).withMonths(2);
+        assertSame(p, p.plus((ReadablePeriod) null));
+        assertSame(p, p.minus((ReadablePeriod) null));
+        assertSame(p, p.withFields(null));
+        assertSame(p, p.withFieldAdded(DurationFieldType.years(), 0));
+        assertSame(p, p.plusYears(0));
+        assertSame(p, p.plusMonths(0));
+        assertSame(p, p.plusWeeks(0));
+        assertSame(p, p.plusDays(0));
+        assertSame(p, p.plusHours(0));
+        assertSame(p, p.plusMinutes(0));
+        assertSame(p, p.plusSeconds(0));
+        assertSame(p, p.plusMillis(0));
+        assertSame(p, p.multipliedBy(1));
+        assertSame(p, p.withPeriodType(p.getPeriodType()));
+    }
+
+    @Test
+    void fieldDifference_nullArguments_throws() {
+        LocalDate date = new LocalDate(2020, 1, 1);
+        assertThrows(IllegalArgumentException.class, () -> Period.fieldDifference(null, date));
+        assertThrows(IllegalArgumentException.class, () -> Period.fieldDifference(date, null));
+    }
+
+    // -- never-called factories / constructors ----------------------------------------
+    @Test
+    void weeksSecondsMillisFactories() {
+        assertEquals(2, Period.weeks(2).getWeeks());
+        assertEquals(2, Period.seconds(2).getSeconds());
+        assertEquals(2, Period.millis(2).getMillis());
+    }
+
+    @Test
+    void toPeriod_returnsSameInstance() {
+        Period p = Period.days(1);
+        assertSame(p, p.toPeriod());
+    }
+
+    @Test
+    void checkYearsAndMonths_yearsOnly_alsoThrows() {
+        Period p = Period.years(1);
+        assertThrows(UnsupportedOperationException.class, p::toStandardDuration);
+    }
+
+    @Test
+    void constructor_objectWithTypeAndChronology() {
+        Period p = new Period((Object) "P1Y2M3D", PeriodType.yearMonthDayTime(),
+                (Chronology) com.legacy.system.datetime.chrono.ISOChronology.getInstanceUTC());
+        assertEquals(1, p.getYears());
+        assertEquals(2, p.getMonths());
+        assertEquals(3, p.getDays());
+    }
+
+    @Test
+    void constructor_objectWithChronology() {
+        Period p = new Period((Object) "P1Y2M3D", (Chronology) com.legacy.system.datetime.chrono.ISOChronology.getInstanceUTC());
+        assertEquals(1, p.getYears());
+    }
+
+    @Test
+    void constructor_startEndLongs_withType() {
+        Period p = new Period(0L, 2L * DateTimeConstants.MILLIS_PER_DAY, PeriodType.days());
+        assertEquals(2, p.getDays());
+    }
+
+    @Test
+    void constructor_startEndLongs_noType() {
+        Period p = new Period(0L, 2L * DateTimeConstants.MILLIS_PER_DAY);
+        assertEquals(2, p.getDays());
     }
 }

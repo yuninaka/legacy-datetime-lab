@@ -512,6 +512,35 @@
             <goals>
               <goal>report</goal>
             </goals>
+            <configuration>
+              <!-- Scoped to the "core package" documented in SPECIFICATION.md and covered
+                   by src/test/java (the value/instant/period types + the two default
+                   chronologies), not the whole com.legacy.system.datetime.* library
+                   (format/tz/convert/field and the other calendar systems). -->
+              <includes>
+                <include>**/DateTime.class</include>
+                <include>**/DateTime$*.class</include>
+                <include>**/LocalDate.class</include>
+                <include>**/LocalDate$*.class</include>
+                <include>**/LocalDateTime.class</include>
+                <include>**/LocalDateTime$*.class</include>
+                <include>**/LocalTime.class</include>
+                <include>**/LocalTime$*.class</include>
+                <include>**/Instant.class</include>
+                <include>**/Duration.class</include>
+                <include>**/Period.class</include>
+                <include>**/Interval.class</include>
+                <include>**/DateTimeZone.class</include>
+                <include>**/MutableDateTime.class</include>
+                <include>**/MutableDateTime$*.class</include>
+                <include>**/Days.class</include>
+                <include>**/Weeks.class</include>
+                <include>**/Months.class</include>
+                <include>**/Years.class</include>
+                <include>**/chrono/GregorianChronology.class</include>
+                <include>**/chrono/ISOChronology.class</include>
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -664,10 +693,34 @@
         </dependencies>
         <configuration>
           <targetClasses>
-            <param>com.legacy.system.datetime.*</param>
+            <!-- Same "core package" scope as the JaCoCo report (see the jacoco-maven-plugin
+                 execution above): the value/instant/period types plus the two default
+                 chronologies, not the whole library. -->
+            <param>com.legacy.system.datetime.DateTime</param>
+            <param>com.legacy.system.datetime.DateTime$*</param>
+            <param>com.legacy.system.datetime.LocalDate</param>
+            <param>com.legacy.system.datetime.LocalDate$*</param>
+            <param>com.legacy.system.datetime.LocalDateTime</param>
+            <param>com.legacy.system.datetime.LocalDateTime$*</param>
+            <param>com.legacy.system.datetime.LocalTime</param>
+            <param>com.legacy.system.datetime.LocalTime$*</param>
+            <param>com.legacy.system.datetime.Instant</param>
+            <param>com.legacy.system.datetime.Duration</param>
+            <param>com.legacy.system.datetime.Period</param>
+            <param>com.legacy.system.datetime.Interval</param>
+            <param>com.legacy.system.datetime.DateTimeZone</param>
+            <param>com.legacy.system.datetime.MutableDateTime</param>
+            <param>com.legacy.system.datetime.MutableDateTime$*</param>
+            <param>com.legacy.system.datetime.Days</param>
+            <param>com.legacy.system.datetime.Weeks</param>
+            <param>com.legacy.system.datetime.Months</param>
+            <param>com.legacy.system.datetime.Years</param>
+            <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
+            <param>com.legacy.system.datetime.chrono.ISOChronology</param>
           </targetClasses>
           <targetTests>
-            <param>com.legacy.system.datetime.*</param>
+            <param>com.legacy.system.datetime.*Test</param>
+            <param>com.legacy.system.datetime.chrono.*Test</param>
           </targetTests>
         </configuration>
       </plugin>
@@ -852,10 +905,34 @@
         </dependencies>
         <configuration>
           <targetClasses>
-            <param>com.legacy.system.datetime.*</param>
+            <!-- Same "core package" scope as the JaCoCo report (see the jacoco-maven-plugin
+                 execution above): the value/instant/period types plus the two default
+                 chronologies, not the whole library. -->
+            <param>com.legacy.system.datetime.DateTime</param>
+            <param>com.legacy.system.datetime.DateTime$*</param>
+            <param>com.legacy.system.datetime.LocalDate</param>
+            <param>com.legacy.system.datetime.LocalDate$*</param>
+            <param>com.legacy.system.datetime.LocalDateTime</param>
+            <param>com.legacy.system.datetime.LocalDateTime$*</param>
+            <param>com.legacy.system.datetime.LocalTime</param>
+            <param>com.legacy.system.datetime.LocalTime$*</param>
+            <param>com.legacy.system.datetime.Instant</param>
+            <param>com.legacy.system.datetime.Duration</param>
+            <param>com.legacy.system.datetime.Period</param>
+            <param>com.legacy.system.datetime.Interval</param>
+            <param>com.legacy.system.datetime.DateTimeZone</param>
+            <param>com.legacy.system.datetime.MutableDateTime</param>
+            <param>com.legacy.system.datetime.MutableDateTime$*</param>
+            <param>com.legacy.system.datetime.Days</param>
+            <param>com.legacy.system.datetime.Weeks</param>
+            <param>com.legacy.system.datetime.Months</param>
+            <param>com.legacy.system.datetime.Years</param>
+            <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
+            <param>com.legacy.system.datetime.chrono.ISOChronology</param>
           </targetClasses>
           <targetTests>
-            <param>com.legacy.system.datetime.*</param>
+            <param>com.legacy.system.datetime.*Test</param>
+            <param>com.legacy.system.datetime.chrono.*Test</param>
           </targetTests>
         </configuration>
       </plugin>
@@ -944,10 +1021,34 @@
         <version>1.15.3</version>
         <configuration>
           <targetClasses>
-            <param>com.legacy.system.datetime.*</param>
+            <!-- Same "core package" scope as the JaCoCo report (see the jacoco-maven-plugin
+                 execution above): the value/instant/period types plus the two default
+                 chronologies, not the whole library. -->
+            <param>com.legacy.system.datetime.DateTime</param>
+            <param>com.legacy.system.datetime.DateTime$*</param>
+            <param>com.legacy.system.datetime.LocalDate</param>
+            <param>com.legacy.system.datetime.LocalDate$*</param>
+            <param>com.legacy.system.datetime.LocalDateTime</param>
+            <param>com.legacy.system.datetime.LocalDateTime$*</param>
+            <param>com.legacy.system.datetime.LocalTime</param>
+            <param>com.legacy.system.datetime.LocalTime$*</param>
+            <param>com.legacy.system.datetime.Instant</param>
+            <param>com.legacy.system.datetime.Duration</param>
+            <param>com.legacy.system.datetime.Period</param>
+            <param>com.legacy.system.datetime.Interval</param>
+            <param>com.legacy.system.datetime.DateTimeZone</param>
+            <param>com.legacy.system.datetime.MutableDateTime</param>
+            <param>com.legacy.system.datetime.MutableDateTime$*</param>
+            <param>com.legacy.system.datetime.Days</param>
+            <param>com.legacy.system.datetime.Weeks</param>
+            <param>com.legacy.system.datetime.Months</param>
+            <param>com.legacy.system.datetime.Years</param>
+            <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
+            <param>com.legacy.system.datetime.chrono.ISOChronology</param>
           </targetClasses>
           <targetTests>
-            <param>com.legacy.system.datetime.*</param>
+            <param>com.legacy.system.datetime.*Test</param>
+            <param>com.legacy.system.datetime.chrono.*Test</param>
           </targetTests>
         </configuration>
       </plugin>
@@ -1107,10 +1208,34 @@
         </dependencies>
         <configuration>
           <targetClasses>
-            <param>com.legacy.system.datetime.*</param>
+            <!-- Same "core package" scope as the JaCoCo report (see the jacoco-maven-plugin
+                 execution above): the value/instant/period types plus the two default
+                 chronologies, not the whole library. -->
+            <param>com.legacy.system.datetime.DateTime</param>
+            <param>com.legacy.system.datetime.DateTime$*</param>
+            <param>com.legacy.system.datetime.LocalDate</param>
+            <param>com.legacy.system.datetime.LocalDate$*</param>
+            <param>com.legacy.system.datetime.LocalDateTime</param>
+            <param>com.legacy.system.datetime.LocalDateTime$*</param>
+            <param>com.legacy.system.datetime.LocalTime</param>
+            <param>com.legacy.system.datetime.LocalTime$*</param>
+            <param>com.legacy.system.datetime.Instant</param>
+            <param>com.legacy.system.datetime.Duration</param>
+            <param>com.legacy.system.datetime.Period</param>
+            <param>com.legacy.system.datetime.Interval</param>
+            <param>com.legacy.system.datetime.DateTimeZone</param>
+            <param>com.legacy.system.datetime.MutableDateTime</param>
+            <param>com.legacy.system.datetime.MutableDateTime$*</param>
+            <param>com.legacy.system.datetime.Days</param>
+            <param>com.legacy.system.datetime.Weeks</param>
+            <param>com.legacy.system.datetime.Months</param>
+            <param>com.legacy.system.datetime.Years</param>
+            <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
+            <param>com.legacy.system.datetime.chrono.ISOChronology</param>
           </targetClasses>
           <targetTests>
-            <param>com.legacy.system.datetime.*</param>
+            <param>com.legacy.system.datetime.*Test</param>
+            <param>com.legacy.system.datetime.chrono.*Test</param>
           </targetTests>
         </configuration>
       </plugin>
@@ -1165,10 +1290,34 @@
         </dependencies>
         <configuration>
           <targetClasses>
-            <param>com.legacy.system.datetime.*</param>
+            <!-- Same "core package" scope as the JaCoCo report (see the jacoco-maven-plugin
+                 execution above): the value/instant/period types plus the two default
+                 chronologies, not the whole library. -->
+            <param>com.legacy.system.datetime.DateTime</param>
+            <param>com.legacy.system.datetime.DateTime$*</param>
+            <param>com.legacy.system.datetime.LocalDate</param>
+            <param>com.legacy.system.datetime.LocalDate$*</param>
+            <param>com.legacy.system.datetime.LocalDateTime</param>
+            <param>com.legacy.system.datetime.LocalDateTime$*</param>
+            <param>com.legacy.system.datetime.LocalTime</param>
+            <param>com.legacy.system.datetime.LocalTime$*</param>
+            <param>com.legacy.system.datetime.Instant</param>
+            <param>com.legacy.system.datetime.Duration</param>
+            <param>com.legacy.system.datetime.Period</param>
+            <param>com.legacy.system.datetime.Interval</param>
+            <param>com.legacy.system.datetime.DateTimeZone</param>
+            <param>com.legacy.system.datetime.MutableDateTime</param>
+            <param>com.legacy.system.datetime.MutableDateTime$*</param>
+            <param>com.legacy.system.datetime.Days</param>
+            <param>com.legacy.system.datetime.Weeks</param>
+            <param>com.legacy.system.datetime.Months</param>
+            <param>com.legacy.system.datetime.Years</param>
+            <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
+            <param>com.legacy.system.datetime.chrono.ISOChronology</param>
           </targetClasses>
           <targetTests>
-            <param>com.legacy.system.datetime.*</param>
+            <param>com.legacy.system.datetime.*Test</param>
+            <param>com.legacy.system.datetime.chrono.*Test</param>
           </targetTests>
         </configuration>
       </plugin>

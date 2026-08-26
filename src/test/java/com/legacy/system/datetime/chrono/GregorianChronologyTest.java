@@ -7,6 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import com.legacy.system.datetime.Chronology;
 import com.legacy.system.datetime.DateTimeZone;
 import com.legacy.system.datetime.IllegalFieldValueException;
@@ -16,6 +22,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class GregorianChronologyTest {
+
+    private static Object roundTripSerialize(Object original) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (ObjectOutputStream out = new ObjectOutputStream(bytes)) {
+            out.writeObject(original);
+        }
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+            return in.readObject();
+        }
+    }
 
     @Test
     void getInstanceUTC_isUtcSingleton() {
@@ -198,5 +214,38 @@ class GregorianChronologyTest {
     void toString_containsZoneId() {
         GregorianChronology chrono = GregorianChronology.getInstanceUTC();
         assertTrue(chrono.toString().contains("UTC"));
+    }
+
+    @Test
+    void getInstance_noArgs_usesDefaultZone() {
+        GregorianChronology chrono = GregorianChronology.getInstance();
+        assertEquals(DateTimeZone.getDefault(), chrono.getZone());
+        assertEquals(4, chrono.getMinimumDaysInFirstWeek());
+    }
+
+    @Test
+    void getInstance_nullZoneWithMinDays_usesDefaultZone() {
+        GregorianChronology chrono = GregorianChronology.getInstance(null, 5);
+        assertEquals(DateTimeZone.getDefault(), chrono.getZone());
+        assertEquals(5, chrono.getMinimumDaysInFirstWeek());
+    }
+
+    @Test
+    void getInstance_zonedTwice_returnsSameCachedInstance() {
+        DateTimeZone tokyo = DateTimeZone.forID("Asia/Tokyo");
+        assertSame(GregorianChronology.getInstance(tokyo, 6), GregorianChronology.getInstance(tokyo, 6));
+    }
+
+    @Test
+    void serialization_resolvesToSameCachedInstance() throws Exception {
+        GregorianChronology original = GregorianChronology.getInstance(DateTimeZone.forID("Asia/Tokyo"), 6);
+        GregorianChronology roundTripped = (GregorianChronology) roundTripSerialize(original);
+        assertSame(GregorianChronology.getInstance(DateTimeZone.forID("Asia/Tokyo"), 6), roundTripped);
+    }
+
+    @Test
+    void serialization_utcInstance_resolvesToUtcSingleton() throws Exception {
+        GregorianChronology roundTripped = (GregorianChronology) roundTripSerialize(GregorianChronology.getInstanceUTC());
+        assertSame(GregorianChronology.getInstanceUTC(), roundTripped);
     }
 }
