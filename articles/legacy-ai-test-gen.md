@@ -1,6 +1,6 @@
 ---
 slug: "legacy-ai-test-gen"
-title: "仕様書なしのレガシーコードから、Claude Codeで網羅率93%のテスト保護網を自動構築した話"
+title: "OSSライブラリで検証：仕様書ゼロからClaude Codeでテスト網羅率93%を達成した話"
 emoji: "🧪"
 type: "tech"
 topics: ["claude", "java", "zenn", "ai駆動開発", "テスト自動生成"]
