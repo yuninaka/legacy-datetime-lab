@@ -182,8 +182,7 @@ public final class BuddhistChronology extends AssembledChronology {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof BuddhistChronology) {
-      BuddhistChronology chrono = (BuddhistChronology) obj;
+    if (obj instanceof BuddhistChronology chrono) {
       return getZone().equals(chrono.getZone());
     }
     return false;

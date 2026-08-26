@@ -61,8 +61,7 @@ class InternalParserDateTimeParser implements DateTimeParser, InternalParser {
     if (obj == this) {
       return true;
     }
-    if (obj instanceof InternalParserDateTimeParser) {
-      InternalParserDateTimeParser other = (InternalParserDateTimeParser) obj;
+    if (obj instanceof InternalParserDateTimeParser other) {
       return underlying.equals(other.underlying);
     }
     return false;

@@ -577,8 +577,8 @@ public class PeriodType implements Serializable {
     }
     var inPartType = new PeriodType(null, types, null);
     Object cached = cache.get(inPartType);
-    if (cached instanceof PeriodType) {
-      return (PeriodType) cached;
+    if (cached instanceof PeriodType type) {
+      return type;
     }
     if (cached != null) {
       throw new IllegalArgumentException("PeriodType does not support fields: " + cached);

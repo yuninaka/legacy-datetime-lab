@@ -411,8 +411,7 @@ public final class GJChronology extends AssembledChronology {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof GJChronology) {
-      GJChronology chrono = (GJChronology) obj;
+    if (obj instanceof GJChronology chrono) {
       return iCutoverMillis == chrono.iCutoverMillis
           && getMinimumDaysInFirstWeek() == chrono.getMinimumDaysInFirstWeek()
           && getZone().equals(chrono.getZone());

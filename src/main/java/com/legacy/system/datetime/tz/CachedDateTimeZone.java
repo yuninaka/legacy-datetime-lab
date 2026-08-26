@@ -131,8 +131,8 @@ public class CachedDateTimeZone extends DateTimeZone {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof CachedDateTimeZone) {
-      return iZone.equals(((CachedDateTimeZone) obj).iZone);
+    if (obj instanceof CachedDateTimeZone other) {
+      return iZone.equals(other.iZone);
     }
     return false;
   }

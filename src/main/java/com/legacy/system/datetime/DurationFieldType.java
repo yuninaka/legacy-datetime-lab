@@ -280,8 +280,8 @@ public abstract class DurationFieldType implements Serializable {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof StandardDurationFieldType) {
-        return iOrdinal == ((StandardDurationFieldType) obj).iOrdinal;
+      if (obj instanceof StandardDurationFieldType other) {
+        return iOrdinal == other.iOrdinal;
       }
       return false;
     }

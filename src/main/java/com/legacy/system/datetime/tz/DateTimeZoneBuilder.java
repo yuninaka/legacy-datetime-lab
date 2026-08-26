@@ -458,9 +458,9 @@ public class DateTimeZoneBuilder {
       writeMillis(out, zone.getOffset(0));
       writeMillis(out, zone.getStandardOffset(0));
     } else {
-      if (zone instanceof CachedDateTimeZone) {
+      if (zone instanceof CachedDateTimeZone cached) {
         out.writeByte('C'); // 'C' for cached, precalculated
-        zone = ((CachedDateTimeZone) zone).getUncachedZone();
+        zone = cached.getUncachedZone();
       } else {
         out.writeByte('P'); // 'P' for precalculated, uncached
       }
@@ -635,8 +635,7 @@ public class DateTimeZoneBuilder {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof OfYear) {
-        OfYear other = (OfYear) obj;
+      if (obj instanceof OfYear other) {
         return iMode == other.iMode
             && iMonthOfYear == other.iMonthOfYear
             && iDayOfMonth == other.iDayOfMonth
@@ -796,8 +795,7 @@ public class DateTimeZoneBuilder {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof Recurrence) {
-        Recurrence other = (Recurrence) obj;
+      if (obj instanceof Recurrence other) {
         return iSaveMillis == other.iSaveMillis
             && iNameKey.equals(other.iNameKey)
             && iOfYear.equals(other.iOfYear);
@@ -1330,8 +1328,7 @@ public class DateTimeZoneBuilder {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof DSTZone) {
-        DSTZone other = (DSTZone) obj;
+      if (obj instanceof DSTZone other) {
         return getID().equals(other.getID())
             && iStandardOffset == other.iStandardOffset
             && iStartRecurrence.equals(other.iStartRecurrence)
@@ -1683,8 +1680,7 @@ public class DateTimeZoneBuilder {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof PrecalculatedZone) {
-        PrecalculatedZone other = (PrecalculatedZone) obj;
+      if (obj instanceof PrecalculatedZone other) {
         return getID().equals(other.getID())
             && Arrays.equals(iTransitions, other.iTransitions)
             && Arrays.equals(iNameKeys, other.iNameKeys)

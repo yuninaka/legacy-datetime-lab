@@ -237,8 +237,7 @@ public class DateTimeComparator implements Comparator<Object>, Serializable {
    */
   @Override
   public boolean equals(Object object) {
-    if (object instanceof DateTimeComparator) {
-      DateTimeComparator other = (DateTimeComparator) object;
+    if (object instanceof DateTimeComparator other) {
       return (iLowerLimit == other.getLowerLimit()
               || (iLowerLimit != null && iLowerLimit.equals(other.getLowerLimit())))
           && (iUpperLimit == other.getUpperLimit()

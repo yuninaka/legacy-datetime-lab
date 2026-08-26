@@ -159,8 +159,8 @@ public final class MillisDurationField extends DurationField implements Serializ
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof MillisDurationField) {
-      return getUnitMillis() == ((MillisDurationField) obj).getUnitMillis();
+    if (obj instanceof MillisDurationField other) {
+      return getUnitMillis() == other.getUnitMillis();
     }
     return false;
   }

@@ -293,8 +293,7 @@ public final class IslamicChronology extends BasicChronology {
     if (this == obj) {
       return true;
     }
-    if (obj instanceof IslamicChronology) {
-      IslamicChronology chrono = (IslamicChronology) obj;
+    if (obj instanceof IslamicChronology chrono) {
       return getLeapYearPatternType().index == chrono.getLeapYearPatternType().index
           && super.equals(obj);
     }

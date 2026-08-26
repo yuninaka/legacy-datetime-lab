@@ -897,10 +897,9 @@ public class DateTimeFormat {
       if (obj == null) {
         return false;
       }
-      if (!(obj instanceof StyleFormatterCacheKey)) {
+      if (!(obj instanceof StyleFormatterCacheKey other)) {
         return false;
       }
-      StyleFormatterCacheKey other = (StyleFormatterCacheKey) obj;
       if (combinedTypeAndStyle != other.combinedTypeAndStyle) {
         return false;
       }

@@ -545,8 +545,8 @@ public abstract class DateTimeFieldType implements Serializable {
       if (this == obj) {
         return true;
       }
-      if (obj instanceof StandardDateTimeFieldType) {
-        return iOrdinal == ((StandardDateTimeFieldType) obj).iOrdinal;
+      if (obj instanceof StandardDateTimeFieldType other) {
+        return iOrdinal == other.iOrdinal;
       }
       return false;
     }
