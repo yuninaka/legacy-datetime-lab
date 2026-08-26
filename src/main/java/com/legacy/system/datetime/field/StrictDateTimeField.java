@@ -18,10 +18,10 @@ package com.legacy.system.datetime.field;
 import com.legacy.system.datetime.DateTimeField;
 
 /**
- * Converts a lenient DateTimeField into a strict one. By being strict, the set
- * throws an IllegalArgumentException if the value is out of bounds.
- * <p>
- * StrictDateTimeField is thread-safe and immutable.
+ * Converts a lenient DateTimeField into a strict one. By being strict, the set throws an
+ * IllegalArgumentException if the value is out of bounds.
+ *
+ * <p>StrictDateTimeField is thread-safe and immutable.
  *
  * @author Brian S O'Neill
  * @see org.joda.time.chrono.StrictChronology
@@ -30,46 +30,45 @@ import com.legacy.system.datetime.DateTimeField;
  */
 public class StrictDateTimeField extends DelegatedDateTimeField {
 
-    private static final long serialVersionUID = 3154803964207950910L;
+  private static final long serialVersionUID = 3154803964207950910L;
 
-    /**
-     * Returns a strict version of the given field. If it is already strict,
-     * then it is returned as-is. Otherwise, a new StrictDateTimeField is returned.
-     * 
-     * @param field  the field, null returns null
-     * @return the field. may be null
-     */
-    public static DateTimeField getInstance(DateTimeField field) {
-        if (field == null) {
-            return null;
-        }
-        if (field instanceof LenientDateTimeField) {
-            field = ((LenientDateTimeField)field).getWrappedField();
-        }
-        if (!field.isLenient()) {
-            return field;
-        }
-        return new StrictDateTimeField(field);
+  /**
+   * Returns a strict version of the given field. If it is already strict, then it is returned
+   * as-is. Otherwise, a new StrictDateTimeField is returned.
+   *
+   * @param field the field, null returns null
+   * @return the field. may be null
+   */
+  public static DateTimeField getInstance(DateTimeField field) {
+    if (field == null) {
+      return null;
     }
+    if (field instanceof LenientDateTimeField) {
+      field = ((LenientDateTimeField) field).getWrappedField();
+    }
+    if (!field.isLenient()) {
+      return field;
+    }
+    return new StrictDateTimeField(field);
+  }
 
-    protected StrictDateTimeField(DateTimeField field) {
-        super(field);
-    }
+  protected StrictDateTimeField(DateTimeField field) {
+    super(field);
+  }
 
-    @Override
-    public final boolean isLenient() {
-        return false;
-    }
+  @Override
+  public final boolean isLenient() {
+    return false;
+  }
 
-    /**
-     * Does a bounds check before setting the value.
-     *
-     * @throws IllegalArgumentException if the value is invalid
-     */
-    @Override
-    public long set(long instant, int value) {
-        FieldUtils.verifyValueBounds
-            (this, value, getMinimumValue(instant), getMaximumValue(instant));
-        return super.set(instant, value);
-    }
+  /**
+   * Does a bounds check before setting the value.
+   *
+   * @throws IllegalArgumentException if the value is invalid
+   */
+  @Override
+  public long set(long instant, int value) {
+    FieldUtils.verifyValueBounds(this, value, getMinimumValue(instant), getMaximumValue(instant));
+    return super.set(instant, value);
+  }
 }

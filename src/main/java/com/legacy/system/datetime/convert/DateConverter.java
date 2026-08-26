@@ -15,56 +15,49 @@
  */
 package com.legacy.system.datetime.convert;
 
+import com.legacy.system.datetime.Chronology;
 import java.util.Date;
 
-import com.legacy.system.datetime.Chronology;
-
 /**
- * DateConverter converts a java util Date to an instant or partial.
- * The Date is converted to milliseconds in the ISO chronology.
+ * DateConverter converts a java util Date to an instant or partial. The Date is converted to
+ * milliseconds in the ISO chronology.
  *
  * @author Stephen Colebourne
  * @since 1.0
  */
-final class DateConverter extends AbstractConverter
-        implements InstantConverter, PartialConverter {
+final class DateConverter extends AbstractConverter implements InstantConverter, PartialConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final DateConverter INSTANCE = new DateConverter();
+  /** Singleton instance. */
+  static final DateConverter INSTANCE = new DateConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected DateConverter() {
-        super();
-    }
+  /** Restricted constructor. */
+  protected DateConverter() {
+    super();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Gets the millis, which is the Date millis value.
-     * 
-     * @param object  the Date to convert, must not be null
-     * @param chrono  the non-null result of getChronology
-     * @return the millisecond value
-     * @throws NullPointerException if the object is null
-     * @throws ClassCastException if the object is an invalid type
-     */
-    @Override
-    public long getInstantMillis(Object object, Chronology chrono) {
-        Date date = (Date) object;
-        return date.getTime();
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Gets the millis, which is the Date millis value.
+   *
+   * @param object the Date to convert, must not be null
+   * @param chrono the non-null result of getChronology
+   * @return the millisecond value
+   * @throws NullPointerException if the object is null
+   * @throws ClassCastException if the object is an invalid type
+   */
+  @Override
+  public long getInstantMillis(Object object, Chronology chrono) {
+    Date date = (Date) object;
+    return date.getTime();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Returns Date.class.
-     * 
-     * @return Date.class
-     */
-    public Class<?> getSupportedType() {
-        return Date.class;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns Date.class.
+   *
+   * @return Date.class
+   */
+  public Class<?> getSupportedType() {
+    return Date.class;
+  }
 }

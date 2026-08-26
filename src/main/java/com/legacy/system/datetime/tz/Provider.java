@@ -15,9 +15,8 @@
  */
 package com.legacy.system.datetime.tz;
 
-import java.util.Set;
-
 import com.legacy.system.datetime.DateTimeZone;
+import java.util.Set;
 
 /**
  * Service provider factory for time zones.
@@ -27,18 +26,13 @@ import com.legacy.system.datetime.DateTimeZone;
  */
 public interface Provider {
 
-    /**
-     * Retrieves a DateTimeZone for the given id. All providers must at
-     * least support id "UTC".
-     *
-     * @return null if not found
-     */
-    DateTimeZone getZone(String id);
+  /**
+   * Retrieves a DateTimeZone for the given id. All providers must at least support id "UTC".
+   *
+   * @return null if not found
+   */
+  DateTimeZone getZone(String id);
 
-    /**
-     * Returns an unmodifiable set of ids. All providers must at least
-     * support id "UTC".
-     */        
-    Set<String> getAvailableIDs();
-
+  /** Returns an unmodifiable set of ids. All providers must at least support id "UTC". */
+  Set<String> getAvailableIDs();
 }

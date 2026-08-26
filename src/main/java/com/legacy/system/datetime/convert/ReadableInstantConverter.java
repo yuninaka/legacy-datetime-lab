@@ -28,89 +28,82 @@ import com.legacy.system.datetime.chrono.ISOChronology;
  * @since 1.0
  */
 class ReadableInstantConverter extends AbstractConverter
-        implements InstantConverter, PartialConverter {
+    implements InstantConverter, PartialConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final ReadableInstantConverter INSTANCE = new ReadableInstantConverter();
+  /** Singleton instance. */
+  static final ReadableInstantConverter INSTANCE = new ReadableInstantConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected ReadableInstantConverter() {
-        super();
+  /** Restricted constructor. */
+  protected ReadableInstantConverter() {
+    super();
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Gets the chronology, which is taken from the ReadableInstant. If the chronology on the instant
+   * is null, the ISOChronology in the specified time zone is used. If the chronology on the instant
+   * is not in the specified zone, it is adapted.
+   *
+   * @param object the ReadableInstant to convert, must not be null
+   * @param zone the specified zone to use, null means default zone
+   * @return the chronology, never null
+   */
+  @Override
+  public Chronology getChronology(Object object, DateTimeZone zone) {
+    Chronology chrono = ((ReadableInstant) object).getChronology();
+    if (chrono == null) {
+      return ISOChronology.getInstance(zone);
     }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Gets the chronology, which is taken from the ReadableInstant.
-     * If the chronology on the instant is null, the ISOChronology in the
-     * specified time zone is used.
-     * If the chronology on the instant is not in the specified zone, it is
-     * adapted.
-     * 
-     * @param object  the ReadableInstant to convert, must not be null
-     * @param zone  the specified zone to use, null means default zone
-     * @return the chronology, never null
-     */
-    @Override
-    public Chronology getChronology(Object object, DateTimeZone zone) {
-        Chronology chrono = ((ReadableInstant) object).getChronology();
-        if (chrono == null) {
-            return ISOChronology.getInstance(zone);
-        }
-        DateTimeZone chronoZone = chrono.getZone();
-        if (chronoZone != zone) {
-            chrono = chrono.withZone(zone);
-            if (chrono == null) {
-                return ISOChronology.getInstance(zone);
-            }
-        }
-        return chrono;
+    DateTimeZone chronoZone = chrono.getZone();
+    if (chronoZone != zone) {
+      chrono = chrono.withZone(zone);
+      if (chrono == null) {
+        return ISOChronology.getInstance(zone);
+      }
     }
+    return chrono;
+  }
 
-    /**
-     * Gets the chronology, which is taken from the ReadableInstant.
-     * <p>
-     * If the passed in chronology is non-null, it is used.
-     * Otherwise the chronology from the instant is used.
-     * 
-     * @param object  the ReadableInstant to convert, must not be null
-     * @param chrono  the chronology to use, null means use that from object
-     * @return the chronology, never null
-     */
-    @Override
-    public Chronology getChronology(Object object, Chronology chrono) {
-        if (chrono == null) {
-            chrono = ((ReadableInstant) object).getChronology();
-            chrono = DateTimeUtils.getChronology(chrono);
-        }
-        return chrono;
+  /**
+   * Gets the chronology, which is taken from the ReadableInstant.
+   *
+   * <p>If the passed in chronology is non-null, it is used. Otherwise the chronology from the
+   * instant is used.
+   *
+   * @param object the ReadableInstant to convert, must not be null
+   * @param chrono the chronology to use, null means use that from object
+   * @return the chronology, never null
+   */
+  @Override
+  public Chronology getChronology(Object object, Chronology chrono) {
+    if (chrono == null) {
+      chrono = ((ReadableInstant) object).getChronology();
+      chrono = DateTimeUtils.getChronology(chrono);
     }
+    return chrono;
+  }
 
-    /**
-     * Extracts the millis from an object of this converter's type.
-     * 
-     * @param object  the ReadableInstant to convert, must not be null
-     * @param chrono  the non-null result of getChronology
-     * @return the millisecond value
-     * @throws NullPointerException if the object is null
-     * @throws ClassCastException if the object is an invalid type
-     */
-    @Override
-    public long getInstantMillis(Object object, Chronology chrono) {
-        return ((ReadableInstant) object).getMillis();
-    }
+  /**
+   * Extracts the millis from an object of this converter's type.
+   *
+   * @param object the ReadableInstant to convert, must not be null
+   * @param chrono the non-null result of getChronology
+   * @return the millisecond value
+   * @throws NullPointerException if the object is null
+   * @throws ClassCastException if the object is an invalid type
+   */
+  @Override
+  public long getInstantMillis(Object object, Chronology chrono) {
+    return ((ReadableInstant) object).getMillis();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Returns ReadableInstant.class.
-     * 
-     * @return ReadableInstant.class
-     */
-    public Class<?> getSupportedType() {
-        return ReadableInstant.class;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns ReadableInstant.class.
+   *
+   * @return ReadableInstant.class
+   */
+  public Class<?> getSupportedType() {
+    return ReadableInstant.class;
+  }
 }

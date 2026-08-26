@@ -17,67 +17,66 @@ package com.legacy.system.datetime;
 
 /**
  * A DateTimeZone implementation for UTC.
- * <p>
- * This exists instead of using FixedDateTimeZone to avoid deadlocks.
+ *
+ * <p>This exists instead of using FixedDateTimeZone to avoid deadlocks.
  * https://github.com/JodaOrg/joda-time/issues/171
  */
 final class UTCDateTimeZone extends DateTimeZone {
 
-    static final DateTimeZone INSTANCE = new UTCDateTimeZone();
-    private static final long serialVersionUID = -3513011772763289092L;
+  static final DateTimeZone INSTANCE = new UTCDateTimeZone();
+  private static final long serialVersionUID = -3513011772763289092L;
 
-    public UTCDateTimeZone() {
-        super("UTC");
-    }
+  public UTCDateTimeZone() {
+    super("UTC");
+  }
 
-    @Override
-    public String getNameKey(long instant) {
-        return "UTC";
-    }
+  @Override
+  public String getNameKey(long instant) {
+    return "UTC";
+  }
 
-    @Override
-    public int getOffset(long instant) {
-        return 0;
-    }
+  @Override
+  public int getOffset(long instant) {
+    return 0;
+  }
 
-    @Override
-    public int getStandardOffset(long instant) {
-        return 0;
-    }
+  @Override
+  public int getStandardOffset(long instant) {
+    return 0;
+  }
 
-    @Override
-    public int getOffsetFromLocal(long instantLocal) {
-        return 0;
-    }
+  @Override
+  public int getOffsetFromLocal(long instantLocal) {
+    return 0;
+  }
 
-    @Override
-    public boolean isFixed() {
-        return true;
-    }
+  @Override
+  public boolean isFixed() {
+    return true;
+  }
 
-    @Override
-    public long nextTransition(long instant) {
-        return instant;
-    }
+  @Override
+  public long nextTransition(long instant) {
+    return instant;
+  }
 
-    @Override
-    public long previousTransition(long instant) {
-        return instant;
-    }
+  @Override
+  public long previousTransition(long instant) {
+    return instant;
+  }
 
-    @Override
-    public java.util.TimeZone toTimeZone() {
-        return new java.util.SimpleTimeZone(0, getID());
-    }
+  @Override
+  public java.util.TimeZone toTimeZone() {
+    return new java.util.SimpleTimeZone(0, getID());
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof UTCDateTimeZone);
-    }
+  @Override
+  public boolean equals(Object obj) {
+    return (obj instanceof UTCDateTimeZone);
+  }
 
-    @Override
-    public int hashCode() {
-        return getID().hashCode();
-    }
-
+  @Override
+  public int hashCode() {
+    return getID().hashCode();
+  }
 }

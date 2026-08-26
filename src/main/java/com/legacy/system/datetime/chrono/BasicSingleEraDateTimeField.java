@@ -15,8 +15,6 @@
  */
 package com.legacy.system.datetime.chrono;
 
-import java.util.Locale;
-
 import com.legacy.system.datetime.DateTimeConstants;
 import com.legacy.system.datetime.DateTimeFieldType;
 import com.legacy.system.datetime.DurationField;
@@ -25,6 +23,7 @@ import com.legacy.system.datetime.IllegalFieldValueException;
 import com.legacy.system.datetime.field.BaseDateTimeField;
 import com.legacy.system.datetime.field.FieldUtils;
 import com.legacy.system.datetime.field.UnsupportedDurationField;
+import java.util.Locale;
 
 /**
  * Provides time calculations for the coptic era component of time.
@@ -35,100 +34,94 @@ import com.legacy.system.datetime.field.UnsupportedDurationField;
  */
 final class BasicSingleEraDateTimeField extends BaseDateTimeField {
 
-    /**
-     * Value of the era, which will be the same as DateTimeConstants.CE.
-     */
-    private static final int ERA_VALUE = DateTimeConstants.CE;
-    /**
-     * Text value of the era.
-     */
-    private final String iEraText;
+  /** Value of the era, which will be the same as DateTimeConstants.CE. */
+  private static final int ERA_VALUE = DateTimeConstants.CE;
 
-    /**
-     * Restricted constructor.
-     */
-    BasicSingleEraDateTimeField(String text) {
-        super(DateTimeFieldType.era());
-        iEraText = text;
+  /** Text value of the era. */
+  private final String iEraText;
+
+  /** Restricted constructor. */
+  BasicSingleEraDateTimeField(String text) {
+    super(DateTimeFieldType.era());
+    iEraText = text;
+  }
+
+  @Override
+  public boolean isLenient() {
+    return false;
+  }
+
+  @Override
+  public int get(long instant) {
+    return ERA_VALUE;
+  }
+
+  @Override
+  public long set(long instant, int era) {
+    FieldUtils.verifyValueBounds(this, era, ERA_VALUE, ERA_VALUE);
+    return instant;
+  }
+
+  @Override
+  public long set(long instant, String text, Locale locale) {
+    if (iEraText.equals(text) == false && "1".equals(text) == false) {
+      throw new IllegalFieldValueException(DateTimeFieldType.era(), text);
     }
+    return instant;
+  }
 
-    @Override
-    public boolean isLenient() {
-        return false;
-    }
+  @Override
+  public long roundFloor(long instant) {
+    return Long.MIN_VALUE;
+  }
 
-    @Override
-    public int get(long instant) {
-        return ERA_VALUE;
-    }
+  @Override
+  public long roundCeiling(long instant) {
+    return Long.MAX_VALUE;
+  }
 
-    @Override
-    public long set(long instant, int era) {
-        FieldUtils.verifyValueBounds(this, era, ERA_VALUE, ERA_VALUE);
-        return instant;
-    }
+  @Override
+  public long roundHalfFloor(long instant) {
+    return Long.MIN_VALUE;
+  }
 
-    @Override
-    public long set(long instant, String text, Locale locale) {
-        if (iEraText.equals(text) == false && "1".equals(text) == false) {
-            throw new IllegalFieldValueException(DateTimeFieldType.era(), text);
-        }
-        return instant;
-    }
+  @Override
+  public long roundHalfCeiling(long instant) {
+    return Long.MIN_VALUE;
+  }
 
-    @Override
-    public long roundFloor(long instant) {
-        return Long.MIN_VALUE;
-    }
+  @Override
+  public long roundHalfEven(long instant) {
+    return Long.MIN_VALUE;
+  }
 
-    @Override
-    public long roundCeiling(long instant) {
-        return Long.MAX_VALUE;
-    }
+  @Override
+  public DurationField getDurationField() {
+    return UnsupportedDurationField.getInstance(DurationFieldType.eras());
+  }
 
-    @Override
-    public long roundHalfFloor(long instant) {
-        return Long.MIN_VALUE;
-    }
+  @Override
+  public DurationField getRangeDurationField() {
+    return null;
+  }
 
-    @Override
-    public long roundHalfCeiling(long instant) {
-        return Long.MIN_VALUE;
-    }
+  @Override
+  public int getMinimumValue() {
+    return ERA_VALUE;
+  }
 
-    @Override
-    public long roundHalfEven(long instant) {
-        return Long.MIN_VALUE;
-    }
+  @Override
+  public int getMaximumValue() {
+    return ERA_VALUE;
+  }
 
-    @Override
-    public DurationField getDurationField() {
-        return UnsupportedDurationField.getInstance(DurationFieldType.eras());
-    }
+  @Override
+  public String getAsText(int fieldValue, Locale locale) {
+    return iEraText;
+  }
 
-    @Override
-    public DurationField getRangeDurationField() {
-        return null;
-    }
-
-    @Override
-    public int getMinimumValue() {
-        return ERA_VALUE;
-    }
-
-    @Override
-    public int getMaximumValue() {
-        return ERA_VALUE;
-    }
-
-    @Override
-    public String getAsText(int fieldValue, Locale locale) {
-        return iEraText;
-    }
-
-    @Override
-    public int getMaximumTextLength(Locale locale) {
-        return iEraText.length();
-    }
-
+  @Override
+  public int getMaximumTextLength(Locale locale) {
+    return iEraText.length();
+  }
 }

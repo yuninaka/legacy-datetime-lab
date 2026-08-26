@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Baseline: pre-existing findings as of the initial CI guardrail setup.
+       Suppresses only the exact (class, bug-pattern) pairs found at baseline time,
+       so any NEW finding (new class, or new pattern in an existing class) still fails the build. -->
+  <Match>
+    <Class name="com.legacy.system.datetime.DateMidnight$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.DateTime$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.DateTimeUtils"/>
+    <Bug pattern="REC_CATCH_EXCEPTION"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.DateTimeZone"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="IC_SUPERCLASS_USES_SUBCLASS_DURING_INITIALIZATION"/>
+      <Bug pattern="VSC_VULNERABLE_SECURITY_CHECK_METHODS"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.LocalDate"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.LocalDate$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.LocalDateTime"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.LocalDateTime$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.LocalTime"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.LocalTime$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.MonthDay$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.MutableDateTime"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.MutableDateTime$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.Partial"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.TimeOfDay$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.YearMonth$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.YearMonthDay$Property"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.base.BaseDateTime"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.base.BaseInterval"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.base.BasePartial"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.base.BasePeriod"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.AssembledChronology"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.BasicChronology"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.BuddhistChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.CopticChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.EthiopicChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.GJChronology$LinkedDurationField"/>
+    <Bug pattern="SE_BAD_FIELD"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.GregorianChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.ISOChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.IslamicChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="IM_BAD_CHECK_FOR_ODD"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.JulianChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="MS_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.LenientChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.LimitChronology"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.StrictChronology"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.chrono.ZonedChronology$ZonedDurationField"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.BaseDateTimeField"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.BaseDurationField"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.DecoratedDateTimeField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.DecoratedDurationField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.DelegatedDateTimeField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.DelegatedDurationField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.DividedDateTimeField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.ImpreciseDateTimeField"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.OffsetDateTimeField"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.PreciseDateTimeField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.PreciseDurationDateTimeField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.RemainderDateTimeField"/>
+    <Or>
+      <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.ScaledDurationField"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.SkipDateTimeField"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.SkipUndoDateTimeField"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.field.UnsupportedDateTimeField"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.DateTimeFormat"/>
+    <Or>
+      <Bug pattern="DM_STRING_CTOR"/>
+      <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.DateTimeFormat$StyleFormatter"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.DateTimeFormatter"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.DateTimeFormatterBuilder$TimeZoneOffset"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.DateTimeParserBucket"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+      <Bug pattern="RV_NEGATING_RESULT_OF_COMPARETO"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.DateTimeParserBucket$SavedField"/>
+    <Bug pattern="EQ_COMPARETO_USE_OBJECT_EQUALS"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.PeriodFormatter"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.PeriodFormatterBuilder$FieldFormatter"/>
+    <Bug pattern="UC_USELESS_CONDITION"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.format.PeriodFormatterBuilder$RegExAffix"/>
+    <Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.CachedDateTimeZone"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.DateTimeZoneBuilder$DSTZone"/>
+    <Bug pattern="SE_BAD_FIELD"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.ZoneInfoCompiler"/>
+    <Or>
+      <Bug pattern="DM_DEFAULT_ENCODING"/>
+      <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.ZoneInfoCompiler$DateTimeOfYear"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.ZoneInfoCompiler$Rule"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.ZoneInfoCompiler$Zone"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <Match>
+    <Class name="com.legacy.system.datetime.tz.ZoneInfoProvider"/>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+</FindBugsFilter>

@@ -15,16 +15,14 @@
  */
 package com.legacy.system.datetime.chrono;
 
-import java.util.Locale;
-
 import com.legacy.system.datetime.DateTimeConstants;
 import com.legacy.system.datetime.DateTimeFieldType;
 import com.legacy.system.datetime.DurationField;
 import com.legacy.system.datetime.field.PreciseDurationDateTimeField;
+import java.util.Locale;
 
 /**
- * GJDayOfWeekDateTimeField provides time calculations for the
- * day of the week component of time.
+ * GJDayOfWeekDateTimeField provides time calculations for the day of the week component of time.
  *
  * @since 1.0
  * @author Guy Allard
@@ -32,120 +30,116 @@ import com.legacy.system.datetime.field.PreciseDurationDateTimeField;
  * @author Brian S O'Neill
  */
 final class GJDayOfWeekDateTimeField extends PreciseDurationDateTimeField {
-    
-    /** Serialization version */
-    @SuppressWarnings("unused")
-    private static final long serialVersionUID = -3857947176719041436L;
 
-    private final BasicChronology iChronology;
+  /** Serialization version */
+  @SuppressWarnings("unused")
+  private static final long serialVersionUID = -3857947176719041436L;
 
-    /**
-     * Restricted constructor.
-     */
-    GJDayOfWeekDateTimeField(BasicChronology chronology, DurationField days) {
-        super(DateTimeFieldType.dayOfWeek(), days);
-        iChronology = chronology;
-    }
+  private final BasicChronology iChronology;
 
-    /**
-     * Get the value of the specified time instant.
-     * 
-     * @param instant  the time instant in millis to query
-     * @return the day of the week extracted from the input
-     */
-    @Override
-    public int get(long instant) {
-        return iChronology.getDayOfWeek(instant);
-    }
+  /** Restricted constructor. */
+  GJDayOfWeekDateTimeField(BasicChronology chronology, DurationField days) {
+    super(DateTimeFieldType.dayOfWeek(), days);
+    iChronology = chronology;
+  }
 
-    /**
-     * Get the textual value of the specified time instant.
-     * 
-     * @param fieldValue  the field value to query
-     * @param locale  the locale to use
-     * @return the day of the week, such as 'Monday'
-     */
-    @Override
-    public String getAsText(int fieldValue, Locale locale) {
-        return GJLocaleSymbols.forLocale(locale).dayOfWeekValueToText(fieldValue);
-    }
+  /**
+   * Get the value of the specified time instant.
+   *
+   * @param instant the time instant in millis to query
+   * @return the day of the week extracted from the input
+   */
+  @Override
+  public int get(long instant) {
+    return iChronology.getDayOfWeek(instant);
+  }
 
-    /**
-     * Get the abbreviated textual value of the specified time instant.
-     * 
-     * @param fieldValue  the field value to query
-     * @param locale  the locale to use
-     * @return the day of the week, such as 'Mon'
-     */
-    @Override
-    public String getAsShortText(int fieldValue, Locale locale) {
-        return GJLocaleSymbols.forLocale(locale).dayOfWeekValueToShortText(fieldValue);
-    }
+  /**
+   * Get the textual value of the specified time instant.
+   *
+   * @param fieldValue the field value to query
+   * @param locale the locale to use
+   * @return the day of the week, such as 'Monday'
+   */
+  @Override
+  public String getAsText(int fieldValue, Locale locale) {
+    return GJLocaleSymbols.forLocale(locale).dayOfWeekValueToText(fieldValue);
+  }
 
-    /**
-     * Convert the specified text and locale into a value.
-     * 
-     * @param text  the text to convert
-     * @param locale  the locale to convert using
-     * @return the value extracted from the text
-     * @throws IllegalArgumentException if the text is invalid
-     */
-    @Override
-    protected int convertText(String text, Locale locale) {
-        return GJLocaleSymbols.forLocale(locale).dayOfWeekTextToValue(text);
-    }
+  /**
+   * Get the abbreviated textual value of the specified time instant.
+   *
+   * @param fieldValue the field value to query
+   * @param locale the locale to use
+   * @return the day of the week, such as 'Mon'
+   */
+  @Override
+  public String getAsShortText(int fieldValue, Locale locale) {
+    return GJLocaleSymbols.forLocale(locale).dayOfWeekValueToShortText(fieldValue);
+  }
 
-    @Override
-    public DurationField getRangeDurationField() {
-        return iChronology.weeks();
-    }
+  /**
+   * Convert the specified text and locale into a value.
+   *
+   * @param text the text to convert
+   * @param locale the locale to convert using
+   * @return the value extracted from the text
+   * @throws IllegalArgumentException if the text is invalid
+   */
+  @Override
+  protected int convertText(String text, Locale locale) {
+    return GJLocaleSymbols.forLocale(locale).dayOfWeekTextToValue(text);
+  }
 
-    /**
-     * Get the minimum value that this field can have.
-     * 
-     * @return the field's minimum value
-     */
-    @Override
-    public int getMinimumValue() {
-        return DateTimeConstants.MONDAY;
-    }
+  @Override
+  public DurationField getRangeDurationField() {
+    return iChronology.weeks();
+  }
 
-    /**
-     * Get the maximum value that this field can have.
-     * 
-     * @return the field's maximum value
-     */
-    @Override
-    public int getMaximumValue() {
-        return DateTimeConstants.SUNDAY;
-    }
+  /**
+   * Get the minimum value that this field can have.
+   *
+   * @return the field's minimum value
+   */
+  @Override
+  public int getMinimumValue() {
+    return DateTimeConstants.MONDAY;
+  }
 
-    /**
-     * Get the maximum length of the text returned by this field.
-     * 
-     * @param locale  the locale to use
-     * @return the maximum textual length
-     */
-    @Override
-    public int getMaximumTextLength(Locale locale) {
-        return GJLocaleSymbols.forLocale(locale).getDayOfWeekMaxTextLength();
-    }
+  /**
+   * Get the maximum value that this field can have.
+   *
+   * @return the field's maximum value
+   */
+  @Override
+  public int getMaximumValue() {
+    return DateTimeConstants.SUNDAY;
+  }
 
-    /**
-     * Get the maximum length of the abbreviated text returned by this field.
-     * 
-     * @param locale  the locale to use
-     * @return the maximum abbreviated textual length
-     */
-    @Override
-    public int getMaximumShortTextLength(Locale locale) {
-        return GJLocaleSymbols.forLocale(locale).getDayOfWeekMaxShortTextLength();
-    }
+  /**
+   * Get the maximum length of the text returned by this field.
+   *
+   * @param locale the locale to use
+   * @return the maximum textual length
+   */
+  @Override
+  public int getMaximumTextLength(Locale locale) {
+    return GJLocaleSymbols.forLocale(locale).getDayOfWeekMaxTextLength();
+  }
 
-    /**
-     * Serialization singleton
-     */
-    private Object readResolve() {
-        return iChronology.dayOfWeek();
-    }
+  /**
+   * Get the maximum length of the abbreviated text returned by this field.
+   *
+   * @param locale the locale to use
+   * @return the maximum abbreviated textual length
+   */
+  @Override
+  public int getMaximumShortTextLength(Locale locale) {
+    return GJLocaleSymbols.forLocale(locale).getDayOfWeekMaxShortTextLength();
+  }
+
+  /** Serialization singleton */
+  private Object readResolve() {
+    return iChronology.dayOfWeek();
+  }
 }

@@ -19,10 +19,10 @@ import com.legacy.system.datetime.Chronology;
 import com.legacy.system.datetime.DateTimeField;
 
 /**
- * Converts a strict DateTimeField into a lenient one. By being lenient, the
- * set method accepts out of bounds values, performing an addition instead.
- * <p>
- * LenientDateTimeField is thread-safe and immutable.
+ * Converts a strict DateTimeField into a lenient one. By being lenient, the set method accepts out
+ * of bounds values, performing an addition instead.
+ *
+ * <p>LenientDateTimeField is thread-safe and immutable.
  *
  * @author Brian S O'Neill
  * @see org.joda.time.chrono.LenientChronology
@@ -31,52 +31,52 @@ import com.legacy.system.datetime.DateTimeField;
  */
 public class LenientDateTimeField extends DelegatedDateTimeField {
 
-    private static final long serialVersionUID = 8714085824173290599L;
+  private static final long serialVersionUID = 8714085824173290599L;
 
-    private final Chronology iBase;
+  private final Chronology iBase;
 
-    /**
-     * Returns a lenient version of the given field. If it is already lenient,
-     * then it is returned as-is. Otherwise, a new LenientDateTimeField is returned.
-     * 
-     * @param field  the field, null returns null
-     * @param base  the chronology, not null
-     * @return the field. may be null
-     */
-    public static DateTimeField getInstance(DateTimeField field, Chronology base) {
-        if (field == null) {
-            return null;
-        }
-        if (field instanceof StrictDateTimeField) {
-            field = ((StrictDateTimeField)field).getWrappedField();
-        }
-        if (field.isLenient()) {
-            return field;
-        }
-        return new LenientDateTimeField(field, base);
+  /**
+   * Returns a lenient version of the given field. If it is already lenient, then it is returned
+   * as-is. Otherwise, a new LenientDateTimeField is returned.
+   *
+   * @param field the field, null returns null
+   * @param base the chronology, not null
+   * @return the field. may be null
+   */
+  public static DateTimeField getInstance(DateTimeField field, Chronology base) {
+    if (field == null) {
+      return null;
     }
-
-    protected LenientDateTimeField(DateTimeField field, Chronology base) {
-        super(field);
-        iBase = base;
+    if (field instanceof StrictDateTimeField) {
+      field = ((StrictDateTimeField) field).getWrappedField();
     }
-
-    @Override
-    public final boolean isLenient() {
-        return true;
+    if (field.isLenient()) {
+      return field;
     }
+    return new LenientDateTimeField(field, base);
+  }
 
-    /**
-     * Set values which may be out of bounds by adding the difference between
-     * the new value and the current value.
-     */
-    @Override
-    public long set(long instant, int value) {
-        // lenient needs to handle time zone chronologies
-        // so we do the calculation using local milliseconds
-        long localInstant = iBase.getZone().convertUTCToLocal(instant);
-        long difference = FieldUtils.safeSubtract(value, get(instant));
-        localInstant = getType().getField(iBase.withUTC()).add(localInstant, difference);
-        return iBase.getZone().convertLocalToUTC(localInstant, false, instant);
-    }
+  protected LenientDateTimeField(DateTimeField field, Chronology base) {
+    super(field);
+    iBase = base;
+  }
+
+  @Override
+  public final boolean isLenient() {
+    return true;
+  }
+
+  /**
+   * Set values which may be out of bounds by adding the difference between the new value and the
+   * current value.
+   */
+  @Override
+  public long set(long instant, int value) {
+    // lenient needs to handle time zone chronologies
+    // so we do the calculation using local milliseconds
+    long localInstant = iBase.getZone().convertUTCToLocal(instant);
+    long difference = FieldUtils.safeSubtract(value, get(instant));
+    localInstant = getType().getField(iBase.withUTC()).add(localInstant, difference);
+    return iBase.getZone().convertLocalToUTC(localInstant, false, instant);
+  }
 }

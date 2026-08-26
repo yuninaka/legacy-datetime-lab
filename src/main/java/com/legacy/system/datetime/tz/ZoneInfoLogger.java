@@ -15,28 +15,27 @@
  */
 package com.legacy.system.datetime.tz;
 
-/**
- * Logger for the compiler.
- */
+/** Logger for the compiler. */
 public class ZoneInfoLogger {
 
-    static ThreadLocal<Boolean> cVerbose = new ThreadLocal<Boolean>() {
+  static ThreadLocal<Boolean> cVerbose =
+      new ThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {
-            return Boolean.FALSE;
+          return Boolean.FALSE;
         }
-    };
+      };
 
-    /**
-     * Gets a flag indicating that verbose logging is required.
-     * @return true to log verbosely
-     */
-    public static boolean verbose() {
-        return cVerbose.get();
-    }
+  /**
+   * Gets a flag indicating that verbose logging is required.
+   *
+   * @return true to log verbosely
+   */
+  public static boolean verbose() {
+    return cVerbose.get();
+  }
 
-    public static void set(boolean verbose) {
-        cVerbose.set(verbose);
-    }
-
+  public static void set(boolean verbose) {
+    cVerbose.set(verbose);
+  }
 }

@@ -15,49 +15,38 @@
  */
 package com.legacy.system.datetime.tz;
 
+import com.legacy.system.datetime.DateTimeZone;
 import java.util.Collections;
 import java.util.Set;
 
-import com.legacy.system.datetime.DateTimeZone;
-
 /**
  * Simple time zone provider that supports only UTC.
- * <p>
- * UTCProvider is thread-safe and immutable.
+ *
+ * <p>UTCProvider is thread-safe and immutable.
  *
  * @author Brian S O'Neill
  * @since 1.0
  */
 public final class UTCProvider implements Provider {
 
-    /**
-     * The available IDs.
-     */
-    private static final Set<String> AVAILABLE_IDS = Collections.singleton("UTC");
+  /** The available IDs. */
+  private static final Set<String> AVAILABLE_IDS = Collections.singleton("UTC");
 
-    /**
-     * Constructor.
-     */
-    public UTCProvider() {
-        super();
+  /** Constructor. */
+  public UTCProvider() {
+    super();
+  }
+
+  /** Returns {@link DateTimeZone#UTC UTC} for <code>"UTC"</code>, null otherwise. */
+  public DateTimeZone getZone(String id) {
+    if ("UTC".equalsIgnoreCase(id)) {
+      return DateTimeZone.UTC;
     }
+    return null;
+  }
 
-    /**
-     * Returns {@link DateTimeZone#UTC UTC} for <code>"UTC"</code>, null
-     * otherwise.
-     */
-    public DateTimeZone getZone(String id) {
-        if ("UTC".equalsIgnoreCase(id)) {
-            return DateTimeZone.UTC;
-        }
-        return null;
-    }
-
-    /**
-     * Returns a singleton collection containing only <code>"UTC"</code>.
-     */    
-    public Set<String> getAvailableIDs() {
-        return AVAILABLE_IDS;
-    }
-
+  /** Returns a singleton collection containing only <code>"UTC"</code>. */
+  public Set<String> getAvailableIDs() {
+    return AVAILABLE_IDS;
+  }
 }

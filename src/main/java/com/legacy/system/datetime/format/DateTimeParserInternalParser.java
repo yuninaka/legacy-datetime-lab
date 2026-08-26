@@ -22,34 +22,33 @@ package com.legacy.system.datetime.format;
  * @since 2.4
  */
 class DateTimeParserInternalParser implements InternalParser {
-    
-    private final DateTimeParser underlying;
 
-    static InternalParser of(DateTimeParser underlying) {
-        if (underlying instanceof InternalParserDateTimeParser) {
-            return (InternalParser) underlying;
-        }
-        if (underlying == null) {
-            return null;
-        }
-        return new DateTimeParserInternalParser(underlying);
+  private final DateTimeParser underlying;
+
+  static InternalParser of(DateTimeParser underlying) {
+    if (underlying instanceof InternalParserDateTimeParser) {
+      return (InternalParser) underlying;
     }
-
-    private DateTimeParserInternalParser(DateTimeParser underlying) {
-        this.underlying = underlying;
+    if (underlying == null) {
+      return null;
     }
+    return new DateTimeParserInternalParser(underlying);
+  }
 
-    //-----------------------------------------------------------------------
-    DateTimeParser getUnderlying() {
-        return underlying;
-    }
+  private DateTimeParserInternalParser(DateTimeParser underlying) {
+    this.underlying = underlying;
+  }
 
-    public int estimateParsedLength() {
-        return underlying.estimateParsedLength();
-    }
+  // -----------------------------------------------------------------------
+  DateTimeParser getUnderlying() {
+    return underlying;
+  }
 
-    public int parseInto(DateTimeParserBucket bucket, CharSequence text, int position) {
-        return underlying.parseInto(bucket, text.toString(), position);
-    }
+  public int estimateParsedLength() {
+    return underlying.estimateParsedLength();
+  }
 
+  public int parseInto(DateTimeParserBucket bucket, CharSequence text, int position) {
+    return underlying.parseInto(bucket, text.toString(), position);
+  }
 }

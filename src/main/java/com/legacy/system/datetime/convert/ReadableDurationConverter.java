@@ -28,64 +28,59 @@ import com.legacy.system.datetime.ReadableDuration;
  * @since 1.0
  */
 class ReadableDurationConverter extends AbstractConverter
-        implements DurationConverter, PeriodConverter {
+    implements DurationConverter, PeriodConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final ReadableDurationConverter INSTANCE = new ReadableDurationConverter();
+  /** Singleton instance. */
+  static final ReadableDurationConverter INSTANCE = new ReadableDurationConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected ReadableDurationConverter() {
-        super();
+  /** Restricted constructor. */
+  protected ReadableDurationConverter() {
+    super();
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Extracts the millis from an object of this converter's type.
+   *
+   * @param object the object to convert, must not be null
+   * @return the millisecond value
+   * @throws NullPointerException if the object is null
+   * @throws ClassCastException if the object is an invalid type
+   * @throws IllegalArgumentException if the object is invalid
+   */
+  public long getDurationMillis(Object object) {
+    return ((ReadableDuration) object).getMillis();
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Extracts duration values from an object of this converter's type, and sets them into the given
+   * ReadWritableDuration.
+   *
+   * @param writablePeriod period to get modified
+   * @param object the object to convert, must not be null
+   * @param chrono the chronology to use, must not be null
+   * @throws NullPointerException if the duration or object is null
+   * @throws ClassCastException if the object is an invalid type
+   * @throws IllegalArgumentException if the object is invalid
+   */
+  public void setInto(ReadWritablePeriod writablePeriod, Object object, Chronology chrono) {
+    ReadableDuration dur = (ReadableDuration) object;
+    chrono = DateTimeUtils.getChronology(chrono);
+    long duration = dur.getMillis();
+    int[] values = chrono.get(writablePeriod, duration);
+    for (int i = 0; i < values.length; i++) {
+      writablePeriod.setValue(i, values[i]);
     }
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Extracts the millis from an object of this converter's type.
-     * 
-     * @param object  the object to convert, must not be null
-     * @return the millisecond value
-     * @throws NullPointerException if the object is null
-     * @throws ClassCastException if the object is an invalid type
-     * @throws IllegalArgumentException if the object is invalid
-     */
-    public long getDurationMillis(Object object) {
-        return ((ReadableDuration) object).getMillis();
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Extracts duration values from an object of this converter's type, and
-     * sets them into the given ReadWritableDuration.
-     *
-     * @param writablePeriod  period to get modified
-     * @param object  the object to convert, must not be null
-     * @param chrono  the chronology to use, must not be null
-     * @throws NullPointerException if the duration or object is null
-     * @throws ClassCastException if the object is an invalid type
-     * @throws IllegalArgumentException if the object is invalid
-     */
-    public void setInto(ReadWritablePeriod writablePeriod, Object object, Chronology chrono) {
-        ReadableDuration dur = (ReadableDuration) object;
-        chrono = DateTimeUtils.getChronology(chrono);
-        long duration = dur.getMillis();
-        int[] values = chrono.get(writablePeriod, duration);
-        for (int i = 0; i < values.length; i++) {
-            writablePeriod.setValue(i, values[i]);
-        }
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns ReadableDuration.class.
-     * 
-     * @return ReadableDuration.class
-     */
-    public Class<?> getSupportedType() {
-        return ReadableDuration.class;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns ReadableDuration.class.
+   *
+   * @return ReadableDuration.class
+   */
+  public Class<?> getSupportedType() {
+    return ReadableDuration.class;
+  }
 }

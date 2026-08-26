@@ -15,13 +15,12 @@
  */
 package com.legacy.system.datetime.format;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Locale;
-
 import com.legacy.system.datetime.Chronology;
 import com.legacy.system.datetime.DateTimeZone;
 import com.legacy.system.datetime.ReadablePartial;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Locale;
 
 /**
  * Adapter between old and new printer interface.
@@ -30,60 +29,66 @@ import com.legacy.system.datetime.ReadablePartial;
  * @since 2.4
  */
 class DateTimePrinterInternalPrinter implements InternalPrinter {
-    
-    private final DateTimePrinter underlying;
 
-    static InternalPrinter of(DateTimePrinter underlying) {
-        if (underlying instanceof InternalPrinterDateTimePrinter) {
-            return (InternalPrinter) underlying;
-        }
-        if (underlying == null) {
-            return null;
-        }
-        return new DateTimePrinterInternalPrinter(underlying);
+  private final DateTimePrinter underlying;
+
+  static InternalPrinter of(DateTimePrinter underlying) {
+    if (underlying instanceof InternalPrinterDateTimePrinter) {
+      return (InternalPrinter) underlying;
     }
-
-    private DateTimePrinterInternalPrinter(DateTimePrinter underlying) {
-        this.underlying = underlying;
+    if (underlying == null) {
+      return null;
     }
+    return new DateTimePrinterInternalPrinter(underlying);
+  }
 
-    //-----------------------------------------------------------------------
-    DateTimePrinter getUnderlying() {
-        return underlying;
+  private DateTimePrinterInternalPrinter(DateTimePrinter underlying) {
+    this.underlying = underlying;
+  }
+
+  // -----------------------------------------------------------------------
+  DateTimePrinter getUnderlying() {
+    return underlying;
+  }
+
+  // -----------------------------------------------------------------------
+  public int estimatePrintedLength() {
+    return underlying.estimatePrintedLength();
+  }
+
+  public void printTo(
+      Appendable appendable,
+      long instant,
+      Chronology chrono,
+      int displayOffset,
+      DateTimeZone displayZone,
+      Locale locale)
+      throws IOException {
+    if (appendable instanceof StringBuffer) {
+      StringBuffer buf = (StringBuffer) appendable;
+      underlying.printTo(buf, instant, chrono, displayOffset, displayZone, locale);
+    } else if (appendable instanceof Writer) {
+      Writer out = (Writer) appendable;
+      underlying.printTo(out, instant, chrono, displayOffset, displayZone, locale);
+    } else {
+      StringBuffer buf = new StringBuffer(estimatePrintedLength());
+      underlying.printTo(buf, instant, chrono, displayOffset, displayZone, locale);
+      appendable.append(buf);
     }
+  }
 
-    //-----------------------------------------------------------------------
-    public int estimatePrintedLength() {
-        return underlying.estimatePrintedLength();
+  public void printTo(Appendable appendable, ReadablePartial partial, Locale locale)
+      throws IOException {
+    if (appendable instanceof StringBuffer) {
+      StringBuffer buf = (StringBuffer) appendable;
+      underlying.printTo(buf, partial, locale);
+    } else if (appendable instanceof Writer) {
+      Writer out = (Writer) appendable;
+      underlying.printTo(out, partial, locale);
+    } else {
+      StringBuffer buf = new StringBuffer(estimatePrintedLength());
+      underlying.printTo(buf, partial, locale);
+      appendable.append(buf);
     }
-
-    public void printTo(Appendable appendable, long instant, Chronology chrono, int displayOffset,
-                    DateTimeZone displayZone, Locale locale) throws IOException {
-        if (appendable instanceof StringBuffer) {
-            StringBuffer buf = (StringBuffer) appendable;
-            underlying.printTo(buf, instant, chrono, displayOffset, displayZone, locale);
-        } else if (appendable instanceof Writer) {
-            Writer out = (Writer) appendable;
-            underlying.printTo(out, instant, chrono, displayOffset, displayZone, locale);
-        } else {
-            StringBuffer buf = new StringBuffer(estimatePrintedLength());
-            underlying.printTo(buf, instant, chrono, displayOffset, displayZone, locale);
-            appendable.append(buf);
-        }
-    }
-
-    public void printTo(Appendable appendable, ReadablePartial partial, Locale locale) throws IOException {
-        if (appendable instanceof StringBuffer) {
-            StringBuffer buf = (StringBuffer) appendable;
-            underlying.printTo(buf, partial, locale);
-        } else if (appendable instanceof Writer) {
-            Writer out = (Writer) appendable;
-            underlying.printTo(out, partial, locale);
-        } else {
-            StringBuffer buf = new StringBuffer(estimatePrintedLength());
-            underlying.printTo(buf, partial, locale);
-            appendable.append(buf);
-        }
-    }
-
+  }
 }

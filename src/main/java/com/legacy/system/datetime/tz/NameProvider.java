@@ -24,21 +24,21 @@ import java.util.Locale;
  * @since 1.0
  */
 public interface NameProvider {
-    /**
-     * Returns a localized short name, or null if not found.
-     *
-     * @param locale locale to use for selecting name set
-     * @param id time zone id
-     * @param nameKey time zone name key
-     */
-    String getShortName(Locale locale, String id, String nameKey);
-    
-    /**
-     * Returns a localized name, or null if not found.
-     *
-     * @param locale locale to use for selecting name set
-     * @param id time zone id
-     * @param nameKey time zone name key
-     */
-    String getName(Locale locale, String id, String nameKey);
+  /**
+   * Returns a localized short name, or null if not found.
+   *
+   * @param locale locale to use for selecting name set
+   * @param id time zone id
+   * @param nameKey time zone name key
+   */
+  String getShortName(Locale locale, String id, String nameKey);
+
+  /**
+   * Returns a localized name, or null if not found.
+   *
+   * @param locale locale to use for selecting name set
+   * @param id time zone id
+   * @param nameKey time zone name key
+   */
+  String getName(Locale locale, String id, String nameKey);
 }

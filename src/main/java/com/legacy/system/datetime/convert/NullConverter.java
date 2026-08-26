@@ -22,77 +22,75 @@ import com.legacy.system.datetime.ReadWritableInterval;
 import com.legacy.system.datetime.ReadWritablePeriod;
 
 /**
- * NullConverter converts null to an instant, partial, duration, period
- * or interval. Null means now for instant/partial, zero for duration/period
- * and from now to now for interval.
+ * NullConverter converts null to an instant, partial, duration, period or interval. Null means now
+ * for instant/partial, zero for duration/period and from now to now for interval.
  *
  * @author Stephen Colebourne
  * @author Brian S O'Neill
  * @since 1.0
  */
 class NullConverter extends AbstractConverter
-        implements InstantConverter, PartialConverter, DurationConverter, PeriodConverter, IntervalConverter {
+    implements InstantConverter,
+        PartialConverter,
+        DurationConverter,
+        PeriodConverter,
+        IntervalConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final NullConverter INSTANCE = new NullConverter();
+  /** Singleton instance. */
+  static final NullConverter INSTANCE = new NullConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected NullConverter() {
-        super();
-    }
+  /** Restricted constructor. */
+  protected NullConverter() {
+    super();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Gets the millisecond duration, which is zero.
-     * 
-     * @param object  the object to convert, which is null
-     * @return the millisecond duration
-     */
-    public long getDurationMillis(Object object) {
-        return 0L;
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Gets the millisecond duration, which is zero.
+   *
+   * @param object the object to convert, which is null
+   * @return the millisecond duration
+   */
+  public long getDurationMillis(Object object) {
+    return 0L;
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Sets the given ReadWritableDuration to zero milliseconds.
-     *
-     * @param duration duration to get modified
-     * @param object  the object to convert, which is null
-     * @param chrono  the chronology to use
-     * @throws NullPointerException if the duration is null
-     */
-    public void setInto(ReadWritablePeriod duration, Object object, Chronology chrono) {
-        duration.setPeriod((Period) null);
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Sets the given ReadWritableDuration to zero milliseconds.
+   *
+   * @param duration duration to get modified
+   * @param object the object to convert, which is null
+   * @param chrono the chronology to use
+   * @throws NullPointerException if the duration is null
+   */
+  public void setInto(ReadWritablePeriod duration, Object object, Chronology chrono) {
+    duration.setPeriod((Period) null);
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Extracts interval endpoint values from an object of this converter's
-     * type, and sets them into the given ReadWritableInterval.
-     *
-     * @param writableInterval interval to get modified, not null
-     * @param object  the object to convert, which is null
-     * @param chrono  the chronology to use, may be null
-     * @throws NullPointerException if the interval is null
-     */
-    public void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono) {
-        writableInterval.setChronology(chrono);
-        long now = DateTimeUtils.currentTimeMillis();
-        writableInterval.setInterval(now, now);
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Extracts interval endpoint values from an object of this converter's type, and sets them into
+   * the given ReadWritableInterval.
+   *
+   * @param writableInterval interval to get modified, not null
+   * @param object the object to convert, which is null
+   * @param chrono the chronology to use, may be null
+   * @throws NullPointerException if the interval is null
+   */
+  public void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono) {
+    writableInterval.setChronology(chrono);
+    long now = DateTimeUtils.currentTimeMillis();
+    writableInterval.setInterval(now, now);
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Returns null.
-     * 
-     * @return null
-     */
-    public Class<?> getSupportedType() {
-        return null;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns null.
+   *
+   * @return null
+   */
+  public Class<?> getSupportedType() {
+    return null;
+  }
 }

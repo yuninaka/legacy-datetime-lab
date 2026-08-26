@@ -22,8 +22,8 @@ import com.legacy.system.datetime.field.LenientDateTimeField;
 
 /**
  * Wraps another Chronology, ensuring all the fields are lenient.
- * <p>
- * LenientChronology is thread-safe and immutable.
+ *
+ * <p>LenientChronology is thread-safe and immutable.
  *
  * @author Brian S O'Neill
  * @since 1.0
@@ -32,132 +32,130 @@ import com.legacy.system.datetime.field.LenientDateTimeField;
  */
 public final class LenientChronology extends AssembledChronology {
 
-    /** Serialization lock */
-    private static final long serialVersionUID = -3148237568046877177L;
+  /** Serialization lock */
+  private static final long serialVersionUID = -3148237568046877177L;
 
-    /**
-     * Create a LenientChronology for any chronology.
-     *
-     * @param base the chronology to wrap
-     * @return the chronology, not null
-     * @throws IllegalArgumentException if chronology is null
-     */
-    public static LenientChronology getInstance(Chronology base) {
-        if (base == null) {
-            throw new IllegalArgumentException("Must supply a chronology");
-        }
-        return new LenientChronology(base);
+  /**
+   * Create a LenientChronology for any chronology.
+   *
+   * @param base the chronology to wrap
+   * @return the chronology, not null
+   * @throws IllegalArgumentException if chronology is null
+   */
+  public static LenientChronology getInstance(Chronology base) {
+    if (base == null) {
+      throw new IllegalArgumentException("Must supply a chronology");
     }
+    return new LenientChronology(base);
+  }
 
-    private transient Chronology iWithUTC;
+  private transient Chronology iWithUTC;
 
-    /**
-     * Create a LenientChronology for any chronology.
-     *
-     * @param base the chronology to wrap
-     */
-    private LenientChronology(Chronology base) {
-        super(base, null);
+  /**
+   * Create a LenientChronology for any chronology.
+   *
+   * @param base the chronology to wrap
+   */
+  private LenientChronology(Chronology base) {
+    super(base, null);
+  }
+
+  @Override
+  public Chronology withUTC() {
+    if (iWithUTC == null) {
+      if (getZone() == DateTimeZone.UTC) {
+        iWithUTC = this;
+      } else {
+        iWithUTC = LenientChronology.getInstance(getBase().withUTC());
+      }
     }
+    return iWithUTC;
+  }
 
-    @Override
-    public Chronology withUTC() {
-        if (iWithUTC == null) {
-            if (getZone() == DateTimeZone.UTC) {
-                iWithUTC = this;
-            } else {
-                iWithUTC = LenientChronology.getInstance(getBase().withUTC());
-            }
-        }
-        return iWithUTC;
+  @Override
+  public Chronology withZone(DateTimeZone zone) {
+    if (zone == null) {
+      zone = DateTimeZone.getDefault();
     }
-
-    @Override
-    public Chronology withZone(DateTimeZone zone) {
-        if (zone == null) {
-            zone = DateTimeZone.getDefault();
-        }
-        if (zone == DateTimeZone.UTC) {
-            return withUTC();
-        }
-        if (zone == getZone()) {
-            return this;
-        }
-        return LenientChronology.getInstance(getBase().withZone(zone));
+    if (zone == DateTimeZone.UTC) {
+      return withUTC();
     }
-
-    @Override
-    protected void assemble(Fields fields) {
-        fields.year = convertField(fields.year);
-        fields.yearOfEra = convertField(fields.yearOfEra);
-        fields.yearOfCentury = convertField(fields.yearOfCentury);
-        fields.centuryOfEra = convertField(fields.centuryOfEra);
-        fields.era = convertField(fields.era);
-        fields.dayOfWeek = convertField(fields.dayOfWeek);
-        fields.dayOfMonth = convertField(fields.dayOfMonth);
-        fields.dayOfYear = convertField(fields.dayOfYear);
-        fields.monthOfYear = convertField(fields.monthOfYear);
-        fields.weekOfWeekyear = convertField(fields.weekOfWeekyear);
-        fields.weekyear = convertField(fields.weekyear);
-        fields.weekyearOfCentury = convertField(fields.weekyearOfCentury);
-
-        fields.millisOfSecond = convertField(fields.millisOfSecond);
-        fields.millisOfDay = convertField(fields.millisOfDay);
-        fields.secondOfMinute = convertField(fields.secondOfMinute);
-        fields.secondOfDay = convertField(fields.secondOfDay);
-        fields.minuteOfHour = convertField(fields.minuteOfHour);
-        fields.minuteOfDay = convertField(fields.minuteOfDay);
-        fields.hourOfDay = convertField(fields.hourOfDay);
-        fields.hourOfHalfday = convertField(fields.hourOfHalfday);
-        fields.clockhourOfDay = convertField(fields.clockhourOfDay);
-        fields.clockhourOfHalfday = convertField(fields.clockhourOfHalfday);
-        fields.halfdayOfDay = convertField(fields.halfdayOfDay);
+    if (zone == getZone()) {
+      return this;
     }
+    return LenientChronology.getInstance(getBase().withZone(zone));
+  }
 
-    private final DateTimeField convertField(DateTimeField field) {
-        return LenientDateTimeField.getInstance(field, getBase());
+  @Override
+  protected void assemble(Fields fields) {
+    fields.year = convertField(fields.year);
+    fields.yearOfEra = convertField(fields.yearOfEra);
+    fields.yearOfCentury = convertField(fields.yearOfCentury);
+    fields.centuryOfEra = convertField(fields.centuryOfEra);
+    fields.era = convertField(fields.era);
+    fields.dayOfWeek = convertField(fields.dayOfWeek);
+    fields.dayOfMonth = convertField(fields.dayOfMonth);
+    fields.dayOfYear = convertField(fields.dayOfYear);
+    fields.monthOfYear = convertField(fields.monthOfYear);
+    fields.weekOfWeekyear = convertField(fields.weekOfWeekyear);
+    fields.weekyear = convertField(fields.weekyear);
+    fields.weekyearOfCentury = convertField(fields.weekyearOfCentury);
+
+    fields.millisOfSecond = convertField(fields.millisOfSecond);
+    fields.millisOfDay = convertField(fields.millisOfDay);
+    fields.secondOfMinute = convertField(fields.secondOfMinute);
+    fields.secondOfDay = convertField(fields.secondOfDay);
+    fields.minuteOfHour = convertField(fields.minuteOfHour);
+    fields.minuteOfDay = convertField(fields.minuteOfDay);
+    fields.hourOfDay = convertField(fields.hourOfDay);
+    fields.hourOfHalfday = convertField(fields.hourOfHalfday);
+    fields.clockhourOfDay = convertField(fields.clockhourOfDay);
+    fields.clockhourOfHalfday = convertField(fields.clockhourOfHalfday);
+    fields.halfdayOfDay = convertField(fields.halfdayOfDay);
+  }
+
+  private final DateTimeField convertField(DateTimeField field) {
+    return LenientDateTimeField.getInstance(field, getBase());
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * A lenient chronology is only equal to a lenient chronology with the same base chronology.
+   *
+   * @param obj the object to compare to
+   * @return true if equal
+   * @since 1.4
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    //-----------------------------------------------------------------------
-    /**
-     * A lenient chronology is only equal to a lenient chronology with the
-     * same base chronology.
-     * 
-     * @param obj  the object to compare to
-     * @return true if equal
-     * @since 1.4
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof LenientChronology == false) {
-            return false;
-        }
-        LenientChronology chrono = (LenientChronology) obj;
-        return getBase().equals(chrono.getBase());
+    if (obj instanceof LenientChronology == false) {
+      return false;
     }
+    LenientChronology chrono = (LenientChronology) obj;
+    return getBase().equals(chrono.getBase());
+  }
 
-    /**
-     * A suitable hashcode for the chronology.
-     * 
-     * @return the hashcode
-     * @since 1.4
-     */
-    @Override
-    public int hashCode() {
-        return 236548278 + getBase().hashCode() * 7;
-    }
+  /**
+   * A suitable hashcode for the chronology.
+   *
+   * @return the hashcode
+   * @since 1.4
+   */
+  @Override
+  public int hashCode() {
+    return 236548278 + getBase().hashCode() * 7;
+  }
 
-    /**
-     * A debugging string for the chronology.
-     * 
-     * @return the debugging string
-     */
-    @Override
-    public String toString() {
-        return "LenientChronology[" + getBase().toString() + ']';
-    }
-
+  /**
+   * A debugging string for the chronology.
+   *
+   * @return the debugging string
+   */
+  @Override
+  public String toString() {
+    return "LenientChronology[" + getBase().toString() + ']';
+  }
 }

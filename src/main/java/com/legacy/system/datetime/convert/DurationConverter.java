@@ -24,13 +24,12 @@ package com.legacy.system.datetime.convert;
  */
 public interface DurationConverter extends Converter {
 
-    /**
-     * Extracts the millis from an object of this converter's type.
-     * 
-     * @param object  the object to convert, must not be null
-     * @return the millisecond duration
-     * @throws ClassCastException if the object is invalid
-     */
-    long getDurationMillis(Object object);
-
+  /**
+   * Extracts the millis from an object of this converter's type.
+   *
+   * @param object the object to convert, must not be null
+   * @return the millisecond duration
+   * @throws ClassCastException if the object is invalid
+   */
+  long getDurationMillis(Object object);
 }

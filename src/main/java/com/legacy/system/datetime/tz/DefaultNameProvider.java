@@ -15,147 +15,149 @@
  */
 package com.legacy.system.datetime.tz;
 
+import com.legacy.system.datetime.DateTimeUtils;
 import java.text.DateFormatSymbols;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.legacy.system.datetime.DateTimeUtils;
-
 /**
- * The default name provider acquires localized names from
- * {@link DateFormatSymbols java.text.DateFormatSymbols}.
- * <p>
- * DefaultNameProvider is thread-safe and immutable.
+ * The default name provider acquires localized names from {@link DateFormatSymbols
+ * java.text.DateFormatSymbols}.
+ *
+ * <p>DefaultNameProvider is thread-safe and immutable.
  *
  * @author Brian S O'Neill
  * @since 1.0
  */
 @SuppressWarnings("unchecked")
 public class DefaultNameProvider implements NameProvider {
-    // locale -> (id -> (nameKey -> [shortName, name]))
-    private HashMap<Locale, Map<String, Map<String, Object>>> iByLocaleCache = createCache();
-    private HashMap<Locale, Map<String, Map<Boolean, Object>>> iByLocaleCache2 = createCache();
+  // locale -> (id -> (nameKey -> [shortName, name]))
+  private HashMap<Locale, Map<String, Map<String, Object>>> iByLocaleCache = createCache();
+  private HashMap<Locale, Map<String, Map<Boolean, Object>>> iByLocaleCache2 = createCache();
 
-    public DefaultNameProvider() {
+  public DefaultNameProvider() {}
+
+  // -----------------------------------------------------------------------
+  // retained original code for name lookup, not used in normal code
+  // this code could be refactored to avoid duplication, but leaving it as is ensures backward
+  // compatibility
+  public String getShortName(Locale locale, String id, String nameKey) {
+    String[] nameSet = getNameSet(locale, id, nameKey);
+    return nameSet == null ? null : nameSet[0];
+  }
+
+  public String getName(Locale locale, String id, String nameKey) {
+    String[] nameSet = getNameSet(locale, id, nameKey);
+    return nameSet == null ? null : nameSet[1];
+  }
+
+  private synchronized String[] getNameSet(Locale locale, String id, String nameKey) {
+    if (locale == null || id == null || nameKey == null) {
+      return null;
     }
 
-    //-----------------------------------------------------------------------
-    // retained original code for name lookup, not used in normal code
-    // this code could be refactored to avoid duplication, but leaving it as is ensures backward compatibility
-    public String getShortName(Locale locale, String id, String nameKey) {
-        String[] nameSet = getNameSet(locale, id, nameKey);
-        return nameSet == null ? null : nameSet[0];
-    }
-    
-    public String getName(Locale locale, String id, String nameKey) {
-        String[] nameSet = getNameSet(locale, id, nameKey);
-        return nameSet == null ? null : nameSet[1];
+    Map<String, Map<String, Object>> byIdCache = iByLocaleCache.get(locale);
+    if (byIdCache == null) {
+      iByLocaleCache.put(locale, byIdCache = createCache());
     }
 
-    private synchronized String[] getNameSet(Locale locale, String id, String nameKey) {
-        if (locale == null || id == null || nameKey == null) {
-            return null;
+    Map<String, Object> byNameKeyCache = byIdCache.get(id);
+    if (byNameKeyCache == null) {
+      byIdCache.put(id, byNameKeyCache = createCache());
+
+      String[][] zoneStringsEn =
+          DateTimeUtils.getDateFormatSymbols(Locale.ENGLISH).getZoneStrings();
+      String[] setEn = null;
+      for (String[] strings : zoneStringsEn) {
+        if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
+          setEn = strings;
+          break;
         }
-
-        Map<String, Map<String, Object>> byIdCache = iByLocaleCache.get(locale);
-        if (byIdCache == null) {
-            iByLocaleCache.put(locale, byIdCache = createCache());
+      }
+      String[][] zoneStringsLoc = DateTimeUtils.getDateFormatSymbols(locale).getZoneStrings();
+      String[] setLoc = null;
+      for (String[] strings : zoneStringsLoc) {
+        if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
+          setLoc = strings;
+          break;
         }
+      }
 
-        Map<String, Object> byNameKeyCache = byIdCache.get(id);
-        if (byNameKeyCache == null) {
-            byIdCache.put(id, byNameKeyCache = createCache());
-            
-            String[][] zoneStringsEn = DateTimeUtils.getDateFormatSymbols(Locale.ENGLISH).getZoneStrings();
-            String[] setEn = null;
-            for (String[] strings : zoneStringsEn) {
-                if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
-                    setEn = strings;
-                    break;
-                }
-            }
-            String[][] zoneStringsLoc = DateTimeUtils.getDateFormatSymbols(locale).getZoneStrings();
-            String[] setLoc = null;
-            for (String[] strings : zoneStringsLoc) {
-                if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
-                    setLoc = strings;
-                    break;
-                }
-            }
-            
-            if (setEn != null && setLoc != null) {
-                byNameKeyCache.put(setEn[2], new String[] {setLoc[2], setLoc[1]});
-                // need to handle case where summer and winter have the same
-                // abbreviation, such as EST in Australia [1716305]
-                // we handle this by appending "-Summer", cf ZoneInfoCompiler
-                if (setEn[2].equals(setEn[4])) {
-                    byNameKeyCache.put(setEn[4] + "-Summer", new String[] {setLoc[4], setLoc[3]});
-                } else {
-                    byNameKeyCache.put(setEn[4], new String[] {setLoc[4], setLoc[3]});
-                }
-            }
+      if (setEn != null && setLoc != null) {
+        byNameKeyCache.put(setEn[2], new String[] {setLoc[2], setLoc[1]});
+        // need to handle case where summer and winter have the same
+        // abbreviation, such as EST in Australia [1716305]
+        // we handle this by appending "-Summer", cf ZoneInfoCompiler
+        if (setEn[2].equals(setEn[4])) {
+          byNameKeyCache.put(setEn[4] + "-Summer", new String[] {setLoc[4], setLoc[3]});
+        } else {
+          byNameKeyCache.put(setEn[4], new String[] {setLoc[4], setLoc[3]});
         }
-        return (String[]) byNameKeyCache.get(nameKey);
+      }
+    }
+    return (String[]) byNameKeyCache.get(nameKey);
+  }
+
+  // -----------------------------------------------------------------------
+  // change lookup to operate on boolean standard/summer time flag
+  // handles changes to the nameKey better
+  public String getShortName(Locale locale, String id, String nameKey, boolean standardTime) {
+    String[] nameSet = getNameSet(locale, id, nameKey, standardTime);
+    return nameSet == null ? null : nameSet[0];
+  }
+
+  public String getName(Locale locale, String id, String nameKey, boolean standardTime) {
+    String[] nameSet = getNameSet(locale, id, nameKey, standardTime);
+    return nameSet == null ? null : nameSet[1];
+  }
+
+  private synchronized String[] getNameSet(
+      Locale locale, String id, String nameKey, boolean standardTime) {
+    if (locale == null || id == null || nameKey == null) {
+      return null;
+    }
+    if (id.startsWith("Etc/")) {
+      id = id.substring(4);
     }
 
-    //-----------------------------------------------------------------------
-    // change lookup to operate on boolean standard/summer time flag
-    // handles changes to the nameKey better
-    public String getShortName(Locale locale, String id, String nameKey, boolean standardTime) {
-        String[] nameSet = getNameSet(locale, id, nameKey, standardTime);
-        return nameSet == null ? null : nameSet[0];
-    }
-    
-    public String getName(Locale locale, String id, String nameKey, boolean standardTime) {
-        String[] nameSet = getNameSet(locale, id, nameKey, standardTime);
-        return nameSet == null ? null : nameSet[1];
+    Map<String, Map<Boolean, Object>> byIdCache = iByLocaleCache2.get(locale);
+    if (byIdCache == null) {
+      iByLocaleCache2.put(locale, byIdCache = createCache());
     }
 
-    private synchronized String[] getNameSet(Locale locale, String id, String nameKey, boolean standardTime) {
-        if (locale == null || id == null || nameKey == null) {
-            return null;
-        }
-        if (id.startsWith("Etc/")) {
-            id = id.substring(4);
-        }
+    Map<Boolean, Object> byNameKeyCache = byIdCache.get(id);
+    if (byNameKeyCache == null) {
+      byIdCache.put(id, byNameKeyCache = createCache());
 
-        Map<String, Map<Boolean, Object>> byIdCache = iByLocaleCache2.get(locale);
-        if (byIdCache == null) {
-            iByLocaleCache2.put(locale, byIdCache = createCache());
+      String[][] zoneStringsEn =
+          DateTimeUtils.getDateFormatSymbols(Locale.ENGLISH).getZoneStrings();
+      String[] setEn = null;
+      for (String[] strings : zoneStringsEn) {
+        if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
+          setEn = strings;
+          break;
         }
+      }
+      String[][] zoneStringsLoc = DateTimeUtils.getDateFormatSymbols(locale).getZoneStrings();
+      String[] setLoc = null;
+      for (String[] strings : zoneStringsLoc) {
+        if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
+          setLoc = strings;
+          break;
+        }
+      }
 
-        Map<Boolean, Object> byNameKeyCache = byIdCache.get(id);
-        if (byNameKeyCache == null) {
-            byIdCache.put(id, byNameKeyCache = createCache());
-            
-            String[][] zoneStringsEn = DateTimeUtils.getDateFormatSymbols(Locale.ENGLISH).getZoneStrings();
-            String[] setEn = null;
-            for (String[] strings : zoneStringsEn) {
-                if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
-                    setEn = strings;
-                    break;
-                }
-            }
-            String[][] zoneStringsLoc = DateTimeUtils.getDateFormatSymbols(locale).getZoneStrings();
-            String[] setLoc = null;
-            for (String[] strings : zoneStringsLoc) {
-                if (strings != null && strings.length >= 5 && id.equals(strings[0])) {
-                    setLoc = strings;
-                    break;
-                }
-            }
-            
-            if (setEn != null && setLoc != null) {
-                byNameKeyCache.put(Boolean.TRUE, new String[] {setLoc[2], setLoc[1]});
-                byNameKeyCache.put(Boolean.FALSE, new String[] {setLoc[4], setLoc[3]});
-            }
-        }
-        return (String[]) byNameKeyCache.get(Boolean.valueOf(standardTime));
+      if (setEn != null && setLoc != null) {
+        byNameKeyCache.put(Boolean.TRUE, new String[] {setLoc[2], setLoc[1]});
+        byNameKeyCache.put(Boolean.FALSE, new String[] {setLoc[4], setLoc[3]});
+      }
     }
+    return (String[]) byNameKeyCache.get(Boolean.valueOf(standardTime));
+  }
 
-    //-----------------------------------------------------------------------
-    private HashMap createCache() {
-        return new HashMap(7);
-    }
+  // -----------------------------------------------------------------------
+  private HashMap createCache() {
+    return new HashMap(7);
+  }
 }

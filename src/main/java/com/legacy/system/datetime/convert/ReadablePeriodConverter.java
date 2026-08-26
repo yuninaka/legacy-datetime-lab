@@ -27,59 +27,53 @@ import com.legacy.system.datetime.ReadablePeriod;
  * @author Brian S O'Neill
  * @since 1.0
  */
-class ReadablePeriodConverter extends AbstractConverter
-        implements PeriodConverter {
+class ReadablePeriodConverter extends AbstractConverter implements PeriodConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final ReadablePeriodConverter INSTANCE = new ReadablePeriodConverter();
+  /** Singleton instance. */
+  static final ReadablePeriodConverter INSTANCE = new ReadablePeriodConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected ReadablePeriodConverter() {
-        super();
-    }
+  /** Restricted constructor. */
+  protected ReadablePeriodConverter() {
+    super();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Extracts duration values from an object of this converter's type, and
-     * sets them into the given ReadWritablePeriod.
-     *
-     * @param duration duration to get modified
-     * @param object  the object to convert, must not be null
-     * @param chrono  the chronology to use
-     * @throws NullPointerException if the duration or object is null
-     * @throws ClassCastException if the object is an invalid type
-     * @throws IllegalArgumentException if the object is invalid
-     */
-    public void setInto(ReadWritablePeriod duration, Object object, Chronology chrono) {
-        duration.setPeriod((ReadablePeriod) object);
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Extracts duration values from an object of this converter's type, and sets them into the given
+   * ReadWritablePeriod.
+   *
+   * @param duration duration to get modified
+   * @param object the object to convert, must not be null
+   * @param chrono the chronology to use
+   * @throws NullPointerException if the duration or object is null
+   * @throws ClassCastException if the object is an invalid type
+   * @throws IllegalArgumentException if the object is invalid
+   */
+  public void setInto(ReadWritablePeriod duration, Object object, Chronology chrono) {
+    duration.setPeriod((ReadablePeriod) object);
+  }
 
-    /**
-     * Selects a suitable period type for the given object.
-     *
-     * @param object  the object to examine, must not be null
-     * @return the period type from the readable duration
-     * @throws NullPointerException if the object is null
-     * @throws ClassCastException if the object is an invalid type
-     */
-    @Override
-    public PeriodType getPeriodType(Object object) {
-        ReadablePeriod period = (ReadablePeriod) object;
-        return period.getPeriodType();
-    }
+  /**
+   * Selects a suitable period type for the given object.
+   *
+   * @param object the object to examine, must not be null
+   * @return the period type from the readable duration
+   * @throws NullPointerException if the object is null
+   * @throws ClassCastException if the object is an invalid type
+   */
+  @Override
+  public PeriodType getPeriodType(Object object) {
+    ReadablePeriod period = (ReadablePeriod) object;
+    return period.getPeriodType();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Returns ReadablePeriod class.
-     * 
-     * @return ReadablePeriod.class
-     */
-    public Class<?> getSupportedType() {
-        return ReadablePeriod.class;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns ReadablePeriod class.
+   *
+   * @return ReadablePeriod.class
+   */
+  public Class<?> getSupportedType() {
+    return ReadablePeriod.class;
+  }
 }

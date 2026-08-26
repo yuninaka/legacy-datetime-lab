@@ -27,27 +27,26 @@ import com.legacy.system.datetime.ReadWritableInterval;
  */
 public interface IntervalConverter extends Converter {
 
-    /**
-     * Checks if the input is a ReadableInterval.
-     * <p>
-     * If it is, then the calling code should cast and copy the fields directly.
-     *
-     * @param object  the object to convert, must not be null
-     * @param chrono  the chronology to use, may be null
-     * @return true if the input is a ReadableInterval
-     * @throws ClassCastException if the object is invalid
-     */
-    boolean isReadableInterval(Object object, Chronology chrono);
+  /**
+   * Checks if the input is a ReadableInterval.
+   *
+   * <p>If it is, then the calling code should cast and copy the fields directly.
+   *
+   * @param object the object to convert, must not be null
+   * @param chrono the chronology to use, may be null
+   * @return true if the input is a ReadableInterval
+   * @throws ClassCastException if the object is invalid
+   */
+  boolean isReadableInterval(Object object, Chronology chrono);
 
-    /**
-     * Extracts interval endpoint values from an object of this converter's
-     * type, and sets them into the given ReadWritableInterval.
-     *
-     * @param writableInterval  interval to get modified, not null
-     * @param object  the object to convert, must not be null
-     * @param chrono  the chronology to use, may be null
-     * @throws ClassCastException if the object is invalid
-     */
-    void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono);
-
+  /**
+   * Extracts interval endpoint values from an object of this converter's type, and sets them into
+   * the given ReadWritableInterval.
+   *
+   * @param writableInterval interval to get modified, not null
+   * @param object the object to convert, must not be null
+   * @param chrono the chronology to use, may be null
+   * @throws ClassCastException if the object is invalid
+   */
+  void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono);
 }

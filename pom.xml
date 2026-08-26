@@ -724,6 +724,29 @@
           </targetTests>
         </configuration>
       </plugin>
+      <!-- Code formatting guardrail -->
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.43.0</version>
+        <configuration>
+          <java>
+            <googleJavaFormat/>
+            <removeUnusedImports/>
+          </java>
+        </configuration>
+      </plugin>
+      <!-- Static analysis guardrail -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.8.3.0</version>
+        <configuration>
+          <!-- Baseline: suppresses pre-existing findings so the gate fails only on
+               NEW findings introduced after this guardrail was set up. -->
+          <excludeFilterFile>${project.basedir}/spotbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
     </plugins>
     <!-- Manage plugin versions -->
     <pluginManagement>

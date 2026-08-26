@@ -15,180 +15,173 @@
  */
 package com.legacy.system.datetime.field;
 
-import java.io.Serializable;
-
 import com.legacy.system.datetime.DurationField;
 import com.legacy.system.datetime.DurationFieldType;
+import java.io.Serializable;
 
 /**
- * Duration field class representing a field with a fixed unit length of one
- * millisecond.
- * <p>
- * MillisDurationField is thread-safe and immutable.
+ * Duration field class representing a field with a fixed unit length of one millisecond.
+ *
+ * <p>MillisDurationField is thread-safe and immutable.
  *
  * @author Brian S O'Neill
  * @since 1.0
  */
 public final class MillisDurationField extends DurationField implements Serializable {
 
-    /** Serialization lock. */
-    private static final long serialVersionUID = 2656707858124633367L;
+  /** Serialization lock. */
+  private static final long serialVersionUID = 2656707858124633367L;
 
-    /** Singleton instance. */
-    public static final DurationField INSTANCE = new MillisDurationField();
+  /** Singleton instance. */
+  public static final DurationField INSTANCE = new MillisDurationField();
 
-    /**
-     * Restricted constructor.
-     */
-    private MillisDurationField() {
-        super();
+  /** Restricted constructor. */
+  private MillisDurationField() {
+    super();
+  }
+
+  // ------------------------------------------------------------------------
+  @Override
+  public DurationFieldType getType() {
+    return DurationFieldType.millis();
+  }
+
+  @Override
+  public String getName() {
+    return "millis";
+  }
+
+  /**
+   * Returns true as this field is supported.
+   *
+   * @return true always
+   */
+  @Override
+  public boolean isSupported() {
+    return true;
+  }
+
+  /**
+   * Returns true as this field is precise.
+   *
+   * @return true always
+   */
+  @Override
+  public final boolean isPrecise() {
+    return true;
+  }
+
+  /**
+   * Returns the amount of milliseconds per unit value of this field.
+   *
+   * @return one always
+   */
+  @Override
+  public final long getUnitMillis() {
+    return 1;
+  }
+
+  // ------------------------------------------------------------------------
+  @Override
+  public int getValue(long duration) {
+    return FieldUtils.safeToInt(duration);
+  }
+
+  @Override
+  public long getValueAsLong(long duration) {
+    return duration;
+  }
+
+  @Override
+  public int getValue(long duration, long instant) {
+    return FieldUtils.safeToInt(duration);
+  }
+
+  @Override
+  public long getValueAsLong(long duration, long instant) {
+    return duration;
+  }
+
+  @Override
+  public long getMillis(int value) {
+    return value;
+  }
+
+  @Override
+  public long getMillis(long value) {
+    return value;
+  }
+
+  @Override
+  public long getMillis(int value, long instant) {
+    return value;
+  }
+
+  @Override
+  public long getMillis(long value, long instant) {
+    return value;
+  }
+
+  @Override
+  public long add(long instant, int value) {
+    return FieldUtils.safeAdd(instant, value);
+  }
+
+  @Override
+  public long add(long instant, long value) {
+    return FieldUtils.safeAdd(instant, value);
+  }
+
+  @Override
+  public int getDifference(long minuendInstant, long subtrahendInstant) {
+    return FieldUtils.safeToInt(FieldUtils.safeSubtract(minuendInstant, subtrahendInstant));
+  }
+
+  @Override
+  public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
+    return FieldUtils.safeSubtract(minuendInstant, subtrahendInstant);
+  }
+
+  // ------------------------------------------------------------------------
+  public int compareTo(DurationField otherField) {
+    long otherMillis = otherField.getUnitMillis();
+    long thisMillis = getUnitMillis();
+    // cannot do (thisMillis - otherMillis) as can overflow
+    if (thisMillis == otherMillis) {
+      return 0;
     }
-    
-    //------------------------------------------------------------------------
-    @Override
-    public DurationFieldType getType() {
-        return DurationFieldType.millis();
+    if (thisMillis < otherMillis) {
+      return -1;
+    } else {
+      return 1;
     }
+  }
 
-    @Override
-    public String getName() {
-        return "millis";
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof MillisDurationField) {
+      return getUnitMillis() == ((MillisDurationField) obj).getUnitMillis();
     }
+    return false;
+  }
 
-    /**
-     * Returns true as this field is supported.
-     * 
-     * @return true always
-     */
-    @Override
-    public boolean isSupported() {
-        return true;
-    }
+  @Override
+  public int hashCode() {
+    return (int) getUnitMillis();
+  }
 
-    /**
-     * Returns true as this field is precise.
-     * 
-     * @return true always
-     */
-    @Override
-    public final boolean isPrecise() {
-        return true;
-    }
+  /**
+   * Get a suitable debug string.
+   *
+   * @return debug string
+   */
+  @Override
+  public String toString() {
+    return "DurationField[millis]";
+  }
 
-    /**
-     * Returns the amount of milliseconds per unit value of this field.
-     *
-     * @return one always
-     */
-    @Override
-    public final long getUnitMillis() {
-        return 1;
-    }
-
-    //------------------------------------------------------------------------
-    @Override
-    public int getValue(long duration) {
-        return FieldUtils.safeToInt(duration);
-    }
-
-    @Override
-    public long getValueAsLong(long duration) {
-        return duration;
-    }
-
-    @Override
-    public int getValue(long duration, long instant) {
-        return FieldUtils.safeToInt(duration);
-    }
-
-    @Override
-    public long getValueAsLong(long duration, long instant) {
-        return duration;
-    }
-
-    @Override
-    public long getMillis(int value) {
-        return value;
-    }
-
-    @Override
-    public long getMillis(long value) {
-        return value;
-    }
-
-    @Override
-    public long getMillis(int value, long instant) {
-        return value;
-    }
-
-    @Override
-    public long getMillis(long value, long instant) {
-        return value;
-    }
-
-    @Override
-    public long add(long instant, int value) {
-        return FieldUtils.safeAdd(instant, value);
-    }
-
-    @Override
-    public long add(long instant, long value) {
-        return FieldUtils.safeAdd(instant, value);
-    }
-
-    @Override
-    public int getDifference(long minuendInstant, long subtrahendInstant) {
-        return FieldUtils.safeToInt(FieldUtils.safeSubtract(minuendInstant, subtrahendInstant));
-    }
-
-    @Override
-    public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
-        return FieldUtils.safeSubtract(minuendInstant, subtrahendInstant);
-    }
-
-    //------------------------------------------------------------------------
-    public int compareTo(DurationField otherField) {
-        long otherMillis = otherField.getUnitMillis();
-        long thisMillis = getUnitMillis();
-        // cannot do (thisMillis - otherMillis) as can overflow
-        if (thisMillis == otherMillis) {
-            return 0;
-        }
-        if (thisMillis < otherMillis) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof MillisDurationField) {
-            return getUnitMillis() == ((MillisDurationField) obj).getUnitMillis();
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) getUnitMillis();
-    }
-
-    /**
-     * Get a suitable debug string.
-     * 
-     * @return debug string
-     */
-    @Override
-    public String toString() {
-        return "DurationField[millis]";
-    }
-
-    /**
-     * Deserialize to the singleton.
-     */
-    private Object readResolve() {
-        return INSTANCE;
-    }
-
+  /** Deserialize to the singleton. */
+  private Object readResolve() {
+    return INSTANCE;
+  }
 }

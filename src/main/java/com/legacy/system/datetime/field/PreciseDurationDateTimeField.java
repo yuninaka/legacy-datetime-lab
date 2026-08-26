@@ -20,158 +20,153 @@ import com.legacy.system.datetime.DurationField;
 
 /**
  * Precise datetime field, which has a precise unit duration field.
- * <p>
- * PreciseDurationDateTimeField is thread-safe and immutable, and its
- * subclasses must be as well.
+ *
+ * <p>PreciseDurationDateTimeField is thread-safe and immutable, and its subclasses must be as well.
  *
  * @author Brian S O'Neill
  * @since 1.0
  */
 public abstract class PreciseDurationDateTimeField extends BaseDateTimeField {
 
-    @SuppressWarnings("unused")
-    private static final long serialVersionUID = 5004523158306266035L;
+  @SuppressWarnings("unused")
+  private static final long serialVersionUID = 5004523158306266035L;
 
-    /** The fractional unit in millis */
-    final long iUnitMillis;
+  /** The fractional unit in millis */
+  final long iUnitMillis;
 
-    private final DurationField iUnitField;
+  private final DurationField iUnitField;
 
-    /**
-     * Constructor.
-     * 
-     * @param type  the field type
-     * @param unit  precise unit duration, like "days()".
-     * @throws IllegalArgumentException if duration field is imprecise
-     * @throws IllegalArgumentException if unit milliseconds is less than one
-     */
-    public PreciseDurationDateTimeField(DateTimeFieldType type, DurationField unit) {
-        super(type);
+  /**
+   * Constructor.
+   *
+   * @param type the field type
+   * @param unit precise unit duration, like "days()".
+   * @throws IllegalArgumentException if duration field is imprecise
+   * @throws IllegalArgumentException if unit milliseconds is less than one
+   */
+  public PreciseDurationDateTimeField(DateTimeFieldType type, DurationField unit) {
+    super(type);
 
-        if (!unit.isPrecise()) {
-            throw new IllegalArgumentException("Unit duration field must be precise");
-        }
-
-        iUnitMillis = unit.getUnitMillis();
-        if (iUnitMillis < 1) {
-            throw new IllegalArgumentException("The unit milliseconds must be at least 1");
-        }
-
-        iUnitField = unit;
+    if (!unit.isPrecise()) {
+      throw new IllegalArgumentException("Unit duration field must be precise");
     }
 
-    /**
-     * Returns false by default.
-     */
-    @Override
-    public boolean isLenient() {
-        return false;
+    iUnitMillis = unit.getUnitMillis();
+    if (iUnitMillis < 1) {
+      throw new IllegalArgumentException("The unit milliseconds must be at least 1");
     }
 
-    /**
-     * Set the specified amount of units to the specified time instant.
-     * 
-     * @param instant  the milliseconds from 1970-01-01T00:00:00Z to set in
-     * @param value  value of units to set.
-     * @return the updated time instant.
-     * @throws IllegalArgumentException if value is too large or too small.
-     */
-    @Override
-    public long set(long instant, int value) {
-        FieldUtils.verifyValueBounds(this, value, getMinimumValue(),
-                                     getMaximumValueForSet(instant, value));
-        return instant + (value - get(instant)) * iUnitMillis;
-    }
+    iUnitField = unit;
+  }
 
-    /**
-     * This method assumes that this field is properly rounded on
-     * 1970-01-01T00:00:00. If the rounding alignment differs, override this
-     * method as follows:
-     * <pre>
-     * return super.roundFloor(instant + ALIGNMENT_MILLIS) - ALIGNMENT_MILLIS;
-     * </pre>
-     */
-    @Override
-    public long roundFloor(long instant) {
-        if (instant >= 0) {
-            return instant - instant % iUnitMillis;
-        } else {
-            instant += 1;
-            return instant - instant % iUnitMillis - iUnitMillis;
-        }
-    }
+  /** Returns false by default. */
+  @Override
+  public boolean isLenient() {
+    return false;
+  }
 
-    /**
-     * This method assumes that this field is properly rounded on
-     * 1970-01-01T00:00:00. If the rounding alignment differs, override this
-     * method as follows:
-     * <pre>
-     * return super.roundCeiling(instant + ALIGNMENT_MILLIS) - ALIGNMENT_MILLIS;
-     * </pre>
-     */
-    @Override
-    public long roundCeiling(long instant) {
-        if (instant > 0) {
-            instant -= 1;
-            return instant - instant % iUnitMillis + iUnitMillis;
-        } else {
-            return instant - instant % iUnitMillis;
-        }
-    }
+  /**
+   * Set the specified amount of units to the specified time instant.
+   *
+   * @param instant the milliseconds from 1970-01-01T00:00:00Z to set in
+   * @param value value of units to set.
+   * @return the updated time instant.
+   * @throws IllegalArgumentException if value is too large or too small.
+   */
+  @Override
+  public long set(long instant, int value) {
+    FieldUtils.verifyValueBounds(
+        this, value, getMinimumValue(), getMaximumValueForSet(instant, value));
+    return instant + (value - get(instant)) * iUnitMillis;
+  }
 
-    /**
-     * This method assumes that this field is properly rounded on
-     * 1970-01-01T00:00:00. If the rounding alignment differs, override this
-     * method as follows:
-     * <pre>
-     * return super.remainder(instant + ALIGNMENT_MILLIS);
-     * </pre>
-     */
-    @Override
-    public long remainder(long instant) {
-        if (instant >= 0) {
-            return instant % iUnitMillis;
-        } else {
-            return (instant + 1) % iUnitMillis + iUnitMillis - 1;
-        }
+  /**
+   * This method assumes that this field is properly rounded on 1970-01-01T00:00:00. If the rounding
+   * alignment differs, override this method as follows:
+   *
+   * <pre>
+   * return super.roundFloor(instant + ALIGNMENT_MILLIS) - ALIGNMENT_MILLIS;
+   * </pre>
+   */
+  @Override
+  public long roundFloor(long instant) {
+    if (instant >= 0) {
+      return instant - instant % iUnitMillis;
+    } else {
+      instant += 1;
+      return instant - instant % iUnitMillis - iUnitMillis;
     }
+  }
 
-    /**
-     * Returns the duration per unit value of this field. For example, if this
-     * field represents "minute of hour", then the duration field is minutes.
-     *
-     * @return the duration of this field, or UnsupportedDurationField if field
-     * has no duration
-     */
-    @Override
-    public DurationField getDurationField() {
-        return iUnitField;
+  /**
+   * This method assumes that this field is properly rounded on 1970-01-01T00:00:00. If the rounding
+   * alignment differs, override this method as follows:
+   *
+   * <pre>
+   * return super.roundCeiling(instant + ALIGNMENT_MILLIS) - ALIGNMENT_MILLIS;
+   * </pre>
+   */
+  @Override
+  public long roundCeiling(long instant) {
+    if (instant > 0) {
+      instant -= 1;
+      return instant - instant % iUnitMillis + iUnitMillis;
+    } else {
+      return instant - instant % iUnitMillis;
     }
+  }
 
-    /**
-     * Get the minimum value for the field.
-     * 
-     * @return the minimum value
-     */
-    @Override
-    public int getMinimumValue() {
-        return 0;
+  /**
+   * This method assumes that this field is properly rounded on 1970-01-01T00:00:00. If the rounding
+   * alignment differs, override this method as follows:
+   *
+   * <pre>
+   * return super.remainder(instant + ALIGNMENT_MILLIS);
+   * </pre>
+   */
+  @Override
+  public long remainder(long instant) {
+    if (instant >= 0) {
+      return instant % iUnitMillis;
+    } else {
+      return (instant + 1) % iUnitMillis + iUnitMillis - 1;
     }
+  }
 
-    public final long getUnitMillis() {
-        return iUnitMillis;
-    }
+  /**
+   * Returns the duration per unit value of this field. For example, if this field represents
+   * "minute of hour", then the duration field is minutes.
+   *
+   * @return the duration of this field, or UnsupportedDurationField if field has no duration
+   */
+  @Override
+  public DurationField getDurationField() {
+    return iUnitField;
+  }
 
-    /**
-     * Called by the set method to get the maximum allowed value. By default,
-     * returns getMaximumValue(instant). Override to provide a faster implementation.
-     * 
-     * @param instant  the instant to query at
-     * @param value  the value
-     * @return the maximum value
-     */
-    protected int getMaximumValueForSet(long instant, int value) {
-        return getMaximumValue(instant);
-    }
+  /**
+   * Get the minimum value for the field.
+   *
+   * @return the minimum value
+   */
+  @Override
+  public int getMinimumValue() {
+    return 0;
+  }
 
+  public final long getUnitMillis() {
+    return iUnitMillis;
+  }
+
+  /**
+   * Called by the set method to get the maximum allowed value. By default, returns
+   * getMaximumValue(instant). Override to provide a faster implementation.
+   *
+   * @param instant the instant to query at
+   * @param value the value
+   * @return the maximum value
+   */
+  protected int getMaximumValueForSet(long instant, int value) {
+    return getMaximumValue(instant);
+  }
 }

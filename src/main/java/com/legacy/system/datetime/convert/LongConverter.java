@@ -18,64 +18,59 @@ package com.legacy.system.datetime.convert;
 import com.legacy.system.datetime.Chronology;
 
 /**
- * LongConverter converts a Long to an instant, partial or duration.
- * The Long value represents milliseconds in the ISO chronology.
+ * LongConverter converts a Long to an instant, partial or duration. The Long value represents
+ * milliseconds in the ISO chronology.
  *
  * @author Stephen Colebourne
  * @author Brian S O'Neill
  * @since 1.0
  */
 class LongConverter extends AbstractConverter
-        implements InstantConverter, PartialConverter, DurationConverter {
+    implements InstantConverter, PartialConverter, DurationConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final LongConverter INSTANCE = new LongConverter();
+  /** Singleton instance. */
+  static final LongConverter INSTANCE = new LongConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected LongConverter() {
-        super();
-    }
+  /** Restricted constructor. */
+  protected LongConverter() {
+    super();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Gets the millisecond instant, which is the Long value.
-     * 
-     * @param object  the Long to convert, must not be null
-     * @param chrono  the chronology to use, which is always non-null
-     * @return the millisecond value
-     * @throws NullPointerException if the object is null
-     * @throws ClassCastException if the object is an invalid type
-     */
-    @Override
-    public long getInstantMillis(Object object, Chronology chrono) {
-        return ((Long) object).longValue();
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Gets the millisecond instant, which is the Long value.
+   *
+   * @param object the Long to convert, must not be null
+   * @param chrono the chronology to use, which is always non-null
+   * @return the millisecond value
+   * @throws NullPointerException if the object is null
+   * @throws ClassCastException if the object is an invalid type
+   */
+  @Override
+  public long getInstantMillis(Object object, Chronology chrono) {
+    return ((Long) object).longValue();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Gets the millisecond duration, which is the Long value.
-     * 
-     * @param object  the Long to convert, must not be null
-     * @return the millisecond duration
-     * @throws NullPointerException if the object is null
-     * @throws ClassCastException if the object is an invalid type
-     */
-    public long getDurationMillis(Object object) {
-        return ((Long) object).longValue();
-    }
+  // -----------------------------------------------------------------------
+  /**
+   * Gets the millisecond duration, which is the Long value.
+   *
+   * @param object the Long to convert, must not be null
+   * @return the millisecond duration
+   * @throws NullPointerException if the object is null
+   * @throws ClassCastException if the object is an invalid type
+   */
+  public long getDurationMillis(Object object) {
+    return ((Long) object).longValue();
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Returns Long.class.
-     * 
-     * @return Long.class
-     */
-    public Class<?> getSupportedType() {
-        return Long.class;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns Long.class.
+   *
+   * @return Long.class
+   */
+  public Class<?> getSupportedType() {
+    return Long.class;
+  }
 }

@@ -26,85 +26,78 @@ import com.legacy.system.datetime.ReadablePartial;
  * @author Stephen Colebourne
  * @since 1.0
  */
-class ReadablePartialConverter extends AbstractConverter
-        implements PartialConverter {
+class ReadablePartialConverter extends AbstractConverter implements PartialConverter {
 
-    /**
-     * Singleton instance.
-     */
-    static final ReadablePartialConverter INSTANCE = new ReadablePartialConverter();
+  /** Singleton instance. */
+  static final ReadablePartialConverter INSTANCE = new ReadablePartialConverter();
 
-    /**
-     * Restricted constructor.
-     */
-    protected ReadablePartialConverter() {
-        super();
+  /** Restricted constructor. */
+  protected ReadablePartialConverter() {
+    super();
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Gets the chronology, which is taken from the ReadablePartial.
+   *
+   * @param object the ReadablePartial to convert, must not be null
+   * @param zone the specified zone to use, null means default zone
+   * @return the chronology, never null
+   */
+  @Override
+  public Chronology getChronology(Object object, DateTimeZone zone) {
+    return getChronology(object, (Chronology) null).withZone(zone);
+  }
+
+  /**
+   * Gets the chronology, which is taken from the ReadableInstant.
+   *
+   * <p>If the passed in chronology is non-null, it is used. Otherwise the chronology from the
+   * instant is used.
+   *
+   * @param object the ReadablePartial to convert, must not be null
+   * @param chrono the chronology to use, null means use that from object
+   * @return the chronology, never null
+   */
+  @Override
+  public Chronology getChronology(Object object, Chronology chrono) {
+    if (chrono == null) {
+      chrono = ((ReadablePartial) object).getChronology();
+      chrono = DateTimeUtils.getChronology(chrono);
     }
+    return chrono;
+  }
 
-    //-----------------------------------------------------------------------
-    /**
-     * Gets the chronology, which is taken from the ReadablePartial.
-     * 
-     * @param object  the ReadablePartial to convert, must not be null
-     * @param zone  the specified zone to use, null means default zone
-     * @return the chronology, never null
-     */
-    @Override
-    public Chronology getChronology(Object object, DateTimeZone zone) {
-        return getChronology(object, (Chronology) null).withZone(zone);
+  /**
+   * Extracts the values of the partial from an object of this converter's type. The chrono
+   * parameter is a hint to the converter, should it require a chronology to aid in conversion.
+   *
+   * @param fieldSource a partial that provides access to the fields. This partial may be incomplete
+   *     and only getFieldType(int) should be used
+   * @param object the object to convert
+   * @param chrono the chronology to use, which is the non-null result of getChronology()
+   * @return the array of field values that match the fieldSource, must be non-null valid
+   * @throws ClassCastException if the object is invalid
+   */
+  @Override
+  public int[] getPartialValues(ReadablePartial fieldSource, Object object, Chronology chrono) {
+    ReadablePartial input = (ReadablePartial) object;
+    int size = fieldSource.size();
+    int[] values = new int[size];
+    for (int i = 0; i < size; i++) {
+      values[i] = input.get(fieldSource.getFieldType(i));
     }
+    chrono.validate(fieldSource, values);
+    return values;
+  }
 
-    /**
-     * Gets the chronology, which is taken from the ReadableInstant.
-     * <p>
-     * If the passed in chronology is non-null, it is used.
-     * Otherwise the chronology from the instant is used.
-     * 
-     * @param object  the ReadablePartial to convert, must not be null
-     * @param chrono  the chronology to use, null means use that from object
-     * @return the chronology, never null
-     */
-    @Override
-    public Chronology getChronology(Object object, Chronology chrono) {
-        if (chrono == null) {
-            chrono = ((ReadablePartial) object).getChronology();
-            chrono = DateTimeUtils.getChronology(chrono);
-        }
-        return chrono;
-    }
-
-    /**
-     * Extracts the values of the partial from an object of this converter's type.
-     * The chrono parameter is a hint to the converter, should it require a
-     * chronology to aid in conversion.
-     * 
-     * @param fieldSource  a partial that provides access to the fields.
-     *  This partial may be incomplete and only getFieldType(int) should be used
-     * @param object  the object to convert
-     * @param chrono  the chronology to use, which is the non-null result of getChronology()
-     * @return the array of field values that match the fieldSource, must be non-null valid
-     * @throws ClassCastException if the object is invalid
-     */
-    @Override
-    public int[] getPartialValues(ReadablePartial fieldSource, Object object, Chronology chrono) {
-        ReadablePartial input = (ReadablePartial) object;
-        int size = fieldSource.size();
-        int[] values = new int[size];
-        for (int i = 0; i < size; i++) {
-            values[i] = input.get(fieldSource.getFieldType(i));
-        }
-        chrono.validate(fieldSource, values);
-        return values;
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns ReadableInstant.class.
-     * 
-     * @return ReadableInstant.class
-     */
-    public Class<?> getSupportedType() {
-        return ReadablePartial.class;
-    }
-
+  // -----------------------------------------------------------------------
+  /**
+   * Returns ReadableInstant.class.
+   *
+   * @return ReadableInstant.class
+   */
+  public Class<?> getSupportedType() {
+    return ReadablePartial.class;
+  }
 }
