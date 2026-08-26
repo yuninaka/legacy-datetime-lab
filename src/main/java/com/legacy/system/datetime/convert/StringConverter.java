@@ -98,6 +98,7 @@ class StringConverter extends AbstractConverter
    * @param object the String to convert, must not be null
    * @throws ClassCastException if the object is invalid
    */
+  @Override
   public long getDurationMillis(Object object) {
     // parse here because duration could be bigger than the int supported
     // by the period parser
@@ -159,6 +160,7 @@ class StringConverter extends AbstractConverter
    * @param chrono the chronology to use
    * @throws ClassCastException if the object is invalid
    */
+  @Override
   public void setInto(ReadWritablePeriod period, Object object, Chronology chrono) {
     String str = (String) object;
     PeriodFormatter parser = ISOPeriodFormat.standard();
@@ -181,6 +183,7 @@ class StringConverter extends AbstractConverter
    * @param object the String to convert, must not be null
    * @param chrono the chronology to use, may be null
    */
+  @Override
   public void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono) {
     String str = (String) object;
 
@@ -244,6 +247,7 @@ class StringConverter extends AbstractConverter
    *
    * @return String.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return String.class;
   }

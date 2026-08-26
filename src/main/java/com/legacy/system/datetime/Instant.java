@@ -289,6 +289,7 @@ public final class Instant extends AbstractInstant implements ReadableInstant, S
    *
    * @return the number of milliseconds since 1970-01-01T00:00:00Z
    */
+  @Override
   public long getMillis() {
     return iMillis;
   }
@@ -301,6 +302,7 @@ public final class Instant extends AbstractInstant implements ReadableInstant, S
    *
    * @return ISO in the UTC zone
    */
+  @Override
   public Chronology getChronology() {
     return ISOChronology.getInstanceUTC();
   }

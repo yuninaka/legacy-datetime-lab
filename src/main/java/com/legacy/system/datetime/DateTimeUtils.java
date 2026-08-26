@@ -542,6 +542,7 @@ public class DateTimeUtils {
      *
      * @return the current time in millis
      */
+    @Override
     public long getMillis() {
       return System.currentTimeMillis();
     }
@@ -566,6 +567,7 @@ public class DateTimeUtils {
      *
      * @return the current time in millis
      */
+    @Override
     public long getMillis() {
       return iMillis;
     }
@@ -590,6 +592,7 @@ public class DateTimeUtils {
      *
      * @return the current time in millis
      */
+    @Override
     public long getMillis() {
       return System.currentTimeMillis() + iMillis;
     }

@@ -215,6 +215,7 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
    * @return the value
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     return iValues[index];
   }
@@ -240,6 +241,7 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
    *
    * @return the chronology, never null
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }

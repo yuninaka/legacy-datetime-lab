@@ -48,6 +48,7 @@ class ReadableDurationConverter extends AbstractConverter
    * @throws ClassCastException if the object is an invalid type
    * @throws IllegalArgumentException if the object is invalid
    */
+  @Override
   public long getDurationMillis(Object object) {
     return ((ReadableDuration) object).getMillis();
   }
@@ -64,6 +65,7 @@ class ReadableDurationConverter extends AbstractConverter
    * @throws ClassCastException if the object is an invalid type
    * @throws IllegalArgumentException if the object is invalid
    */
+  @Override
   public void setInto(ReadWritablePeriod writablePeriod, Object object, Chronology chrono) {
     ReadableDuration dur = (ReadableDuration) object;
     chrono = DateTimeUtils.getChronology(chrono);
@@ -80,6 +82,7 @@ class ReadableDurationConverter extends AbstractConverter
    *
    * @return ReadableDuration.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return ReadableDuration.class;
   }

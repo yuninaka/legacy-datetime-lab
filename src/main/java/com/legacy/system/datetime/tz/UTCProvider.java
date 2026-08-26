@@ -37,6 +37,7 @@ public final class UTCProvider implements Provider {
   }
 
   /** Returns {@link DateTimeZone#UTC UTC} for <code>"UTC"</code>, null otherwise. */
+  @Override
   public DateTimeZone getZone(String id) {
     if ("UTC".equalsIgnoreCase(id)) {
       return DateTimeZone.UTC;
@@ -45,6 +46,7 @@ public final class UTCProvider implements Provider {
   }
 
   /** Returns a singleton collection containing only <code>"UTC"</code>. */
+  @Override
   public Set<String> getAvailableIDs() {
     return AVAILABLE_IDS;
   }

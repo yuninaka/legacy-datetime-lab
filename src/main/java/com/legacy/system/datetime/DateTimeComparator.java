@@ -185,6 +185,7 @@ public class DateTimeComparator implements Comparator<Object>, Serializable {
    *     otherwise.
    * @throws IllegalArgumentException if either argument is not supported
    */
+  @Override
   public int compare(Object lhsObj, Object rhsObj) {
     InstantConverter conv = ConverterManager.getInstance().getInstantConverter(lhsObj);
     Chronology lhsChrono = conv.getChronology(lhsObj, (Chronology) null);

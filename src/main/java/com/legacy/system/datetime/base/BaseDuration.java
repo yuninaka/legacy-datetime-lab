@@ -108,6 +108,7 @@ public abstract class BaseDuration extends AbstractDuration
    *
    * @return the length of the duration in milliseconds.
    */
+  @Override
   public long getMillis() {
     return iMillis;
   }

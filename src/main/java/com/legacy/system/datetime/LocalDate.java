@@ -464,6 +464,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
    *
    * @return the field count, three
    */
+  @Override
   public int size() {
     return 3;
   }
@@ -498,6 +499,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
    * @return the value
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     switch (index) {
       case YEAR:
@@ -594,6 +596,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
    *
    * @return the Chronology that the date is using
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }

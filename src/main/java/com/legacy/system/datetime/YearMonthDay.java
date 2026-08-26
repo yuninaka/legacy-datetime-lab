@@ -306,6 +306,7 @@ public final class YearMonthDay extends BasePartial implements ReadablePartial, 
    *
    * @return the field count
    */
+  @Override
   public int size() {
     return 3;
   }

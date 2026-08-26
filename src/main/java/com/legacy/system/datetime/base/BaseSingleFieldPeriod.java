@@ -201,6 +201,7 @@ public abstract class BaseSingleFieldPeriod
    *
    * @return the period type, not null
    */
+  @Override
   public abstract PeriodType getPeriodType();
 
   // -----------------------------------------------------------------------
@@ -209,6 +210,7 @@ public abstract class BaseSingleFieldPeriod
    *
    * @return the number of fields supported, which is one
    */
+  @Override
   public int size() {
     return 1;
   }
@@ -222,6 +224,7 @@ public abstract class BaseSingleFieldPeriod
    * @return the field at the specified index
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public DurationFieldType getFieldType(int index) {
     if (index != 0) {
       throw new IndexOutOfBoundsException(String.valueOf(index));
@@ -238,6 +241,7 @@ public abstract class BaseSingleFieldPeriod
    * @return the value of the field at the specified index
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     if (index != 0) {
       throw new IndexOutOfBoundsException(String.valueOf(index));
@@ -254,6 +258,7 @@ public abstract class BaseSingleFieldPeriod
    * @param type the field type to query, null returns zero
    * @return the value of that field, zero if field not supported
    */
+  @Override
   public int get(DurationFieldType type) {
     if (type == getFieldType()) {
       return getValue();
@@ -267,6 +272,7 @@ public abstract class BaseSingleFieldPeriod
    * @param type the type to check, may be null which returns false
    * @return true if the field is supported
    */
+  @Override
   public boolean isSupported(DurationFieldType type) {
     return (type == getFieldType());
   }
@@ -278,6 +284,7 @@ public abstract class BaseSingleFieldPeriod
    *
    * @return a <code>Period</code> representing the same number of days
    */
+  @Override
   public Period toPeriod() {
     return Period.ZERO.withFields(this);
   }
@@ -290,6 +297,7 @@ public abstract class BaseSingleFieldPeriod
    *
    * @return a MutablePeriod using the same field set and values
    */
+  @Override
   public MutablePeriod toMutablePeriod() {
     var period = new MutablePeriod();
     period.add(this);
@@ -339,6 +347,7 @@ public abstract class BaseSingleFieldPeriod
    * @throws NullPointerException if the other period is null
    * @throws ClassCastException if the other period is of a different type
    */
+  @Override
   public int compareTo(BaseSingleFieldPeriod other) {
     if (other.getClass() != getClass()) {
       throw new ClassCastException(getClass() + " cannot be compared to " + other.getClass());

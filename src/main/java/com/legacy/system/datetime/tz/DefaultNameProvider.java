@@ -42,11 +42,13 @@ public class DefaultNameProvider implements NameProvider {
   // retained original code for name lookup, not used in normal code
   // this code could be refactored to avoid duplication, but leaving it as is ensures backward
   // compatibility
+  @Override
   public String getShortName(Locale locale, String id, String nameKey) {
     String[] nameSet = getNameSet(locale, id, nameKey);
     return nameSet == null ? null : nameSet[0];
   }
 
+  @Override
   public String getName(Locale locale, String id, String nameKey) {
     String[] nameSet = getNameSet(locale, id, nameKey);
     return nameSet == null ? null : nameSet[1];

@@ -142,6 +142,7 @@ public class ZoneInfoProvider implements Provider {
    * @param id the id to load
    * @return the loaded zone
    */
+  @Override
   public DateTimeZone getZone(String id) {
     if (id == null) {
       return null;
@@ -175,6 +176,7 @@ public class ZoneInfoProvider implements Provider {
    *
    * @return the zone ids
    */
+  @Override
   public Set<String> getAvailableIDs() {
     return iZoneInfoKeys;
   }
@@ -207,6 +209,7 @@ public class ZoneInfoProvider implements Provider {
       in =
           AccessController.doPrivileged(
               new PrivilegedAction<InputStream>() {
+                @Override
                 public InputStream run() {
                   if (iLoader != null) {
                     return iLoader.getResourceAsStream(path);

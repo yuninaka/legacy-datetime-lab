@@ -540,6 +540,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    *
    * @return the field count, four
    */
+  @Override
   public int size() {
     return 4;
   }
@@ -574,6 +575,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    * @return the value
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     switch (index) {
       case YEAR:
@@ -658,6 +660,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    *
    * @return the Chronology that the datetime is using
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }

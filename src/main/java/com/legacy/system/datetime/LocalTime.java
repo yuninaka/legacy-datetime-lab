@@ -510,6 +510,7 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    *
    * @return the field count, four
    */
+  @Override
   public int size() {
     return 4;
   }
@@ -544,6 +545,7 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    * @return the value
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     switch (index) {
       case HOUR_OF_DAY:
@@ -640,6 +642,7 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    *
    * @return the Chronology that the time is using
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }

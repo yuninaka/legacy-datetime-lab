@@ -143,6 +143,7 @@ public final class MillisDurationField extends DurationField implements Serializ
   }
 
   // ------------------------------------------------------------------------
+  @Override
   public int compareTo(DurationField otherField) {
     long otherMillis = otherField.getUnitMillis();
     long thisMillis = getUnitMillis();

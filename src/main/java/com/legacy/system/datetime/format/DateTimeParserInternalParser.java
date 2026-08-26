@@ -44,10 +44,12 @@ class DateTimeParserInternalParser implements InternalParser {
     return underlying;
   }
 
+  @Override
   public int estimateParsedLength() {
     return underlying.estimateParsedLength();
   }
 
+  @Override
   public int parseInto(DateTimeParserBucket bucket, CharSequence text, int position) {
     return underlying.parseInto(bucket, text.toString(), position);
   }

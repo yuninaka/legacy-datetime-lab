@@ -103,6 +103,7 @@ class ReadableInstantConverter extends AbstractConverter
    *
    * @return ReadableInstant.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return ReadableInstant.class;
   }

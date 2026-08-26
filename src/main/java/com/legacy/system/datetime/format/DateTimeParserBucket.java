@@ -590,6 +590,7 @@ public class DateTimeParserBucket {
      * The field with the longer range duration is ordered first, where null is considered infinite.
      * If the ranges match, then the field with the longer duration is ordered first.
      */
+    @Override
     public int compareTo(SavedField obj) {
       DateTimeField other = obj.iField;
       int result = compareReverse(iField.getRangeDurationField(), other.getRangeDurationField());

@@ -967,6 +967,7 @@ public class PeriodFormatterBuilder {
   abstract static class IgnorableAffix implements PeriodFieldAffix {
     private volatile String[] iOtherAffixes;
 
+    @Override
     public void finish(Set<PeriodFieldAffix> periodFieldAffixesToIgnore) {
       if (iOtherAffixes == null) {
         // Calculate the shortest affix in this instance.
@@ -1036,18 +1037,22 @@ public class PeriodFormatterBuilder {
       iText = text;
     }
 
+    @Override
     public int calculatePrintedLength(int value) {
       return iText.length();
     }
 
+    @Override
     public void printTo(StringBuffer buf, int value) {
       buf.append(iText);
     }
 
+    @Override
     public void printTo(Writer out, int value) throws IOException {
       out.write(iText);
     }
 
+    @Override
     public int parse(String periodStr, int position) {
       String text = iText;
       int textLength = text.length();
@@ -1059,6 +1064,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public int scan(String periodStr, final int position) {
       String text = iText;
       int textLength = text.length();
@@ -1094,6 +1100,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public String[] getAffixes() {
       return new String[] {iText};
     }
@@ -1113,18 +1120,22 @@ public class PeriodFormatterBuilder {
       iPluralText = pluralText;
     }
 
+    @Override
     public int calculatePrintedLength(int value) {
       return (value == 1 ? iSingularText : iPluralText).length();
     }
 
+    @Override
     public void printTo(StringBuffer buf, int value) {
       buf.append(value == 1 ? iSingularText : iPluralText);
     }
 
+    @Override
     public void printTo(Writer out, int value) throws IOException {
       out.write(value == 1 ? iSingularText : iPluralText);
     }
 
+    @Override
     public int parse(String periodStr, int position) {
       String text1 = iPluralText;
       String text2 = iSingularText;
@@ -1150,6 +1161,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public int scan(String periodStr, final int position) {
       String text1 = iPluralText;
       String text2 = iSingularText;
@@ -1180,6 +1192,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public String[] getAffixes() {
       return new String[] {iSingularText, iPluralText};
     }
@@ -1193,6 +1206,7 @@ public class PeriodFormatterBuilder {
   static class RegExAffix extends IgnorableAffix {
     private static final Comparator<String> LENGTH_DESC_COMPARATOR =
         new Comparator<String>() {
+          @Override
           public int compare(String o1, String o2) {
             return o2.length() - o1.length();
           }
@@ -1230,18 +1244,22 @@ public class PeriodFormatterBuilder {
       return iPatterns.length - 1;
     }
 
+    @Override
     public int calculatePrintedLength(int value) {
       return iSuffixes[selectSuffixIndex(value)].length();
     }
 
+    @Override
     public void printTo(StringBuffer buf, int value) {
       buf.append(iSuffixes[selectSuffixIndex(value)]);
     }
 
+    @Override
     public void printTo(Writer out, int value) throws IOException {
       out.write(iSuffixes[selectSuffixIndex(value)]);
     }
 
+    @Override
     public int parse(String periodStr, int position) {
       for (String text : iSuffixesSortedDescByLength) {
         if (periodStr.regionMatches(true, position, text, 0, text.length())) {
@@ -1253,6 +1271,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public int scan(String periodStr, final int position) {
       int sourceLength = periodStr.length();
       for (int pos = position; pos < sourceLength; pos++) {
@@ -1267,6 +1286,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public String[] getAffixes() {
       return iSuffixes.clone();
     }
@@ -1294,20 +1314,24 @@ public class PeriodFormatterBuilder {
       iLeftRightCombinations = result.toArray(new String[result.size()]);
     }
 
+    @Override
     public int calculatePrintedLength(int value) {
       return iLeft.calculatePrintedLength(value) + iRight.calculatePrintedLength(value);
     }
 
+    @Override
     public void printTo(StringBuffer buf, int value) {
       iLeft.printTo(buf, value);
       iRight.printTo(buf, value);
     }
 
+    @Override
     public void printTo(Writer out, int value) throws IOException {
       iLeft.printTo(out, value);
       iRight.printTo(out, value);
     }
 
+    @Override
     public int parse(String periodStr, int position) {
       int pos = iLeft.parse(periodStr, position);
       if (pos >= 0) {
@@ -1319,6 +1343,7 @@ public class PeriodFormatterBuilder {
       return pos;
     }
 
+    @Override
     public int scan(String periodStr, final int position) {
       int leftPosition = iLeft.scan(periodStr, position);
       if (leftPosition >= 0) {
@@ -1336,6 +1361,7 @@ public class PeriodFormatterBuilder {
       return ~position;
     }
 
+    @Override
     public String[] getAffixes() {
       return iLeftRightCombinations.clone();
     }
@@ -1414,6 +1440,7 @@ public class PeriodFormatterBuilder {
       }
     }
 
+    @Override
     public int countFieldsToPrint(ReadablePeriod period, int stopAt, Locale locale) {
       if (stopAt <= 0) {
         return 0;
@@ -1424,6 +1451,7 @@ public class PeriodFormatterBuilder {
       return 0;
     }
 
+    @Override
     public int calculatePrintedLength(ReadablePeriod period, Locale locale) {
       long valueLong = getFieldValue(period);
       if (valueLong == Long.MAX_VALUE) {
@@ -1456,6 +1484,7 @@ public class PeriodFormatterBuilder {
       return sum;
     }
 
+    @Override
     public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale) {
       long valueLong = getFieldValue(period);
       if (valueLong == Long.MAX_VALUE) {
@@ -1491,6 +1520,7 @@ public class PeriodFormatterBuilder {
       }
     }
 
+    @Override
     public void printTo(Writer out, ReadablePeriod period, Locale locale) throws IOException {
       long valueLong = getFieldValue(period);
       if (valueLong == Long.MAX_VALUE) {
@@ -1522,6 +1552,7 @@ public class PeriodFormatterBuilder {
       }
     }
 
+    @Override
     public int parseInto(ReadWritablePeriod period, String text, int position, Locale locale) {
 
       boolean mustParse = (iPrintZeroSetting == PRINT_ZERO_ALWAYS);
@@ -1882,22 +1913,27 @@ public class PeriodFormatterBuilder {
       iText = text;
     }
 
+    @Override
     public int countFieldsToPrint(ReadablePeriod period, int stopAt, Locale locale) {
       return 0;
     }
 
+    @Override
     public int calculatePrintedLength(ReadablePeriod period, Locale locale) {
       return iText.length();
     }
 
+    @Override
     public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale) {
       buf.append(iText);
     }
 
+    @Override
     public void printTo(Writer out, ReadablePeriod period, Locale locale) throws IOException {
       out.write(iText);
     }
 
+    @Override
     public int parseInto(ReadWritablePeriod period, String periodStr, int position, Locale locale) {
       if (periodStr.regionMatches(true, position, iText, 0, iText.length())) {
         return position + iText.length();
@@ -1960,6 +1996,7 @@ public class PeriodFormatterBuilder {
       iUseAfter = useAfter;
     }
 
+    @Override
     public int countFieldsToPrint(ReadablePeriod period, int stopAt, Locale locale) {
       int sum = iBeforePrinter.countFieldsToPrint(period, stopAt, locale);
       if (sum < stopAt) {
@@ -1968,6 +2005,7 @@ public class PeriodFormatterBuilder {
       return sum;
     }
 
+    @Override
     public int calculatePrintedLength(ReadablePeriod period, Locale locale) {
       PeriodPrinter before = iBeforePrinter;
       PeriodPrinter after = iAfterPrinter;
@@ -1994,6 +2032,7 @@ public class PeriodFormatterBuilder {
       return sum;
     }
 
+    @Override
     public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale) {
       PeriodPrinter before = iBeforePrinter;
       PeriodPrinter after = iAfterPrinter;
@@ -2016,6 +2055,7 @@ public class PeriodFormatterBuilder {
       after.printTo(buf, period, locale);
     }
 
+    @Override
     public void printTo(Writer out, ReadablePeriod period, Locale locale) throws IOException {
       PeriodPrinter before = iBeforePrinter;
       PeriodPrinter after = iAfterPrinter;
@@ -2038,6 +2078,7 @@ public class PeriodFormatterBuilder {
       after.printTo(out, period, locale);
     }
 
+    @Override
     public int parseInto(ReadWritablePeriod period, String periodStr, int position, Locale locale) {
       int oldPos = position;
       position = iBeforeParser.parseInto(period, periodStr, position, locale);
@@ -2118,6 +2159,7 @@ public class PeriodFormatterBuilder {
       }
     }
 
+    @Override
     public int countFieldsToPrint(ReadablePeriod period, int stopAt, Locale locale) {
       int sum = 0;
       PeriodPrinter[] printers = iPrinters;
@@ -2127,6 +2169,7 @@ public class PeriodFormatterBuilder {
       return sum;
     }
 
+    @Override
     public int calculatePrintedLength(ReadablePeriod period, Locale locale) {
       int sum = 0;
       PeriodPrinter[] printers = iPrinters;
@@ -2136,6 +2179,7 @@ public class PeriodFormatterBuilder {
       return sum;
     }
 
+    @Override
     public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale) {
       PeriodPrinter[] printers = iPrinters;
       int len = printers.length;
@@ -2144,6 +2188,7 @@ public class PeriodFormatterBuilder {
       }
     }
 
+    @Override
     public void printTo(Writer out, ReadablePeriod period, Locale locale) throws IOException {
       PeriodPrinter[] printers = iPrinters;
       int len = printers.length;
@@ -2152,6 +2197,7 @@ public class PeriodFormatterBuilder {
       }
     }
 
+    @Override
     public int parseInto(ReadWritablePeriod period, String periodStr, int position, Locale locale) {
       PeriodParser[] parsers = iParsers;
       if (parsers == null) {

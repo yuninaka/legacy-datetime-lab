@@ -123,6 +123,7 @@ final class CalendarConverter extends AbstractConverter
    *
    * @return Calendar.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return Calendar.class;
   }

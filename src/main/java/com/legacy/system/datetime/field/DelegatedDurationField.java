@@ -159,6 +159,7 @@ public class DelegatedDurationField extends DurationField implements Serializabl
     return iField.getUnitMillis();
   }
 
+  @Override
   public int compareTo(DurationField durationField) {
     return iField.compareTo(durationField);
   }

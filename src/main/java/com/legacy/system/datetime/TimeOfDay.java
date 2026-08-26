@@ -422,6 +422,7 @@ public final class TimeOfDay extends BasePartial implements ReadablePartial, Ser
    *
    * @return the field count
    */
+  @Override
   public int size() {
     return 4;
   }

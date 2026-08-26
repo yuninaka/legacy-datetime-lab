@@ -381,6 +381,7 @@ public class MutableInterval extends BaseInterval
    * @throws IllegalArgumentException if the end is before the start
    * @throws ArithmeticException if the start instant exceeds the capacity of a long
    */
+  @Override
   public void setPeriodBeforeEnd(ReadablePeriod period) {
     if (period == null) {
       setStartMillis(getEndMillis());

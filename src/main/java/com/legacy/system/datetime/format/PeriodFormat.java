@@ -403,18 +403,22 @@ public class PeriodFormat {
       iFormatter = formatter;
     }
 
+    @Override
     public int countFieldsToPrint(ReadablePeriod period, int stopAt, Locale locale) {
       return getPrinter(locale).countFieldsToPrint(period, stopAt, locale);
     }
 
+    @Override
     public int calculatePrintedLength(ReadablePeriod period, Locale locale) {
       return getPrinter(locale).calculatePrintedLength(period, locale);
     }
 
+    @Override
     public void printTo(StringBuffer buf, ReadablePeriod period, Locale locale) {
       getPrinter(locale).printTo(buf, period, locale);
     }
 
+    @Override
     public void printTo(Writer out, ReadablePeriod period, Locale locale) throws IOException {
       getPrinter(locale).printTo(out, period, locale);
     }
@@ -426,6 +430,7 @@ public class PeriodFormat {
       return iFormatter.getPrinter();
     }
 
+    @Override
     public int parseInto(ReadWritablePeriod period, String periodStr, int position, Locale locale) {
       return getParser(locale).parseInto(period, periodStr, position, locale);
     }

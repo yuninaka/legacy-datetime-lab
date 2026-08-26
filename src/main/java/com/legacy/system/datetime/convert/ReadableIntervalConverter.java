@@ -44,6 +44,7 @@ class ReadableIntervalConverter extends AbstractConverter
    *
    * @param object the interval
    */
+  @Override
   public long getDurationMillis(Object object) {
     return (((ReadableInterval) object)).toDurationMillis();
   }
@@ -56,6 +57,7 @@ class ReadableIntervalConverter extends AbstractConverter
    * @param object the interval to set from
    * @param chrono the chronology to use
    */
+  @Override
   public void setInto(ReadWritablePeriod writablePeriod, Object object, Chronology chrono) {
     ReadableInterval interval = (ReadableInterval) object;
     chrono = (chrono != null ? chrono : DateTimeUtils.getIntervalChronology(interval));
@@ -92,6 +94,7 @@ class ReadableIntervalConverter extends AbstractConverter
    * @param chrono the chronology to use, may be null
    * @throws ClassCastException if the object is invalid
    */
+  @Override
   public void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono) {
     ReadableInterval input = (ReadableInterval) object;
     writableInterval.setInterval(input);
@@ -104,6 +107,7 @@ class ReadableIntervalConverter extends AbstractConverter
 
   // -----------------------------------------------------------------------
   /** Returns ReadableInterval.class. */
+  @Override
   public Class<?> getSupportedType() {
     return ReadableInterval.class;
   }

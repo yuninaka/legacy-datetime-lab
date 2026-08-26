@@ -140,6 +140,7 @@ public abstract class BaseDurationField extends DurationField implements Seriali
   }
 
   // ------------------------------------------------------------------------
+  @Override
   public int compareTo(DurationField otherField) {
     long otherMillis = otherField.getUnitMillis();
     long thisMillis = getUnitMillis();

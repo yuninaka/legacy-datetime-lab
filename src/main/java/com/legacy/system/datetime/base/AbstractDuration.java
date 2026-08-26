@@ -47,6 +47,7 @@ public abstract class AbstractDuration implements ReadableDuration {
    *
    * @return a Duration created using the millisecond duration from this instance
    */
+  @Override
   public Duration toDuration() {
     return new Duration(getMillis());
   }
@@ -72,6 +73,7 @@ public abstract class AbstractDuration implements ReadableDuration {
    *
    * @return a Period created using the millisecond duration from this instance
    */
+  @Override
   public Period toPeriod() {
     return new Period(getMillis());
   }
@@ -88,6 +90,7 @@ public abstract class AbstractDuration implements ReadableDuration {
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the given object is not supported
    */
+  @Override
   public int compareTo(ReadableDuration other) {
     long thisMillis = this.getMillis();
     long otherMillis = other.getMillis();
@@ -111,6 +114,7 @@ public abstract class AbstractDuration implements ReadableDuration {
    * @param duration another duration to compare to, null means zero milliseconds
    * @return true if this duration is equal to than the duration passed in
    */
+  @Override
   public boolean isEqual(ReadableDuration duration) {
     if (duration == null) {
       duration = Duration.ZERO;
@@ -127,6 +131,7 @@ public abstract class AbstractDuration implements ReadableDuration {
    * @param duration another duration to compare to, null means zero milliseconds
    * @return true if this duration is strictly longer than the duration passed in
    */
+  @Override
   public boolean isLongerThan(ReadableDuration duration) {
     if (duration == null) {
       duration = Duration.ZERO;
@@ -143,6 +148,7 @@ public abstract class AbstractDuration implements ReadableDuration {
    * @param duration another duration to compare to, null means zero milliseconds
    * @return true if this duration is strictly shorter than the duration passed in
    */
+  @Override
   public boolean isShorterThan(ReadableDuration duration) {
     if (duration == null) {
       duration = Duration.ZERO;

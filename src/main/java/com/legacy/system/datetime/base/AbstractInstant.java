@@ -291,6 +291,7 @@ public abstract class AbstractInstant implements ReadableInstant {
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the object type is not supported
    */
+  @Override
   public int compareTo(ReadableInstant other) {
     if (this == other) {
       return 0;
@@ -338,6 +339,7 @@ public abstract class AbstractInstant implements ReadableInstant {
    * @param instant an instant to check against, null means now
    * @return true if the instant is strictly after the instant passed in
    */
+  @Override
   public boolean isAfter(ReadableInstant instant) {
     long instantMillis = DateTimeUtils.getInstantMillis(instant);
     return isAfter(instantMillis);
@@ -371,6 +373,7 @@ public abstract class AbstractInstant implements ReadableInstant {
    * @param instant an instant to check against, null means now
    * @return true if the instant is strictly before the instant passed in
    */
+  @Override
   public boolean isBefore(ReadableInstant instant) {
     long instantMillis = DateTimeUtils.getInstantMillis(instant);
     return isBefore(instantMillis);
@@ -403,6 +406,7 @@ public abstract class AbstractInstant implements ReadableInstant {
    * @param instant an instant to check against, null means now
    * @return true if the instant is equal to the instant passed in
    */
+  @Override
   public boolean isEqual(ReadableInstant instant) {
     long instantMillis = DateTimeUtils.getInstantMillis(instant);
     return isEqual(instantMillis);

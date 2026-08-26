@@ -239,6 +239,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
    *
    * @return zero always
    */
+  @Override
   public int compareTo(DurationField durationField) {
     return 0;
   }

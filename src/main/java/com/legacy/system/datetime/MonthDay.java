@@ -389,6 +389,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    *
    * @return the field count, two
    */
+  @Override
   public int size() {
     return 2;
   }

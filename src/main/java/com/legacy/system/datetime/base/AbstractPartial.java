@@ -75,6 +75,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the field type
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public DateTimeFieldType getFieldType(int index) {
     return getField(index, getChronology()).getType();
   }
@@ -101,6 +102,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the field
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public DateTimeField getField(int index) {
     return getField(index, getChronology());
   }
@@ -146,6 +148,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the value of that field
    * @throws IllegalArgumentException if the field is null or not supported
    */
+  @Override
   public int get(DateTimeFieldType type) {
     return getValue(indexOfSupported(type));
   }
@@ -156,6 +159,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @param type the type to check, may be null which returns false
    * @return true if the field is supported
    */
+  @Override
   public boolean isSupported(DateTimeFieldType type) {
     return (indexOf(type) != -1);
   }
@@ -233,6 +237,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @param baseInstant the instant that provides the missing fields, null means now
    * @return the combined datetime
    */
+  @Override
   public DateTime toDateTime(ReadableInstant baseInstant) {
     Chronology chrono = DateTimeUtils.getInstantChronology(baseInstant);
     long instantMillis = DateTimeUtils.getInstantMillis(baseInstant);
@@ -304,6 +309,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @throws NullPointerException if the partial is null
    * @since 1.1
    */
+  @Override
   public int compareTo(ReadablePartial other) {
     if (this == other) {
       return 0;

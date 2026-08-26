@@ -52,10 +52,12 @@ class DateTimePrinterInternalPrinter implements InternalPrinter {
   }
 
   // -----------------------------------------------------------------------
+  @Override
   public int estimatePrintedLength() {
     return underlying.estimatePrintedLength();
   }
 
+  @Override
   public void printTo(
       Appendable appendable,
       long instant,
@@ -77,6 +79,7 @@ class DateTimePrinterInternalPrinter implements InternalPrinter {
     }
   }
 
+  @Override
   public void printTo(Appendable appendable, ReadablePartial partial, Locale locale)
       throws IOException {
     if (appendable instanceof StringBuffer) {

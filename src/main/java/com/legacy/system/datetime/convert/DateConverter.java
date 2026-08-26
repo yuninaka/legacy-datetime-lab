@@ -57,6 +57,7 @@ final class DateConverter extends AbstractConverter implements InstantConverter,
    *
    * @return Date.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return Date.class;
   }
