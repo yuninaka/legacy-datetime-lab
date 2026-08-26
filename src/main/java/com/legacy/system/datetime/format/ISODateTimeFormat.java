@@ -406,14 +406,14 @@ public class ISODateTimeFormat {
         bld.appendLiteral('T');
       }
     }
-    if (hour && minute && second || (hour && !second && !milli)) {
+    if ((hour && minute && second) || (hour && !second && !milli)) {
       // OK - HMSm/HMS/HM/H - valid in combination with date
     } else {
       if (strictISO && datePresent) {
         throw new IllegalArgumentException(
             "No valid ISO8601 format for fields because Time was truncated: " + fields);
       }
-      if (!hour && (minute && second || (minute && !milli) || second)) {
+      if (!hour && ((minute && second) || (minute && !milli) || second)) {
         // OK - MSm/MS/M/Sm/S - valid ISO formats
       } else {
         if (strictISO) {

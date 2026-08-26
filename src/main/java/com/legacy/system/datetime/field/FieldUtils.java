@@ -171,8 +171,8 @@ public class FieldUtils {
     }
     long total = val1 * val2;
     if (total / val2 != val1
-        || val1 == Long.MIN_VALUE && val2 == -1
-        || val2 == Long.MIN_VALUE && val1 == -1) {
+        || (val1 == Long.MIN_VALUE && val2 == -1)
+        || (val2 == Long.MIN_VALUE && val1 == -1)) {
       throw new ArithmeticException("Multiplication overflows a long: " + val1 + " * " + val2);
     }
     return total;

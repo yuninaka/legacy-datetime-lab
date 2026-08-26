@@ -2059,7 +2059,7 @@ public class DateTimeFormatterBuilder {
 
     @Override
     public int estimatePrintedLength() {
-      int est = 1 + iMinFields << 1;
+      int est = (1 + iMinFields) << 1;
       if (iShowSeparators) {
         est += iMinFields - 1;
       }

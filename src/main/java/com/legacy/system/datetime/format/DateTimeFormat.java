@@ -589,7 +589,7 @@ public class DateTimeFormat {
     int length = pattern.length();
 
     char c = pattern.charAt(i);
-    if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') {
+    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
       // Scan a run of the same character, which indicates a time
       // pattern.
       buf.append(c);
@@ -620,7 +620,7 @@ public class DateTimeFormat {
           } else {
             inLiteral = !inLiteral;
           }
-        } else if (!inLiteral && (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')) {
+        } else if (!inLiteral && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
           i--;
           break;
         } else {
