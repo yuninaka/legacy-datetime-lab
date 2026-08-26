@@ -306,6 +306,10 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     super(0, 0, 0, 0, hours, minutes, seconds, millis, PeriodType.standard());
   }
 
+  // CPD-OFF: matches MutablePeriod's equivalent constructors. Java constructors cannot be
+  // inherited between sibling subclasses, so both Period and MutablePeriod must each
+  // independently declare these convenience overloads that forward to BasePeriod's
+  // constructor; there is no language mechanism to share the bodies.
   /**
    * Create a period from a set of field values using the standard set of fields.
    *
@@ -353,6 +357,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       PeriodType type) {
     super(years, months, weeks, days, hours, minutes, seconds, millis, type);
   }
+  // CPD-ON
 
   /**
    * Creates a period from the given millisecond duration using the standard set of fields.
@@ -725,6 +730,11 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
   }
 
   // -----------------------------------------------------------------------
+  // CPD-OFF: identical to MutablePeriod's getters below. Both extend BasePeriod (in the
+  // .base subpackage), but PeriodType.yearIndex/monthIndex/.../getIndexedField are
+  // package-private to com.legacy.system.datetime, so BasePeriod can't call them; moving
+  // these getters there would require widening PeriodType's package-private API, which is
+  // out of scope for a duplicate-code cleanup.
   /**
    * Gets the years field part of the period.
    *
@@ -797,6 +807,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
   public int getMillis() {
     return getPeriodType().getIndexedField(this, PeriodType.milliIndex);
   }
+  // CPD-ON
 
   // -----------------------------------------------------------------------
   /**

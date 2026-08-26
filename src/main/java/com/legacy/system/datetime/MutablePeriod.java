@@ -109,6 +109,8 @@ public class MutablePeriod extends BasePeriod
     super(0, 0, 0, 0, hours, minutes, seconds, millis, PeriodType.standard());
   }
 
+  // CPD-OFF: matches Period's equivalent constructors (see that class for why these can't
+  // be shared: Java doesn't allow constructors to be inherited between sibling subclasses).
   /**
    * Create a period from a set of field values using the standard set of fields.
    *
@@ -152,6 +154,7 @@ public class MutablePeriod extends BasePeriod
       PeriodType type) {
     super(years, months, weeks, days, hours, minutes, seconds, millis, type);
   }
+  // CPD-ON
 
   /**
    * Creates a period from the given millisecond duration using the standard set of fields.
@@ -728,6 +731,8 @@ public class MutablePeriod extends BasePeriod
   }
 
   // -----------------------------------------------------------------------
+  // CPD-OFF: identical to Period's getters (see that class for why these can't be moved
+  // to the shared BasePeriod superclass).
   /**
    * Gets the years field part of the period.
    *
@@ -800,6 +805,7 @@ public class MutablePeriod extends BasePeriod
   public int getMillis() {
     return getPeriodType().getIndexedField(this, PeriodType.milliIndex);
   }
+  // CPD-ON
 
   // -----------------------------------------------------------------------
   /**
