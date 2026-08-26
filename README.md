@@ -61,6 +61,20 @@ AIコーディングツール（Claude Code）を活用し、仕様書および�
 ### ① カバレッジ計測 (JaCoCo)
 C0（行）/ C1（分岐）カバレッジを計測し、未通過の処理経路を可視化します。
 
+```bash
+mvn clean test
+# レポート出力先: target/site/jacoco/index.html
+```
+
+**実測結果**（対象: `com.legacy.system.datetime.*` 全222クラス、テスト186件）
+
+| 指標 | 結果 |
+| :--- | :--- |
+| Line Coverage | 4,131 / 15,047 = **27.45%** |
+| Branch Coverage | 1,318 / 6,678 = **19.74%** |
+
+生成されたテストはSPECIFICATION.mdに記載した主要クラス（`DateTime` / `Period` / `GregorianChronology` 等）に絞っているため、`format` / `tz` / `convert` パッケージを含むライブラリ全体を母数にすると、この水準にとどまります。
+
 ### ② ミューテーションテスト (PIT)
 コードに人工的なバグ（ミュータント）を注入し、テストがそれを検知できるか（Kill率）を測定します。単に「コードを通過しただけ」のスカスカなテストを見抜く指標とします。
 
@@ -68,6 +82,16 @@ C0（行）/ C1（分岐）カバレッジを計測し、未通過の処理経�
 mvn pitest:mutationCoverage
 # レポート出力先: target/pit-reports/index.html
 ```
+
+**実測結果**
+
+| 指標 | 結果 |
+| :--- | :--- |
+| Mutations Generated | 10,075 |
+| Mutations Killed | 1,178 |
+| **Mutation Score**（Killed / Generated） | **12%**（1,178 / 10,075 = 11.69%） |
+| No Coverage（JaCoCoで未通過だった行のミュータント） | 7,679 |
+| **Test Strength**（Killed / Covered。カバー済みミュータントのみのKill率） | **49%**（1,178 / 2,396 = 49.17%） |
 
 ---
 
@@ -80,3 +104,11 @@ JaCoCoとPITを組み合わせることで、Claude Codeの生成精度を以下
 | **高** | **高** | **理想的**：ロジックを通った上で、正しくアサーションされている |
 | **高** | **低** | **空振りテスト**：コードは通過しているが、検証（`assertEquals` 等）が甘い |
 | **低** | **低** | **テスト不足**：そもそも特定のエッジケースやクラスがテストされていない |
+
+**Test Strength 49% の意味**
+
+Mutation Score（12%）はライブラリ全体を母数にしているため、テスト未対象のクラスが多いことがそのまま数値を押し下げています。一方 Test Strength（49%）は「JaCoCoでカバーされた行に限定した」Kill率であり、Claude Codeが実際にテストしたコード領域そのものの**アサーションの強度**を表します。
+
+- 49%は「カバーした行の半分程度でしか、注入したバグを検知できていない」ことを意味し、上記マトリクスでいう**高カバレッジ域内にも「空振りテスト」が一定数混在している**ことを示します。
+- 主要因として、`equals`/`hashCode`/`toString` や境界値以外の分岐（`CONDITIONALS_BOUNDARY`: 8%、`NEGATE_CONDITIONALS`: 13%程度のKill率）でアサーションが甘く、値を通過させるだけで期待値を厳密に検証していないテストが少なくないことが挙げられます。
+- どのミュータントが生存（`SURVIVED`）したかはクラス別レポート（`target/pit-reports/<package>/index.html`）で特定でき、テスト強化の優先順位付けに利用できます。
