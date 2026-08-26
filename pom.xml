@@ -763,6 +763,18 @@
           <consoleOutput>true</consoleOutput>
         </configuration>
       </plugin>
+      <!-- Duplicate-code guardrail -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${maven-pmd-plugin.version}</version>
+        <configuration>
+          <minimumTokens>50</minimumTokens>
+          <includeTests>false</includeTests>
+          <failOnViolation>true</failOnViolation>
+          <printFailingErrors>true</printFailingErrors>
+        </configuration>
+      </plugin>
       <!-- Strict compiler guardrail: -Xlint:all -Werror plus Google Error Prone -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
