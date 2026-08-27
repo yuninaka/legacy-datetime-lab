@@ -200,7 +200,8 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    * @throws IllegalArgumentException if the monthOfYear or dayOfMonth is invalid for the ISO
    *     chronology
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public static MonthDay fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");
@@ -389,6 +390,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    *
    * @return the field count, two
    */
+  @Override
   public int size() {
     return 2;
   }
@@ -405,6 +407,12 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
   @Override
   protected DateTimeField getField(int index, Chronology chrono) {
     return switch (index) {
+        // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+        // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+        // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+        // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+        // the common base class without a larger, riskier generic/factory-method redesign
+        // that is out of scope for a duplicate-code cleanup.
       case MONTH_OF_YEAR -> chrono.monthOfYear();
       case DAY_OF_MONTH -> chrono.dayOfMonth();
       default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
@@ -432,7 +440,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    */
   @Override
   public DateTimeFieldType[] getFieldTypes() {
-    return (DateTimeFieldType[]) FIELD_TYPES.clone();
+    return FIELD_TYPES.clone();
   }
 
   // -----------------------------------------------------------------------
@@ -451,6 +459,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    * @throws IllegalArgumentException if the values are invalid for the new chronology
    */
   public MonthDay withChronologyRetainFields(Chronology newChronology) {
+    // CPD-ON
     newChronology = DateTimeUtils.getChronology(newChronology);
     newChronology = newChronology.withUTC();
     if (newChronology == getChronology()) {
@@ -482,13 +491,8 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    * @throws IllegalArgumentException if the value is null or invalid
    */
   public MonthDay withField(DateTimeFieldType fieldType, int value) {
-    int index = indexOfSupported(fieldType);
-    if (value == getValue(index)) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).set(this, index, newValues, value);
-    return new MonthDay(this, newValues);
+    int[] newValues = withFieldValues(fieldType, value);
+    return newValues == null ? this : new MonthDay(this, newValues);
   }
 
   /**
@@ -511,13 +515,8 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    * @throws ArithmeticException if the new date-time exceeds the capacity
    */
   public MonthDay withFieldAdded(DurationFieldType fieldType, int amount) {
-    int index = indexOfSupported(fieldType);
-    if (amount == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).add(this, index, newValues, amount);
-    return new MonthDay(this, newValues);
+    int[] newValues = withFieldAddedValues(fieldType, amount);
+    return newValues == null ? this : new MonthDay(this, newValues);
   }
 
   /**
@@ -536,20 +535,8 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
    * @throws ArithmeticException if the new date-time exceeds the capacity
    */
   public MonthDay withPeriodAdded(ReadablePeriod period, int scalar) {
-    if (period == null || scalar == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    for (int i = 0; i < period.size(); i++) {
-      DurationFieldType fieldType = period.getFieldType(i);
-      int index = indexOf(fieldType);
-      if (index >= 0) {
-        newValues =
-            getField(index)
-                .add(this, index, newValues, FieldUtils.safeMultiply(period.getValue(i), scalar));
-      }
-    }
-    return new MonthDay(this, newValues);
+    int[] newValues = withPeriodAddedValues(period, scalar);
+    return newValues == null ? this : new MonthDay(this, newValues);
   }
 
   // -----------------------------------------------------------------------
@@ -783,6 +770,12 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
     List<DateTimeFieldType> fields = new ArrayList<DateTimeFieldType>();
     fields.add(DateTimeFieldType.monthOfYear());
     fields.add(DateTimeFieldType.dayOfMonth());
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.forFields(fields, true, true).print(this);
   }
 
@@ -831,6 +824,8 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
 
     /** The partial */
     private final MonthDay iBase;
+
+    // CPD-ON
 
     /** The field index */
     private final int iFieldIndex;

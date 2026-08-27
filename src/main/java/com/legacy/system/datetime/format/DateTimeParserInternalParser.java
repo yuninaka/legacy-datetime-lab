@@ -21,7 +21,7 @@ package com.legacy.system.datetime.format;
  * @author Stephen Colebourne
  * @since 2.4
  */
-class DateTimeParserInternalParser implements InternalParser {
+final class DateTimeParserInternalParser implements InternalParser {
 
   private final DateTimeParser underlying;
 
@@ -44,10 +44,12 @@ class DateTimeParserInternalParser implements InternalParser {
     return underlying;
   }
 
+  @Override
   public int estimateParsedLength() {
     return underlying.estimateParsedLength();
   }
 
+  @Override
   public int parseInto(DateTimeParserBucket bucket, CharSequence text, int position) {
     return underlying.parseInto(bucket, text.toString(), position);
   }

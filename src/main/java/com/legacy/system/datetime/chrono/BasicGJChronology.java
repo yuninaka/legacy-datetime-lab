@@ -91,7 +91,7 @@ abstract class BasicGJChronology extends BasicChronology {
     // There are 86400000 milliseconds per day, but divided by 1024 is
     // 84375. There are 84375 (128/125)seconds per day.
 
-    return (isLeapYear(year))
+    return isLeapYear(year)
         ? ((i < 182 * 84375)
             ? ((i < 91 * 84375)
                 ? ((i < 31 * 84375) ? 1 : (i < 60 * 84375) ? 2 : 3)

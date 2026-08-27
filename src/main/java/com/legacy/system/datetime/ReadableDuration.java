@@ -122,6 +122,7 @@ public interface ReadableDuration extends Comparable<ReadableDuration> {
    * @param readableDuration a readable duration to check against
    * @return true if the length of the duration is equal
    */
+  @Override
   boolean equals(Object readableDuration);
 
   /**
@@ -135,6 +136,7 @@ public interface ReadableDuration extends Comparable<ReadableDuration> {
    *
    * @return a hash code
    */
+  @Override
   int hashCode();
 
   // -----------------------------------------------------------------------
@@ -146,5 +148,6 @@ public interface ReadableDuration extends Comparable<ReadableDuration> {
    *
    * @return the value as an ISO8601 string
    */
+  @Override
   String toString();
 }

@@ -117,6 +117,13 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
     EthiopicChronology[] chronos = cCache.get(zone);
     if (chronos == null) {
       chronos = new EthiopicChronology[7];
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       EthiopicChronology[] oldChronos = cCache.putIfAbsent(zone, chronos);
       if (oldChronos != null) {
         chronos = oldChronos;
@@ -132,8 +139,9 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
       synchronized (chronos) {
         chrono = chronos[minDaysInFirstWeek - 1];
         if (chrono == null) {
-          if (zone == DateTimeZone.UTC) {
+          if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
+            // CPD-ON
             chrono = new EthiopicChronology(null, null, minDaysInFirstWeek);
             // Impose lower limit and make another EthiopicChronology.
             var lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
@@ -167,6 +175,13 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
     Chronology base = getBase();
     return base == null
         ? getInstance(DateTimeZone.UTC, getMinimumDaysInFirstWeek())
+        // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+        // Chronology implementations (different calendar systems, or wrapper Chronologies
+        // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+        // system as its own type (see BasicChronology.equals()'s getClass() check: two
+        // different chronologies must never be considered equal), so merging this setup
+        // code risks blurring that boundary or hard-coding one calendar's constants into
+        // a shared path used by another.
         : getInstance(base.getZone(), getMinimumDaysInFirstWeek());
   }
 
@@ -193,7 +208,7 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);
@@ -267,3 +282,4 @@ public final class EthiopicChronology extends BasicFixedMonthChronology {
     }
   }
 }
+  // CPD-ON

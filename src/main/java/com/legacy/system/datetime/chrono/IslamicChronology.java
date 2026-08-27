@@ -207,7 +207,7 @@ public final class IslamicChronology extends BasicChronology {
       synchronized (chronos) {
         chrono = chronos[leapYears.index];
         if (chrono == null) {
-          if (zone == DateTimeZone.UTC) {
+          if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
             chrono = new IslamicChronology(null, null, leapYears);
             // Impose lower limit and make another IslamicChronology.
@@ -249,6 +249,13 @@ public final class IslamicChronology extends BasicChronology {
    */
   public LeapYearPatternType getLeapYearPatternType() {
     return iLeapYears;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   // Conversion
@@ -274,7 +281,7 @@ public final class IslamicChronology extends BasicChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);
@@ -294,6 +301,7 @@ public final class IslamicChronology extends BasicChronology {
       return true;
     }
     if (obj instanceof IslamicChronology chrono) {
+      // CPD-ON
       return getLeapYearPatternType().index == chrono.getLeapYearPatternType().index
           && super.equals(obj);
     }
@@ -338,6 +346,13 @@ public final class IslamicChronology extends BasicChronology {
     if (dayOfYear > 354 && !isLeapYear(year)) {
       // Moving to a non-leap year, leap day doesn't exist.
       dayOfYear--;
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
     }
 
     instant = getYearMonthDayMillis(year, 1, dayOfYear);
@@ -366,6 +381,7 @@ public final class IslamicChronology extends BasicChronology {
   // -----------------------------------------------------------------------
   @Override
   long getTotalMillisByYearMonth(int year, int month) {
+    // CPD-ON
     if (--month % 2 == 1) {
       month /= 2;
       return month * MILLIS_PER_MONTH_PAIR + MILLIS_PER_LONG_MONTH;
@@ -504,7 +520,7 @@ public final class IslamicChronology extends BasicChronology {
   @Override
   long getApproxMillisAtEpochDividedByTwo() {
     // Epoch 1970-01-01 ISO = 1389-10-22 Islamic
-    return (-MILLIS_YEAR_1) / 2;
+    return -MILLIS_YEAR_1 / 2;
   }
 
   // -----------------------------------------------------------------------

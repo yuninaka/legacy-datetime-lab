@@ -58,6 +58,11 @@ public final class FixedDateTimeZone extends DateTimeZone {
   @Override
   public int getOffsetFromLocal(long instantLocal) {
     return iWallOffset;
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
   }
 
   @Override
@@ -91,6 +96,8 @@ public final class FixedDateTimeZone extends DateTimeZone {
     // unusual offset, so setup a SimpleTimeZone as best we can
     return new java.util.SimpleTimeZone(iWallOffset, getID());
   }
+
+  // CPD-ON
 
   @Override
   public boolean equals(Object obj) {

@@ -55,7 +55,7 @@ class ReadableInstantConverter extends AbstractConverter
       return ISOChronology.getInstance(zone);
     }
     DateTimeZone chronoZone = chrono.getZone();
-    if (chronoZone != zone) {
+    if (!chronoZone.equals(zone)) {
       chrono = chrono.withZone(zone);
       if (chrono == null) {
         return ISOChronology.getInstance(zone);
@@ -103,6 +103,7 @@ class ReadableInstantConverter extends AbstractConverter
    *
    * @return ReadableInstant.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return ReadableInstant.class;
   }

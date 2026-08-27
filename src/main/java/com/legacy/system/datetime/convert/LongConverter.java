@@ -60,6 +60,7 @@ class LongConverter extends AbstractConverter
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the object is an invalid type
    */
+  @Override
   public long getDurationMillis(Object object) {
     return ((Long) object).longValue();
   }
@@ -70,6 +71,7 @@ class LongConverter extends AbstractConverter
    *
    * @return Long.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return Long.class;
   }

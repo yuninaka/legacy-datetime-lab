@@ -192,6 +192,13 @@ public class RemainderDateTimeField extends DecoratedDateTimeField {
    */
   @Override
   public int getMaximumValue() {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return iDivisor - 1;
   }
 
@@ -231,6 +238,7 @@ public class RemainderDateTimeField extends DecoratedDateTimeField {
    * @return the divisor
    */
   public int getDivisor() {
+    // CPD-ON
     return iDivisor;
   }
 

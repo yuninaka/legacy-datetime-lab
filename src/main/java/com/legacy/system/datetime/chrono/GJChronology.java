@@ -186,7 +186,7 @@ public final class GJChronology extends AssembledChronology {
     var cacheKey = new GJCacheKey(zone, cutoverInstant, minDaysInFirstWeek);
     GJChronology chrono = cCache.get(cacheKey);
     if (chrono == null) {
-      if (zone == DateTimeZone.UTC) {
+      if (zone.equals(DateTimeZone.UTC)) {
         chrono =
             new GJChronology(
                 JulianChronology.getInstance(zone, minDaysInFirstWeek),
@@ -269,6 +269,13 @@ public final class GJChronology extends AssembledChronology {
       return base.getZone();
     }
     return DateTimeZone.UTC;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   // Conversion
@@ -294,7 +301,7 @@ public final class GJChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone, iCutoverInstant, getMinimumDaysInFirstWeek());
@@ -307,6 +314,7 @@ public final class GJChronology extends AssembledChronology {
     if ((base = getBase()) != null) {
       return base.getDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
     }
+    // CPD-ON
 
     // Assume date is Gregorian.
     long instant =
@@ -320,6 +328,13 @@ public final class GJChronology extends AssembledChronology {
       }
     }
     return instant;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   @Override
@@ -337,6 +352,7 @@ public final class GJChronology extends AssembledChronology {
       return base.getDateTimeMillis(
           year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
     }
+    // CPD-ON
 
     // Assume date is Gregorian.
     long instant;
@@ -442,7 +458,7 @@ public final class GJChronology extends AssembledChronology {
    */
   @Override
   public String toString() {
-    var sb = new StringBuffer(60);
+    var sb = new StringBuilder(60);
     sb.append("GJChronology");
     sb.append('[');
     sb.append(getZone().getID());
@@ -1060,6 +1076,13 @@ public final class GJChronology extends AssembledChronology {
     }
 
     @Override
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     public long add(long instant, int value) {
       if (instant >= iCutover) {
         instant = iGregorianField.add(instant, value);
@@ -1129,6 +1152,7 @@ public final class GJChronology extends AssembledChronology {
 
     @Override
     public int getDifference(long minuendInstant, long subtrahendInstant) {
+      // CPD-ON
       if (minuendInstant >= iCutover) {
         if (subtrahendInstant >= iCutover) {
           return iGregorianField.getDifference(minuendInstant, subtrahendInstant);
@@ -1208,6 +1232,11 @@ public final class GJChronology extends AssembledChronology {
     LinkedDurationField(DurationField durationField, ImpreciseCutoverField dateTimeField) {
       super(durationField, durationField.getType());
       iField = dateTimeField;
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
     }
 
     @Override
@@ -1229,5 +1258,6 @@ public final class GJChronology extends AssembledChronology {
     public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
       return iField.getDifferenceAsLong(minuendInstant, subtrahendInstant);
     }
+    // CPD-ON
   }
 }

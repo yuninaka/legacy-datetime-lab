@@ -29,7 +29,7 @@ import java.math.RoundingMode;
  * @author Stephen Colebourne
  * @since 1.0
  */
-public class FieldUtils {
+public final class FieldUtils {
 
   /** Restricted constructor. */
   private FieldUtils() {
@@ -171,8 +171,8 @@ public class FieldUtils {
     }
     long total = val1 * val2;
     if (total / val2 != val1
-        || val1 == Long.MIN_VALUE && val2 == -1
-        || val2 == Long.MIN_VALUE && val1 == -1) {
+        || (val1 == Long.MIN_VALUE && val2 == -1)
+        || (val2 == Long.MIN_VALUE && val1 == -1)) {
       throw new ArithmeticException("Multiplication overflows a long: " + val1 + " * " + val2);
     }
     return total;
@@ -341,7 +341,7 @@ public class FieldUtils {
       return (value % wrapRange) + minValue;
     }
 
-    int remByRange = (-value) % wrapRange;
+    int remByRange = -value % wrapRange;
 
     if (remByRange == 0) {
       return 0 + minValue;

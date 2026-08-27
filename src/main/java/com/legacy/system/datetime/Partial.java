@@ -17,7 +17,6 @@ package com.legacy.system.datetime;
 
 import com.legacy.system.datetime.base.AbstractPartial;
 import com.legacy.system.datetime.field.AbstractPartialFieldProperty;
-import com.legacy.system.datetime.field.FieldUtils;
 import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 import com.legacy.system.datetime.format.ISODateTimeFormat;
@@ -292,9 +291,9 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
       lastUnitField = loopUnitField;
     }
 
-    iTypes = (DateTimeFieldType[]) types.clone();
+    iTypes = types.clone();
     chronology.validate(this, values);
-    iValues = (int[]) values.clone();
+    iValues = values.clone();
   }
 
   /**
@@ -355,6 +354,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    *
    * @return the field count
    */
+  @Override
   public int size() {
     return iTypes.length;
   }
@@ -367,6 +367,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    *
    * @return the chronology, never null
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }
@@ -405,7 +406,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    */
   @Override
   public DateTimeFieldType[] getFieldTypes() {
-    return (DateTimeFieldType[]) iTypes.clone();
+    return iTypes.clone();
   }
 
   // -----------------------------------------------------------------------
@@ -416,6 +417,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    * @return the value
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public int getValue(int index) {
     return iValues[index];
   }
@@ -430,7 +432,7 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    */
   @Override
   public int[] getValues() {
-    return (int[]) iValues.clone();
+    return iValues.clone();
   }
 
   // -----------------------------------------------------------------------
@@ -571,13 +573,8 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    * @throws IllegalArgumentException if the value is null or invalid
    */
   public Partial withField(DateTimeFieldType fieldType, int value) {
-    int index = indexOfSupported(fieldType);
-    if (value == getValue(index)) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).set(this, index, newValues, value);
-    return new Partial(this, newValues);
+    int[] newValues = withFieldValues(fieldType, value);
+    return newValues == null ? this : new Partial(this, newValues);
   }
 
   /**
@@ -595,13 +592,8 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    * @throws ArithmeticException if the new datetime exceeds the capacity
    */
   public Partial withFieldAdded(DurationFieldType fieldType, int amount) {
-    int index = indexOfSupported(fieldType);
-    if (amount == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).add(this, index, newValues, amount);
-    return new Partial(this, newValues);
+    int[] newValues = withFieldAddedValues(fieldType, amount);
+    return newValues == null ? this : new Partial(this, newValues);
   }
 
   /**
@@ -618,13 +610,8 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    * @throws ArithmeticException if the new datetime exceeds the capacity
    */
   public Partial withFieldAddWrapped(DurationFieldType fieldType, int amount) {
-    int index = indexOfSupported(fieldType);
-    if (amount == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).addWrapPartial(this, index, newValues, amount);
-    return new Partial(this, newValues);
+    int[] newValues = withFieldAddWrappedValues(fieldType, amount);
+    return newValues == null ? this : new Partial(this, newValues);
   }
 
   /**
@@ -642,20 +629,8 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
    * @throws ArithmeticException if the new datetime exceeds the capacity
    */
   public Partial withPeriodAdded(ReadablePeriod period, int scalar) {
-    if (period == null || scalar == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    for (int i = 0; i < period.size(); i++) {
-      DurationFieldType fieldType = period.getFieldType(i);
-      int index = indexOf(fieldType);
-      if (index >= 0) {
-        newValues =
-            getField(index)
-                .add(this, index, newValues, FieldUtils.safeMultiply(period.getValue(i), scalar));
-      }
-    }
-    return new Partial(this, newValues);
+    int[] newValues = withPeriodAddedValues(period, scalar);
+    return newValues == null ? this : new Partial(this, newValues);
   }
 
   /**

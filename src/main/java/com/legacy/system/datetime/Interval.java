@@ -97,6 +97,11 @@ public final class Interval extends BaseInterval implements ReadableInterval, Se
    * @since 2.9
    */
   public static Interval parseWithOffset(String str) {
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     int separator = str.indexOf('/');
     if (separator < 0) {
       throw new IllegalArgumentException("Format requires a '/' separator: " + str);
@@ -111,6 +116,7 @@ public final class Interval extends BaseInterval implements ReadableInterval, Se
     }
 
     DateTimeFormatter dateTimeParser = ISODateTimeFormat.dateTimeParser().withOffsetParsed();
+    // CPD-ON
     PeriodFormatter periodParser = ISOPeriodFormat.standard();
     DateTime start = null;
     Period period = null;

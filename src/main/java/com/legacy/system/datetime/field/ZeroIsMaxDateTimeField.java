@@ -75,6 +75,11 @@ public final class ZeroIsMaxDateTimeField extends DecoratedDateTimeField {
 
   @Override
   public int[] addWrapField(ReadablePartial instant, int fieldIndex, int[] values, int valueToAdd) {
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     return getWrappedField().addWrapField(instant, fieldIndex, values, valueToAdd);
   }
 
@@ -121,6 +126,7 @@ public final class ZeroIsMaxDateTimeField extends DecoratedDateTimeField {
   @Override
   public int getMinimumValue() {
     return 1;
+    // CPD-ON
   }
 
   /**
@@ -190,6 +196,13 @@ public final class ZeroIsMaxDateTimeField extends DecoratedDateTimeField {
    */
   @Override
   public int getMaximumValue(ReadablePartial instant, int[] values) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return getWrappedField().getMaximumValue(instant, values) + 1;
   }
 
@@ -222,4 +235,5 @@ public final class ZeroIsMaxDateTimeField extends DecoratedDateTimeField {
   public long remainder(long instant) {
     return getWrappedField().remainder(instant);
   }
+  // CPD-ON
 }

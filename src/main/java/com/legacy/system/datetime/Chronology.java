@@ -32,7 +32,7 @@ package com.legacy.system.datetime;
  * <p>The provided chronology implementations are:
  *
  * <ul>
- *   <li>ISO - The <i>de facto<i> world calendar system, based on the ISO-8601 standard
+ *   <li>ISO - The <i>de facto</i> world calendar system, based on the ISO-8601 standard
  *   <li>GJ - Historically accurate calendar with Julian followed by Gregorian
  *   <li>Gregorian - The Gregorian calendar system used for all time (proleptic)
  *   <li>Julian - The Julian calendar system used for all time (proleptic)

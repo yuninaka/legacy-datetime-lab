@@ -20,6 +20,7 @@ import com.legacy.system.datetime.DateTimeUtils;
 import com.legacy.system.datetime.IllegalFieldValueException;
 import java.text.DateFormatSymbols;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -30,7 +31,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Brian S O'Neill
  * @since 1.0
  */
-class GJLocaleSymbols {
+final class GJLocaleSymbols {
 
   private static ConcurrentMap<Locale, GJLocaleSymbols> cCache =
       new ConcurrentHashMap<Locale, GJLocaleSymbols>();
@@ -72,8 +73,7 @@ class GJLocaleSymbols {
     return a;
   }
 
-  private static void addSymbols(
-      TreeMap<String, Integer> map, String[] symbols, Integer[] integers) {
+  private static void addSymbols(Map<String, Integer> map, String[] symbols, Integer[] integers) {
     for (int i = symbols.length; --i >= 0; ) {
       String symbol = symbols[i];
       if (symbol != null) {
@@ -83,7 +83,7 @@ class GJLocaleSymbols {
   }
 
   private static void addNumerals(
-      TreeMap<String, Integer> map, int start, int end, Integer[] integers) {
+      Map<String, Integer> map, int start, int end, Integer[] integers) {
     for (int i = start; i <= end; i++) {
       map.put(String.valueOf(i).intern(), integers[i]);
     }

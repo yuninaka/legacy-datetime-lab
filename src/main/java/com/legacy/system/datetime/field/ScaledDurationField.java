@@ -141,7 +141,7 @@ public class ScaledDurationField extends DecoratedDurationField {
     if (this == obj) {
       return true;
     } else if (obj instanceof ScaledDurationField other) {
-      return (getWrappedField().equals(other.getWrappedField()))
+      return getWrappedField().equals(other.getWrappedField())
           && (getType() == other.getType())
           && (iScalar == other.iScalar);
     }

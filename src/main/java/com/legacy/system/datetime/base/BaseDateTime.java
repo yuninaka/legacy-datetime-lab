@@ -307,6 +307,7 @@ public abstract class BaseDateTime extends AbstractDateTime
    *
    * @return the number of milliseconds since 1970-01-01T00:00:00Z
    */
+  @Override
   public long getMillis() {
     return iMillis;
   }
@@ -316,6 +317,7 @@ public abstract class BaseDateTime extends AbstractDateTime
    *
    * @return the Chronology that the datetime is using
    */
+  @Override
   public Chronology getChronology() {
     return iChronology;
   }

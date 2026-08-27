@@ -142,6 +142,7 @@ public class ZoneInfoProvider implements Provider {
    * @param id the id to load
    * @return the loaded zone
    */
+  @Override
   public DateTimeZone getZone(String id) {
     if (id == null) {
       return null;
@@ -175,6 +176,7 @@ public class ZoneInfoProvider implements Provider {
    *
    * @return the zone ids
    */
+  @Override
   public Set<String> getAvailableIDs() {
     return iZoneInfoKeys;
   }
@@ -195,7 +197,9 @@ public class ZoneInfoProvider implements Provider {
    * @return the input stream
    * @throws IOException if an error occurs
    */
-  @SuppressWarnings("resource")
+  // AccessController is deprecated for removal (JDK 17+), but the privileged resource
+  // load is intentional (keeps zone-data loading working under a SecurityManager).
+  @SuppressWarnings({"resource", "removal"})
   private InputStream openResource(String name) throws IOException {
     InputStream in;
     if (iFileDir != null) {
@@ -205,6 +209,7 @@ public class ZoneInfoProvider implements Provider {
       in =
           AccessController.doPrivileged(
               new PrivilegedAction<InputStream>() {
+                @Override
                 public InputStream run() {
                   if (iLoader != null) {
                     return iLoader.getResourceAsStream(path);
@@ -248,7 +253,10 @@ public class ZoneInfoProvider implements Provider {
         if (in != null) {
           in.close();
         }
-      } catch (IOException ex) {
+      } catch (
+          @SuppressWarnings("EmptyCatch")
+          IOException ex) {
+        // Nothing useful to do if closing an already-finished stream fails.
       }
     }
   }
@@ -268,7 +276,10 @@ public class ZoneInfoProvider implements Provider {
     } finally {
       try {
         din.close();
-      } catch (IOException ex) {
+      } catch (
+          @SuppressWarnings("EmptyCatch")
+          IOException ex) {
+        // Nothing useful to do if closing an already-finished stream fails.
       }
     }
     map.put("UTC", new SoftReference<DateTimeZone>(DateTimeZone.UTC));

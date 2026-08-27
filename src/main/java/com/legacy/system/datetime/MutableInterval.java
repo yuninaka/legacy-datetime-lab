@@ -204,6 +204,7 @@ public class MutableInterval extends BaseInterval
    * @param endInstant the start of the time interval
    * @throws IllegalArgumentException if the end is before the start
    */
+  @Override
   public void setInterval(long startInstant, long endInstant) {
     super.setInterval(startInstant, endInstant, getChronology());
   }
@@ -214,6 +215,7 @@ public class MutableInterval extends BaseInterval
    * @param interval the interval to copy
    * @throws IllegalArgumentException if the interval is null
    */
+  @Override
   public void setInterval(ReadableInterval interval) {
     if (interval == null) {
       throw new IllegalArgumentException("Interval must not be null");
@@ -232,6 +234,7 @@ public class MutableInterval extends BaseInterval
    * @param end the start of the time interval
    * @throws IllegalArgumentException if the end is before the start
    */
+  @Override
   public void setInterval(ReadableInstant start, ReadableInstant end) {
     if (start == null && end == null) {
       long now = DateTimeUtils.currentTimeMillis();
@@ -250,6 +253,7 @@ public class MutableInterval extends BaseInterval
    *
    * @param chrono the chronology to use, null means ISO default
    */
+  @Override
   public void setChronology(Chronology chrono) {
     super.setInterval(getStartMillis(), getEndMillis(), chrono);
   }
@@ -261,6 +265,7 @@ public class MutableInterval extends BaseInterval
    *     1970-01-01T00:00:00Z
    * @throws IllegalArgumentException if the end is before the start
    */
+  @Override
   public void setStartMillis(long startInstant) {
     super.setInterval(startInstant, getEndMillis(), getChronology());
   }
@@ -271,6 +276,7 @@ public class MutableInterval extends BaseInterval
    * @param start the start of the time interval, null means now
    * @throws IllegalArgumentException if the end is before the start
    */
+  @Override
   public void setStart(ReadableInstant start) {
     long startMillis = DateTimeUtils.getInstantMillis(start);
     super.setInterval(startMillis, getEndMillis(), getChronology());
@@ -282,6 +288,7 @@ public class MutableInterval extends BaseInterval
    * @param endInstant the end of the time interval, millisecond instant from 1970-01-01T00:00:00Z
    * @throws IllegalArgumentException if the end is before the start
    */
+  @Override
   public void setEndMillis(long endInstant) {
     super.setInterval(getStartMillis(), endInstant, getChronology());
   }
@@ -292,6 +299,7 @@ public class MutableInterval extends BaseInterval
    * @param end the end of the time interval, null means now
    * @throws IllegalArgumentException if the end is before the start
    */
+  @Override
   public void setEnd(ReadableInstant end) {
     long endMillis = DateTimeUtils.getInstantMillis(end);
     super.setInterval(getStartMillis(), endMillis, getChronology());
@@ -328,6 +336,7 @@ public class MutableInterval extends BaseInterval
    * @throws IllegalArgumentException if the end is before the start
    * @throws ArithmeticException if the end instant exceeds the capacity of a long
    */
+  @Override
   public void setDurationAfterStart(ReadableDuration duration) {
     long durationMillis = DateTimeUtils.getDurationMillis(duration);
     setEndMillis(FieldUtils.safeAdd(getStartMillis(), durationMillis));
@@ -340,6 +349,7 @@ public class MutableInterval extends BaseInterval
    * @throws IllegalArgumentException if the end is before the start
    * @throws ArithmeticException if the start instant exceeds the capacity of a long
    */
+  @Override
   public void setDurationBeforeEnd(ReadableDuration duration) {
     long durationMillis = DateTimeUtils.getDurationMillis(duration);
     setStartMillis(FieldUtils.safeAdd(getEndMillis(), -durationMillis));
@@ -354,6 +364,7 @@ public class MutableInterval extends BaseInterval
    * @throws IllegalArgumentException if the end is before the start
    * @throws ArithmeticException if the end instant exceeds the capacity of a long
    */
+  @Override
   public void setPeriodAfterStart(ReadablePeriod period) {
     if (period == null) {
       setEndMillis(getStartMillis());
@@ -370,6 +381,7 @@ public class MutableInterval extends BaseInterval
    * @throws IllegalArgumentException if the end is before the start
    * @throws ArithmeticException if the start instant exceeds the capacity of a long
    */
+  @Override
   public void setPeriodBeforeEnd(ReadablePeriod period) {
     if (period == null) {
       setStartMillis(getEndMillis());

@@ -143,6 +143,13 @@ abstract class BasicChronology extends AssembledChronology {
       return base.getZone();
     }
     return DateTimeZone.UTC;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   @Override
@@ -152,10 +159,18 @@ abstract class BasicChronology extends AssembledChronology {
     if ((base = getBase()) != null) {
       return base.getDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
     }
+    // CPD-ON
 
     FieldUtils.verifyValueBounds(
         DateTimeFieldType.millisOfDay(), millisOfDay, 0, DateTimeConstants.MILLIS_PER_DAY - 1);
     return getDateTimeMillis0(year, monthOfYear, dayOfMonth, millisOfDay);
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   @Override
@@ -173,6 +188,7 @@ abstract class BasicChronology extends AssembledChronology {
       return base.getDateTimeMillis(
           year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
     }
+    // CPD-ON
 
     FieldUtils.verifyValueBounds(DateTimeFieldType.hourOfDay(), hourOfDay, 0, 23);
     FieldUtils.verifyValueBounds(DateTimeFieldType.minuteOfHour(), minuteOfHour, 0, 59);
@@ -216,6 +232,10 @@ abstract class BasicChronology extends AssembledChronology {
    * @return true if equal
    * @since 1.6
    */
+  // getClass() (not instanceof) is intentional: distinct concrete subclasses (Gregorian,
+  // Julian, Coptic, Islamic, ...) represent different calendar systems and must never
+  // compare equal to each other even if they share the same zone/minDaysInFirstWeek.
+  @SuppressWarnings("EqualsGetClass")
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

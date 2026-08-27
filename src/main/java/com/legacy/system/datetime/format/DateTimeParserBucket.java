@@ -93,6 +93,10 @@ public class DateTimeParserBucket {
    * @param locale the locale to use
    * @deprecated Use longer constructor
    */
+  // Not @InlineMe: that annotation needs error_prone_annotations as a compile
+  // dependency, not just an annotation-processor path; not worth adding for a
+  // deprecated-constructor tooling hint.
+  @SuppressWarnings("InlineMeSuggester")
   @Deprecated
   public DateTimeParserBucket(long instantLocal, Chronology chrono, Locale locale) {
     this(instantLocal, chrono, locale, null, 2000);
@@ -108,6 +112,10 @@ public class DateTimeParserBucket {
    * @since 1.1
    * @deprecated Use longer constructor
    */
+  // Not @InlineMe: that annotation needs error_prone_annotations as a compile
+  // dependency, not just an annotation-processor path; not worth adding for a
+  // deprecated-constructor tooling hint.
+  @SuppressWarnings("InlineMeSuggester")
   @Deprecated
   public DateTimeParserBucket(
       long instantLocal, Chronology chrono, Locale locale, Integer pivotYear) {
@@ -439,7 +447,7 @@ public class DateTimeParserBucket {
     int count = iSavedFieldsCount;
     if (iSavedFieldsShared) {
       // clone so that sort does not affect saved state
-      iSavedFields = savedFields = (SavedField[]) iSavedFields.clone();
+      iSavedFields = savedFields = iSavedFields.clone();
       iSavedFieldsShared = false;
     }
     sort(savedFields, count);
@@ -510,7 +518,7 @@ public class DateTimeParserBucket {
       Arrays.sort(array, 0, high);
     } else {
       for (int i = 0; i < high; i++) {
-        for (int j = i; j > 0 && (array[j - 1]).compareTo(array[j]) > 0; j--) {
+        for (int j = i; j > 0 && array[j - 1].compareTo(array[j]) > 0; j--) {
           SavedField t = array[j];
           array[j] = array[j - 1];
           array[j - 1] = t;
@@ -590,6 +598,7 @@ public class DateTimeParserBucket {
      * The field with the longer range duration is ordered first, where null is considered infinite.
      * If the ranges match, then the field with the longer duration is ordered first.
      */
+    @Override
     public int compareTo(SavedField obj) {
       DateTimeField other = obj.iField;
       int result = compareReverse(iField.getRangeDurationField(), other.getRangeDurationField());

@@ -289,6 +289,7 @@ public final class Instant extends AbstractInstant implements ReadableInstant, S
    *
    * @return the number of milliseconds since 1970-01-01T00:00:00Z
    */
+  @Override
   public long getMillis() {
     return iMillis;
   }
@@ -301,6 +302,7 @@ public final class Instant extends AbstractInstant implements ReadableInstant, S
    *
    * @return ISO in the UTC zone
    */
+  @Override
   public Chronology getChronology() {
     return ISOChronology.getInstanceUTC();
   }
@@ -342,6 +344,9 @@ public final class Instant extends AbstractInstant implements ReadableInstant, S
    * @return a DateTime using the same millis with ISOChronology
    * @deprecated Use toDateTime() as it is identical
    */
+  // Deliberately NOT @InlineMe: the javadoc above explains this override must stay
+  // permanently (removing it would silently change behavior for existing callers).
+  @SuppressWarnings("InlineMeSuggester")
   @Override
   @Deprecated
   public DateTime toDateTimeISO() {
@@ -386,6 +391,9 @@ public final class Instant extends AbstractInstant implements ReadableInstant, S
    * @return a MutableDateTime using the same millis with ISOChronology
    * @deprecated Use toMutableDateTime() as it is identical
    */
+  // Deliberately NOT @InlineMe: the javadoc above explains this override must stay
+  // permanently (removing it would silently change behavior for existing callers).
+  @SuppressWarnings("InlineMeSuggester")
   @Override
   @Deprecated
   public MutableDateTime toMutableDateTimeISO() {

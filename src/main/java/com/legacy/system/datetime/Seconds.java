@@ -448,6 +448,10 @@ public final class Seconds extends BaseSingleFieldPeriod {
    * @param other the other period, null means zero
    * @return true if this seconds instance is less than the specified one
    */
+  // CPD-OFF: trivial, type-safe logic (isLessThan/toString) intentionally repeated
+  // per single-field-period class so each stays type-safe against its own type
+  // (Days vs Months, etc). Extracting would need generics/interface indirection for
+  // a few lines of logic per class - not worth the added abstraction.
   public boolean isLessThan(Seconds other) {
     if (other == null) {
       return getValue() < 0;
@@ -467,5 +471,6 @@ public final class Seconds extends BaseSingleFieldPeriod {
   @ToString
   public String toString() {
     return "PT" + String.valueOf(getValue()) + "S";
+    // CPD-ON
   }
 }

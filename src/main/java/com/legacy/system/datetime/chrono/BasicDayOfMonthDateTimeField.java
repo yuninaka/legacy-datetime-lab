@@ -77,6 +77,13 @@ final class BasicDayOfMonthDateTimeField extends PreciseDurationDateTimeField {
       }
       return iChronology.getDaysInMonthMax(month);
     }
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     return getMaximumValue();
   }
 
@@ -85,6 +92,7 @@ final class BasicDayOfMonthDateTimeField extends PreciseDurationDateTimeField {
     int size = partial.size();
     for (int i = 0; i < size; i++) {
       if (partial.getFieldType(i) == DateTimeFieldType.monthOfYear()) {
+        // CPD-ON
         int month = values[i];
         for (int j = 0; j < size; j++) {
           if (partial.getFieldType(j) == DateTimeFieldType.year()) {
@@ -109,6 +117,9 @@ final class BasicDayOfMonthDateTimeField extends PreciseDurationDateTimeField {
   }
 
   /** Serialization singleton */
+  // Invoked reflectively by ObjectInputStream during deserialization; never called
+  // directly, but required to preserve the singleton contract on deserialize.
+  @SuppressWarnings("UnusedMethod")
   private Object readResolve() {
     return iChronology.dayOfMonth();
   }

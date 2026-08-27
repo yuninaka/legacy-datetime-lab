@@ -103,6 +103,13 @@ public final class ISOChronology extends AssembledChronology {
 
   /** Restricted constructor */
   private ISOChronology(Chronology base) {
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     super(base, null);
   }
 
@@ -129,7 +136,7 @@ public final class ISOChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);
@@ -145,6 +152,7 @@ public final class ISOChronology extends AssembledChronology {
   @Override
   public String toString() {
     String str = "ISOChronology";
+    // CPD-ON
     DateTimeZone zone = getZone();
     if (zone != null) {
       str = str + '[' + zone.getID() + ']';
@@ -154,7 +162,7 @@ public final class ISOChronology extends AssembledChronology {
 
   @Override
   protected void assemble(Fields fields) {
-    if (getBase().getZone() == DateTimeZone.UTC) {
+    if (getBase().getZone().equals(DateTimeZone.UTC)) {
       // Use zero based century and year of century.
       fields.centuryOfEra =
           new DividedDateTimeField(

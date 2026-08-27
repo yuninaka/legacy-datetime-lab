@@ -20,8 +20,8 @@ mvn spotless:check
 echo "=== 2/4 Type Check & Build: mvn compile -DskipTests ==="
 mvn compile -DskipTests
 
-echo "=== 3/4 Linter: mvn spotbugs:check ==="
-mvn spotbugs:check
+echo "=== 3/4 Linter: mvn spotbugs:check checkstyle:check pmd:cpd-check ==="
+mvn spotbugs:check checkstyle:check pmd:cpd-check
 
 echo "=== 4/4 Unit Test & Mutation: mvn test pitest:mutationCoverage ==="
 mvn test pitest:mutationCoverage

@@ -76,7 +76,7 @@ public class IllegalFieldValueException extends IllegalArgumentException {
    * @return the message
    */
   private static String createMessage(String fieldName, String value) {
-    var buf = new StringBuffer().append("Value ");
+    var buf = new StringBuilder().append("Value ");
 
     if (value == null) {
       buf.append("null");
@@ -98,7 +98,9 @@ public class IllegalFieldValueException extends IllegalArgumentException {
   private final String iStringValue;
   private final Number iLowerBound;
   private final Number iUpperBound;
-  private String iMessage;
+  // Not final: prependMessage() below intentionally mutates this after construction
+  // (documented public API since 1.3).
+  private String iMessage; // CSIGNORE
 
   /**
    * Constructor.

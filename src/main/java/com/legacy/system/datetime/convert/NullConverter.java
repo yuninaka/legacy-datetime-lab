@@ -51,6 +51,7 @@ class NullConverter extends AbstractConverter
    * @param object the object to convert, which is null
    * @return the millisecond duration
    */
+  @Override
   public long getDurationMillis(Object object) {
     return 0L;
   }
@@ -64,6 +65,7 @@ class NullConverter extends AbstractConverter
    * @param chrono the chronology to use
    * @throws NullPointerException if the duration is null
    */
+  @Override
   public void setInto(ReadWritablePeriod duration, Object object, Chronology chrono) {
     duration.setPeriod((Period) null);
   }
@@ -78,6 +80,7 @@ class NullConverter extends AbstractConverter
    * @param chrono the chronology to use, may be null
    * @throws NullPointerException if the interval is null
    */
+  @Override
   public void setInto(ReadWritableInterval writableInterval, Object object, Chronology chrono) {
     writableInterval.setChronology(chrono);
     long now = DateTimeUtils.currentTimeMillis();
@@ -90,6 +93,7 @@ class NullConverter extends AbstractConverter
    *
    * @return null
    */
+  @Override
   public Class<?> getSupportedType() {
     return null;
   }

@@ -589,7 +589,7 @@ public class DateTimeFormat {
     int length = pattern.length();
 
     char c = pattern.charAt(i);
-    if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') {
+    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
       // Scan a run of the same character, which indicates a time
       // pattern.
       buf.append(c);
@@ -620,7 +620,7 @@ public class DateTimeFormat {
           } else {
             inLiteral = !inLiteral;
           }
-        } else if (!inLiteral && (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')) {
+        } else if (!inLiteral && ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
           i--;
           break;
         } else {
@@ -804,10 +804,12 @@ public class DateTimeFormat {
       iType = type;
     }
 
+    @Override
     public int estimatePrintedLength() {
       return 40; // guess
     }
 
+    @Override
     public void printTo(
         Appendable appenadble,
         long instant,
@@ -820,16 +822,19 @@ public class DateTimeFormat {
       p.printTo(appenadble, instant, chrono, displayOffset, displayZone, locale);
     }
 
+    @Override
     public void printTo(Appendable appendable, ReadablePartial partial, Locale locale)
         throws IOException {
       InternalPrinter p = getFormatter(locale).getPrinter0();
       p.printTo(appendable, partial, locale);
     }
 
+    @Override
     public int estimateParsedLength() {
       return 40; // guess
     }
 
+    @Override
     public int parseInto(DateTimeParserBucket bucket, CharSequence text, int position) {
       InternalParser p = getFormatter(bucket.getLocale()).getParser0();
       return p.parseInto(bucket, text, position);
@@ -874,7 +879,7 @@ public class DateTimeFormat {
     private final int combinedTypeAndStyle;
     private final Locale locale;
 
-    public StyleFormatterCacheKey(int iType, int iDateStyle, int iTimeStyle, Locale locale) {
+    StyleFormatterCacheKey(int iType, int iDateStyle, int iTimeStyle, Locale locale) {
       this.locale = locale;
       // keeping old key generation logic of shifting type and style
       this.combinedTypeAndStyle = iType + (iDateStyle << 4) + (iTimeStyle << 8);

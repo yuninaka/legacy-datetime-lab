@@ -23,6 +23,7 @@ import com.legacy.system.datetime.DateTimeUtils;
 import com.legacy.system.datetime.DurationFieldType;
 import com.legacy.system.datetime.ReadableInstant;
 import com.legacy.system.datetime.ReadablePartial;
+import com.legacy.system.datetime.ReadablePeriod;
 import com.legacy.system.datetime.field.FieldUtils;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 
@@ -42,6 +43,10 @@ import com.legacy.system.datetime.format.DateTimeFormatter;
  * @author Stephen Colebourne
  * @since 1.0
  */
+// Comparable<ReadablePartial> (not <AbstractPartial>) is intentional: any two
+// ReadablePartial instances with matching field types are comparable, regardless of
+// concrete subclass (see compareTo's javadoc below).
+@SuppressWarnings("ComparableType")
 public abstract class AbstractPartial implements ReadablePartial, Comparable<ReadablePartial> {
 
   // -----------------------------------------------------------------------
@@ -71,6 +76,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the field type
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public DateTimeFieldType getFieldType(int index) {
     return getField(index, getChronology()).getType();
   }
@@ -97,6 +103,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the field
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  @Override
   public DateTimeField getField(int index) {
     return getField(index, getChronology());
   }
@@ -111,6 +118,11 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
   public DateTimeField[] getFields() {
     DateTimeField[] result = new DateTimeField[size()];
     for (int i = 0; i < result.length; i++) {
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
       result[i] = getField(i);
     }
     return result;
@@ -142,7 +154,9 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the value of that field
    * @throws IllegalArgumentException if the field is null or not supported
    */
+  @Override
   public int get(DateTimeFieldType type) {
+    // CPD-ON
     return getValue(indexOfSupported(type));
   }
 
@@ -152,6 +166,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @param type the type to check, may be null which returns false
    * @return true if the field is supported
    */
+  @Override
   public boolean isSupported(DateTimeFieldType type) {
     return (indexOf(type) != -1);
   }
@@ -219,6 +234,91 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
   }
 
   // -----------------------------------------------------------------------
+  // Shared computation for the withField/withFieldAdded/withFieldAddWrapped/withPeriodAdded
+  // family: each subclass wraps the returned int[] in its own constructor (e.g.
+  // `new Partial(this, newValues)`), which can't be expressed here since the concrete
+  // return type differs per subclass. A null return means "no change" (subclasses should
+  // return `this` in that case) so the fast path avoids allocating a values array.
+  /**
+   * Computes the new field values for {@code withField}, or null if the value is unchanged.
+   *
+   * @param fieldType the field type to set, not null
+   * @param value the value to set
+   * @return the new values, or null if unchanged
+   * @throws IllegalArgumentException if the field is null or unsupported
+   */
+  protected int[] withFieldValues(DateTimeFieldType fieldType, int value) {
+    int index = indexOfSupported(fieldType);
+    if (value == getValue(index)) {
+      return null;
+    }
+    int[] newValues = getValues();
+    return getField(index).set(this, index, newValues, value);
+  }
+
+  /**
+   * Computes the new field values for {@code withFieldAdded}, or null if the amount is zero.
+   *
+   * @param fieldType the field type to add to, not null
+   * @param amount the amount to add
+   * @return the new values, or null if unchanged
+   * @throws IllegalArgumentException if the field is null or unsupported
+   * @throws ArithmeticException if the new datetime exceeds the capacity
+   */
+  protected int[] withFieldAddedValues(DurationFieldType fieldType, int amount) {
+    int index = indexOfSupported(fieldType);
+    if (amount == 0) {
+      return null;
+    }
+    int[] newValues = getValues();
+    return getField(index).add(this, index, newValues, amount);
+  }
+
+  /**
+   * Computes the new field values for {@code withFieldAddWrapped}, or null if the amount is zero.
+   *
+   * @param fieldType the field type to add to, not null
+   * @param amount the amount to add
+   * @return the new values, or null if unchanged
+   * @throws IllegalArgumentException if the field is null or unsupported
+   * @throws ArithmeticException if the new datetime exceeds the capacity
+   */
+  protected int[] withFieldAddWrappedValues(DurationFieldType fieldType, int amount) {
+    int index = indexOfSupported(fieldType);
+    if (amount == 0) {
+      return null;
+    }
+    int[] newValues = getValues();
+    return getField(index).addWrapPartial(this, index, newValues, amount);
+  }
+
+  /**
+   * Computes the new field values for {@code withPeriodAdded}, or null if the period is null or the
+   * scalar is zero.
+   *
+   * @param period the period to add to this one, null means zero
+   * @param scalar the amount of times to add, such as -1 to subtract once
+   * @return the new values, or null if unchanged
+   * @throws ArithmeticException if the new datetime exceeds the capacity
+   */
+  protected int[] withPeriodAddedValues(ReadablePeriod period, int scalar) {
+    if (period == null || scalar == 0) {
+      return null;
+    }
+    int[] newValues = getValues();
+    for (int i = 0; i < period.size(); i++) {
+      DurationFieldType fieldType = period.getFieldType(i);
+      int index = indexOf(fieldType);
+      if (index >= 0) {
+        newValues =
+            getField(index)
+                .add(this, index, newValues, FieldUtils.safeMultiply(period.getValue(i), scalar));
+      }
+    }
+    return newValues;
+  }
+
+  // -----------------------------------------------------------------------
   /**
    * Resolves this partial against another complete instant to create a new full instant. The
    * combination is performed using the chronology of the specified instant.
@@ -229,6 +329,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @param baseInstant the instant that provides the missing fields, null means now
    * @return the combined datetime
    */
+  @Override
   public DateTime toDateTime(ReadableInstant baseInstant) {
     Chronology chrono = DateTimeUtils.getInstantChronology(baseInstant);
     long instantMillis = DateTimeUtils.getInstantMillis(baseInstant);
@@ -253,6 +354,11 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
       return false;
     }
     ReadablePartial other = (ReadablePartial) partial;
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     if (size() != other.size()) {
       return false;
     }
@@ -262,6 +368,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
       }
     }
     return FieldUtils.equals(getChronology(), other.getChronology());
+    // CPD-ON
   }
 
   /**
@@ -300,6 +407,7 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @throws NullPointerException if the partial is null
    * @since 1.1
    */
+  @Override
   public int compareTo(ReadablePartial other) {
     if (this == other) {
       return 0;

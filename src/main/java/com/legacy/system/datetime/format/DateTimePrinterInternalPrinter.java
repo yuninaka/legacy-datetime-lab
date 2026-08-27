@@ -28,7 +28,7 @@ import java.util.Locale;
  * @author Stephen Colebourne
  * @since 2.4
  */
-class DateTimePrinterInternalPrinter implements InternalPrinter {
+final class DateTimePrinterInternalPrinter implements InternalPrinter {
 
   private final DateTimePrinter underlying;
 
@@ -52,10 +52,15 @@ class DateTimePrinterInternalPrinter implements InternalPrinter {
   }
 
   // -----------------------------------------------------------------------
+  @Override
   public int estimatePrintedLength() {
     return underlying.estimatePrintedLength();
   }
 
+  // underlying.printTo requires StringBuffer specifically (see the instanceof branch
+  // below); it has no Appendable/StringBuilder overload to fall back to.
+  @SuppressWarnings("JdkObsolete")
+  @Override
   public void printTo(
       Appendable appendable,
       long instant,
@@ -77,6 +82,10 @@ class DateTimePrinterInternalPrinter implements InternalPrinter {
     }
   }
 
+  // underlying.printTo requires StringBuffer specifically (see the instanceof branch
+  // below); it has no Appendable/StringBuilder overload to fall back to.
+  @SuppressWarnings("JdkObsolete")
+  @Override
   public void printTo(Appendable appendable, ReadablePartial partial, Locale locale)
       throws IOException {
     if (appendable instanceof StringBuffer) {

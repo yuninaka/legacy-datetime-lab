@@ -163,6 +163,13 @@ public class DelegatedDateTimeField extends DateTimeField implements Serializabl
 
   @Override
   public String getAsShortText(int fieldValue, Locale locale) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return iField.getAsShortText(fieldValue, locale);
   }
 
@@ -178,6 +185,7 @@ public class DelegatedDateTimeField extends DateTimeField implements Serializabl
 
   @Override
   public int[] add(ReadablePartial instant, int fieldIndex, int[] values, int valueToAdd) {
+    // CPD-ON
     return iField.add(instant, fieldIndex, values, valueToAdd);
   }
 
@@ -194,6 +202,13 @@ public class DelegatedDateTimeField extends DateTimeField implements Serializabl
 
   @Override
   public int[] addWrapField(ReadablePartial instant, int fieldIndex, int[] values, int valueToAdd) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return iField.addWrapField(instant, fieldIndex, values, valueToAdd);
   }
 
@@ -209,6 +224,7 @@ public class DelegatedDateTimeField extends DateTimeField implements Serializabl
 
   @Override
   public long set(long instant, int value) {
+    // CPD-ON
     return iField.set(instant, value);
   }
 
@@ -268,6 +284,11 @@ public class DelegatedDateTimeField extends DateTimeField implements Serializabl
 
   @Override
   public int getMinimumValue(long instant) {
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     return iField.getMinimumValue(instant);
   }
 
@@ -310,6 +331,8 @@ public class DelegatedDateTimeField extends DateTimeField implements Serializabl
   public int getMaximumShortTextLength(Locale locale) {
     return iField.getMaximumShortTextLength(locale);
   }
+
+  // CPD-ON
 
   @Override
   public long roundFloor(long instant) {

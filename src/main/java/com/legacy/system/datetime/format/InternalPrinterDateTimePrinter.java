@@ -28,7 +28,7 @@ import java.util.Locale;
  * @author Stephen Colebourne
  * @since 2.4
  */
-class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter {
+final class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter {
 
   private final InternalPrinter underlying;
 
@@ -50,10 +50,12 @@ class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter
   }
 
   // -----------------------------------------------------------------------
+  @Override
   public int estimatePrintedLength() {
     return underlying.estimatePrintedLength();
   }
 
+  @Override
   public void printTo(
       StringBuffer buf,
       long instant,
@@ -68,6 +70,7 @@ class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter
     }
   }
 
+  @Override
   public void printTo(
       Writer out,
       long instant,
@@ -79,6 +82,7 @@ class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter
     underlying.printTo(out, instant, chrono, displayOffset, displayZone, locale);
   }
 
+  @Override
   public void printTo(
       Appendable appendable,
       long instant,
@@ -90,6 +94,7 @@ class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter
     underlying.printTo(appendable, instant, chrono, displayOffset, displayZone, locale);
   }
 
+  @Override
   public void printTo(StringBuffer buf, ReadablePartial partial, Locale locale) {
     try {
       underlying.printTo(buf, partial, locale);
@@ -98,10 +103,12 @@ class InternalPrinterDateTimePrinter implements DateTimePrinter, InternalPrinter
     }
   }
 
+  @Override
   public void printTo(Writer out, ReadablePartial partial, Locale locale) throws IOException {
     underlying.printTo(out, partial, locale);
   }
 
+  @Override
   public void printTo(Appendable appendable, ReadablePartial partial, Locale locale)
       throws IOException {
     underlying.printTo(appendable, partial, locale);

@@ -137,6 +137,13 @@ public final class BuddhistChronology extends AssembledChronology {
   /** Serialization singleton */
   private Object readResolve() {
     Chronology base = getBase();
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     return base == null ? getInstanceUTC() : getInstance(base.getZone());
   }
 
@@ -163,7 +170,7 @@ public final class BuddhistChronology extends AssembledChronology {
     if (zone == null) {
       zone = DateTimeZone.getDefault();
     }
-    if (zone == getZone()) {
+    if (zone.equals(getZone())) {
       return this;
     }
     return getInstance(zone);
@@ -183,6 +190,7 @@ public final class BuddhistChronology extends AssembledChronology {
       return true;
     }
     if (obj instanceof BuddhistChronology chrono) {
+      // CPD-ON
       return getZone().equals(chrono.getZone());
     }
     return false;
@@ -228,7 +236,6 @@ public final class BuddhistChronology extends AssembledChronology {
           new OffsetDateTimeField(new SkipUndoDateTimeField(this, field), BUDDHIST_OFFSET);
 
       // one era, so yearOfEra is the same
-      field = fields.yearOfEra;
       fields.yearOfEra =
           new DelegatedDateTimeField(fields.year, fields.eras, DateTimeFieldType.yearOfEra());
 

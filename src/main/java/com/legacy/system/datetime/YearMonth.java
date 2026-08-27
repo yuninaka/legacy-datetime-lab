@@ -188,7 +188,8 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @throws IllegalArgumentException if the calendar is null
    * @throws IllegalArgumentException if the year or month is invalid for the ISO chronology
    */
-  @SuppressWarnings("deprecation")
+  // java.util.Date interop is this method's entire purpose.
+  @SuppressWarnings({"deprecation", "JavaUtilDate"})
   public static YearMonth fromDateFields(Date date) {
     if (date == null) {
       throw new IllegalArgumentException("The date must not be null");
@@ -377,6 +378,7 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    *
    * @return the field count, two
    */
+  @Override
   public int size() {
     return 2;
   }
@@ -420,7 +422,7 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    */
   @Override
   public DateTimeFieldType[] getFieldTypes() {
-    return (DateTimeFieldType[]) FIELD_TYPES.clone();
+    return FIELD_TYPES.clone();
   }
 
   // -----------------------------------------------------------------------
@@ -470,13 +472,8 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @throws IllegalArgumentException if the value is null or invalid
    */
   public YearMonth withField(DateTimeFieldType fieldType, int value) {
-    int index = indexOfSupported(fieldType);
-    if (value == getValue(index)) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).set(this, index, newValues, value);
-    return new YearMonth(this, newValues);
+    int[] newValues = withFieldValues(fieldType, value);
+    return newValues == null ? this : new YearMonth(this, newValues);
   }
 
   /**
@@ -499,13 +496,8 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @throws ArithmeticException if the new date-time exceeds the capacity
    */
   public YearMonth withFieldAdded(DurationFieldType fieldType, int amount) {
-    int index = indexOfSupported(fieldType);
-    if (amount == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).add(this, index, newValues, amount);
-    return new YearMonth(this, newValues);
+    int[] newValues = withFieldAddedValues(fieldType, amount);
+    return newValues == null ? this : new YearMonth(this, newValues);
   }
 
   /**
@@ -524,20 +516,8 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @throws ArithmeticException if the new date-time exceeds the capacity
    */
   public YearMonth withPeriodAdded(ReadablePeriod period, int scalar) {
-    if (period == null || scalar == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    for (int i = 0; i < period.size(); i++) {
-      DurationFieldType fieldType = period.getFieldType(i);
-      int index = indexOf(fieldType);
-      if (index >= 0) {
-        newValues =
-            getField(index)
-                .add(this, index, newValues, FieldUtils.safeMultiply(period.getValue(i), scalar));
-      }
-    }
-    return new YearMonth(this, newValues);
+    int[] newValues = withPeriodAddedValues(period, scalar);
+    return newValues == null ? this : new YearMonth(this, newValues);
   }
 
   // -----------------------------------------------------------------------
@@ -790,6 +770,12 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
   @Override
   @ToString
   public String toString() {
+    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+    // the common base class without a larger, riskier generic/factory-method redesign
+    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.yearMonth().print(this);
   }
 
@@ -838,6 +824,8 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
 
     /** The partial */
     private final YearMonth iBase;
+
+    // CPD-ON
 
     /** The field index */
     private final int iFieldIndex;

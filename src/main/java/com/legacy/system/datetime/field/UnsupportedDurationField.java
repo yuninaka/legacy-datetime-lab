@@ -75,7 +75,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
   // intended to perform calculations throw an UnsupportedOperationException.
 
   @Override
-  public final DurationFieldType getType() {
+  public DurationFieldType getType() {
     return iType;
   }
 
@@ -239,6 +239,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
    *
    * @return zero always
    */
+  @Override
   public int compareTo(DurationField durationField) {
     return 0;
   }
@@ -258,7 +259,7 @@ public final class UnsupportedDurationField extends DurationField implements Ser
       if (other.getName() == null) {
         return (getName() == null);
       }
-      return (other.getName().equals(getName()));
+      return other.getName().equals(getName());
     }
     return false;
   }

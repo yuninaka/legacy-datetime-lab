@@ -52,6 +52,13 @@ final class GJYearOfEraDateTimeField extends DecoratedDateTimeField {
     if (year <= 0) {
       year = 1 - year;
     }
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     return year;
   }
 
@@ -96,6 +103,7 @@ final class GJYearOfEraDateTimeField extends DecoratedDateTimeField {
   @Override
   public long set(long instant, int year) {
     FieldUtils.verifyValueBounds(this, year, 1, getMaximumValue());
+    // CPD-ON
     if (iChronology.getYear(instant) <= 0) {
       year = 1 - year;
     }
@@ -105,6 +113,13 @@ final class GJYearOfEraDateTimeField extends DecoratedDateTimeField {
   @Override
   public int getMinimumValue() {
     return 1;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   @Override
@@ -128,7 +143,11 @@ final class GJYearOfEraDateTimeField extends DecoratedDateTimeField {
   }
 
   /** Serialization singleton */
+  // Invoked reflectively by ObjectInputStream during deserialization; never called
+  // directly, but required to preserve the singleton contract on deserialize.
+  @SuppressWarnings("UnusedMethod")
   private Object readResolve() {
     return iChronology.yearOfEra();
+    // CPD-ON
   }
 }

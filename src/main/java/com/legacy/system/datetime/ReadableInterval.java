@@ -283,6 +283,7 @@ public interface ReadableInterval {
    * @param readableInterval a readable interval to check against
    * @return true if the start and end millis are equal
    */
+  @Override
   boolean equals(Object readableInterval);
 
   /**
@@ -298,6 +299,7 @@ public interface ReadableInterval {
    *
    * @return a hash code
    */
+  @Override
   int hashCode();
 
   // -----------------------------------------------------------------------
@@ -308,5 +310,6 @@ public interface ReadableInterval {
    *
    * @return the value as an ISO8601 string
    */
+  @Override
   String toString();
 }

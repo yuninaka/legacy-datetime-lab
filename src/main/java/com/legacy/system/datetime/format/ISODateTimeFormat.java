@@ -165,7 +165,7 @@ public class ISODateTimeFormat {
     if (workingFields.contains(DateTimeFieldType.monthOfYear())) {
       reducedPrec = dateByMonth(bld, workingFields, extended, strictISO);
     } else if (workingFields.contains(DateTimeFieldType.dayOfYear())) {
-      reducedPrec = dateByOrdinal(bld, workingFields, extended, strictISO);
+      reducedPrec = dateByOrdinal(bld, workingFields, extended);
     } else if (workingFields.contains(DateTimeFieldType.weekOfWeekyear())) {
       reducedPrec = dateByWeek(bld, workingFields, extended, strictISO);
     } else if (workingFields.contains(DateTimeFieldType.dayOfMonth())) {
@@ -274,14 +274,10 @@ public class ISODateTimeFormat {
    * @param bld the builder
    * @param fields the fields
    * @param extended true to use extended format
-   * @param strictISO true to only allow ISO formats
    * @since 1.1
    */
   private static boolean dateByOrdinal(
-      DateTimeFormatterBuilder bld,
-      Collection<DateTimeFieldType> fields,
-      boolean extended,
-      boolean strictISO) {
+      DateTimeFormatterBuilder bld, Collection<DateTimeFieldType> fields, boolean extended) {
 
     boolean reducedPrec = false;
     if (fields.remove(DateTimeFieldType.year())) {
@@ -406,14 +402,14 @@ public class ISODateTimeFormat {
         bld.appendLiteral('T');
       }
     }
-    if (hour && minute && second || (hour && !second && !milli)) {
+    if ((hour && minute && second) || (hour && !second && !milli)) {
       // OK - HMSm/HMS/HM/H - valid in combination with date
     } else {
       if (strictISO && datePresent) {
         throw new IllegalArgumentException(
             "No valid ISO8601 format for fields because Time was truncated: " + fields);
       }
-      if (!hour && (minute && second || (minute && !milli) || second)) {
+      if (!hour && ((minute && second) || (minute && !milli) || second)) {
         // OK - MSm/MS/M/Sm/S - valid ISO formats
       } else {
         if (strictISO) {

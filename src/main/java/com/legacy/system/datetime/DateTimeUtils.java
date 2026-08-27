@@ -137,6 +137,9 @@ public class DateTimeUtils {
    *
    * @throws SecurityException if the provider may not be changed
    */
+  // SecurityManager is deprecated for removal (JDK 17+), but the permission check itself
+  // is intentional public-API behavior, not legacy cruft to delete.
+  @SuppressWarnings("removal")
   private static void checkPermission() throws SecurityException {
     SecurityManager sm = System.getSecurityManager();
     if (sm != null) {
@@ -372,7 +375,8 @@ public class DateTimeUtils {
    */
   public static final DateFormatSymbols getDateFormatSymbols(Locale locale) {
     try {
-      Method method = DateFormatSymbols.class.getMethod("getInstance", new Class[] {Locale.class});
+      Method method =
+          DateFormatSymbols.class.getMethod("getInstance", new Class<?>[] {Locale.class});
       return (DateFormatSymbols) method.invoke(null, new Object[] {locale});
     } catch (Exception ex) {
       return new DateFormatSymbols(locale);
@@ -520,7 +524,7 @@ public class DateTimeUtils {
    * @author Stephen Colebourne
    * @since 2.0 (previously private)
    */
-  public static interface MillisProvider {
+  public interface MillisProvider {
     /**
      * Gets the current time.
      *
@@ -538,6 +542,7 @@ public class DateTimeUtils {
      *
      * @return the current time in millis
      */
+    @Override
     public long getMillis() {
       return System.currentTimeMillis();
     }
@@ -562,6 +567,7 @@ public class DateTimeUtils {
      *
      * @return the current time in millis
      */
+    @Override
     public long getMillis() {
       return iMillis;
     }
@@ -586,6 +592,7 @@ public class DateTimeUtils {
      *
      * @return the current time in millis
      */
+    @Override
     public long getMillis() {
       return System.currentTimeMillis() + iMillis;
     }

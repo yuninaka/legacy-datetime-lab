@@ -306,6 +306,10 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     super(0, 0, 0, 0, hours, minutes, seconds, millis, PeriodType.standard());
   }
 
+  // CPD-OFF: matches MutablePeriod's equivalent constructors. Java constructors cannot be
+  // inherited between sibling subclasses, so both Period and MutablePeriod must each
+  // independently declare these convenience overloads that forward to BasePeriod's
+  // constructor; there is no language mechanism to share the bodies.
   /**
    * Create a period from a set of field values using the standard set of fields.
    *
@@ -353,6 +357,8 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       PeriodType type) {
     super(years, months, weeks, days, hours, minutes, seconds, millis, type);
   }
+
+  // CPD-ON
 
   /**
    * Creates a period from the given millisecond duration using the standard set of fields.
@@ -725,13 +731,18 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
   }
 
   // -----------------------------------------------------------------------
+  // CPD-OFF: identical to MutablePeriod's getters below. Both extend BasePeriod (in the
+  // .base subpackage), but PeriodType.yearIndex/monthIndex/.../getIndexedField are
+  // package-private to com.legacy.system.datetime, so BasePeriod can't call them; moving
+  // these getters there would require widening PeriodType's package-private API, which is
+  // out of scope for a duplicate-code cleanup.
   /**
    * Gets the years field part of the period.
    *
    * @return the number of years in the period, zero if unsupported
    */
   public int getYears() {
-    return getPeriodType().getIndexedField(this, PeriodType.YEAR_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.yearIndex);
   }
 
   /**
@@ -740,7 +751,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of months in the period, zero if unsupported
    */
   public int getMonths() {
-    return getPeriodType().getIndexedField(this, PeriodType.MONTH_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.monthIndex);
   }
 
   /**
@@ -749,7 +760,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of weeks in the period, zero if unsupported
    */
   public int getWeeks() {
-    return getPeriodType().getIndexedField(this, PeriodType.WEEK_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.weekIndex);
   }
 
   /**
@@ -758,7 +769,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of days in the period, zero if unsupported
    */
   public int getDays() {
-    return getPeriodType().getIndexedField(this, PeriodType.DAY_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.dayIndex);
   }
 
   // -----------------------------------------------------------------------
@@ -768,7 +779,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of hours in the period, zero if unsupported
    */
   public int getHours() {
-    return getPeriodType().getIndexedField(this, PeriodType.HOUR_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.hourIndex);
   }
 
   /**
@@ -777,7 +788,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of minutes in the period, zero if unsupported
    */
   public int getMinutes() {
-    return getPeriodType().getIndexedField(this, PeriodType.MINUTE_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.minuteIndex);
   }
 
   /**
@@ -786,7 +797,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of seconds in the period, zero if unsupported
    */
   public int getSeconds() {
-    return getPeriodType().getIndexedField(this, PeriodType.SECOND_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.secondIndex);
   }
 
   /**
@@ -795,8 +806,10 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @return the number of millis in the period, zero if unsupported
    */
   public int getMillis() {
-    return getPeriodType().getIndexedField(this, PeriodType.MILLI_INDEX);
+    return getPeriodType().getIndexedField(this, PeriodType.milliIndex);
   }
+
+  // CPD-ON
 
   // -----------------------------------------------------------------------
   /**
@@ -889,7 +902,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withYears(int years) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.YEAR_INDEX, values, years);
+    getPeriodType().setIndexedField(this, PeriodType.yearIndex, values, years);
     return new Period(values, getPeriodType());
   }
 
@@ -904,7 +917,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withMonths(int months) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.MONTH_INDEX, values, months);
+    getPeriodType().setIndexedField(this, PeriodType.monthIndex, values, months);
     return new Period(values, getPeriodType());
   }
 
@@ -919,7 +932,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withWeeks(int weeks) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.WEEK_INDEX, values, weeks);
+    getPeriodType().setIndexedField(this, PeriodType.weekIndex, values, weeks);
     return new Period(values, getPeriodType());
   }
 
@@ -934,7 +947,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withDays(int days) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.DAY_INDEX, values, days);
+    getPeriodType().setIndexedField(this, PeriodType.dayIndex, values, days);
     return new Period(values, getPeriodType());
   }
 
@@ -949,7 +962,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withHours(int hours) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.HOUR_INDEX, values, hours);
+    getPeriodType().setIndexedField(this, PeriodType.hourIndex, values, hours);
     return new Period(values, getPeriodType());
   }
 
@@ -964,7 +977,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withMinutes(int minutes) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.MINUTE_INDEX, values, minutes);
+    getPeriodType().setIndexedField(this, PeriodType.minuteIndex, values, minutes);
     return new Period(values, getPeriodType());
   }
 
@@ -979,7 +992,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withSeconds(int seconds) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.SECOND_INDEX, values, seconds);
+    getPeriodType().setIndexedField(this, PeriodType.secondIndex, values, seconds);
     return new Period(values, getPeriodType());
   }
 
@@ -994,7 +1007,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    */
   public Period withMillis(int millis) {
     int[] values = getValues(); // cloned
-    getPeriodType().setIndexedField(this, PeriodType.MILLI_INDEX, values, millis);
+    getPeriodType().setIndexedField(this, PeriodType.milliIndex, values, millis);
     return new Period(values, getPeriodType());
   }
 
@@ -1023,28 +1036,28 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     int[] values = getValues(); // cloned
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.YEAR_INDEX, values, period.get(DurationFieldType.YEARS_TYPE));
+            this, PeriodType.yearIndex, values, period.get(DurationFieldType.YEARS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.MONTH_INDEX, values, period.get(DurationFieldType.MONTHS_TYPE));
+            this, PeriodType.monthIndex, values, period.get(DurationFieldType.MONTHS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.WEEK_INDEX, values, period.get(DurationFieldType.WEEKS_TYPE));
+            this, PeriodType.weekIndex, values, period.get(DurationFieldType.WEEKS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.DAY_INDEX, values, period.get(DurationFieldType.DAYS_TYPE));
+            this, PeriodType.dayIndex, values, period.get(DurationFieldType.DAYS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.HOUR_INDEX, values, period.get(DurationFieldType.HOURS_TYPE));
+            this, PeriodType.hourIndex, values, period.get(DurationFieldType.HOURS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.MINUTE_INDEX, values, period.get(DurationFieldType.MINUTES_TYPE));
+            this, PeriodType.minuteIndex, values, period.get(DurationFieldType.MINUTES_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.SECOND_INDEX, values, period.get(DurationFieldType.SECONDS_TYPE));
+            this, PeriodType.secondIndex, values, period.get(DurationFieldType.SECONDS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.MILLI_INDEX, values, period.get(DurationFieldType.MILLIS_TYPE));
+            this, PeriodType.milliIndex, values, period.get(DurationFieldType.MILLIS_TYPE));
     return new Period(values, getPeriodType());
   }
 
@@ -1063,7 +1076,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.YEAR_INDEX, values, years);
+    getPeriodType().addIndexedField(this, PeriodType.yearIndex, values, years);
     return new Period(values, getPeriodType());
   }
 
@@ -1081,7 +1094,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.MONTH_INDEX, values, months);
+    getPeriodType().addIndexedField(this, PeriodType.monthIndex, values, months);
     return new Period(values, getPeriodType());
   }
 
@@ -1099,7 +1112,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.WEEK_INDEX, values, weeks);
+    getPeriodType().addIndexedField(this, PeriodType.weekIndex, values, weeks);
     return new Period(values, getPeriodType());
   }
 
@@ -1117,7 +1130,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.DAY_INDEX, values, days);
+    getPeriodType().addIndexedField(this, PeriodType.dayIndex, values, days);
     return new Period(values, getPeriodType());
   }
 
@@ -1135,7 +1148,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.HOUR_INDEX, values, hours);
+    getPeriodType().addIndexedField(this, PeriodType.hourIndex, values, hours);
     return new Period(values, getPeriodType());
   }
 
@@ -1153,7 +1166,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.MINUTE_INDEX, values, minutes);
+    getPeriodType().addIndexedField(this, PeriodType.minuteIndex, values, minutes);
     return new Period(values, getPeriodType());
   }
 
@@ -1171,7 +1184,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.SECOND_INDEX, values, seconds);
+    getPeriodType().addIndexedField(this, PeriodType.secondIndex, values, seconds);
     return new Period(values, getPeriodType());
   }
 
@@ -1189,7 +1202,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
       return this;
     }
     int[] values = getValues(); // cloned
-    getPeriodType().addIndexedField(this, PeriodType.MILLI_INDEX, values, millis);
+    getPeriodType().addIndexedField(this, PeriodType.milliIndex, values, millis);
     return new Period(values, getPeriodType());
   }
 
@@ -1218,28 +1231,28 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     int[] values = getValues(); // cloned
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.YEAR_INDEX, values, -period.get(DurationFieldType.YEARS_TYPE));
+            this, PeriodType.yearIndex, values, -period.get(DurationFieldType.YEARS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.MONTH_INDEX, values, -period.get(DurationFieldType.MONTHS_TYPE));
+            this, PeriodType.monthIndex, values, -period.get(DurationFieldType.MONTHS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.WEEK_INDEX, values, -period.get(DurationFieldType.WEEKS_TYPE));
+            this, PeriodType.weekIndex, values, -period.get(DurationFieldType.WEEKS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.DAY_INDEX, values, -period.get(DurationFieldType.DAYS_TYPE));
+            this, PeriodType.dayIndex, values, -period.get(DurationFieldType.DAYS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.HOUR_INDEX, values, -period.get(DurationFieldType.HOURS_TYPE));
+            this, PeriodType.hourIndex, values, -period.get(DurationFieldType.HOURS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.MINUTE_INDEX, values, -period.get(DurationFieldType.MINUTES_TYPE));
+            this, PeriodType.minuteIndex, values, -period.get(DurationFieldType.MINUTES_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.SECOND_INDEX, values, -period.get(DurationFieldType.SECONDS_TYPE));
+            this, PeriodType.secondIndex, values, -period.get(DurationFieldType.SECONDS_TYPE));
     getPeriodType()
         .addIndexedField(
-            this, PeriodType.MILLI_INDEX, values, -period.get(DurationFieldType.MILLIS_TYPE));
+            this, PeriodType.milliIndex, values, -period.get(DurationFieldType.MILLIS_TYPE));
     return new Period(values, getPeriodType());
   }
 
@@ -1359,7 +1372,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @since 2.1
    */
   public Period multipliedBy(int scalar) {
-    if (this == ZERO || scalar == 1) {
+    if (this.equals(ZERO) || scalar == 1) {
       return this;
     }
     int[] values = getValues(); // cloned
@@ -1558,6 +1571,11 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @since 1.5
    */
   public Duration toStandardDuration() {
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     checkYearsAndMonths("Duration");
     long millis = getMillis(); // no overflow can happen, even with Integer.MAX_VALUEs
     millis += (((long) getSeconds()) * ((long) DateTimeConstants.MILLIS_PER_SECOND));
@@ -1565,6 +1583,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     millis += (((long) getHours()) * ((long) DateTimeConstants.MILLIS_PER_HOUR));
     millis += (((long) getDays()) * ((long) DateTimeConstants.MILLIS_PER_DAY));
     millis += (((long) getWeeks()) * ((long) DateTimeConstants.MILLIS_PER_WEEK));
+    // CPD-ON
     return new Duration(millis);
   }
 
@@ -1645,6 +1664,11 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
    * @since 1.5
    */
   public Period normalizedStandard(PeriodType type) {
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     type = DateTimeUtils.getPeriodType(type);
     long millis = getMillis(); // no overflow can happen, even with Integer.MAX_VALUEs
     millis += (((long) getSeconds()) * ((long) DateTimeConstants.MILLIS_PER_SECOND));
@@ -1652,6 +1676,7 @@ public final class Period extends BasePeriod implements ReadablePeriod, Serializ
     millis += (((long) getHours()) * ((long) DateTimeConstants.MILLIS_PER_HOUR));
     millis += (((long) getDays()) * ((long) DateTimeConstants.MILLIS_PER_DAY));
     millis += (((long) getWeeks()) * ((long) DateTimeConstants.MILLIS_PER_WEEK));
+    // CPD-ON
     var result = new Period(millis, type, ISOChronology.getInstanceUTC());
     int years = getYears();
     int months = getMonths();

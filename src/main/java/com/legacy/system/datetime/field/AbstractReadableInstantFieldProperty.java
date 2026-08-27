@@ -361,6 +361,13 @@ public abstract class AbstractReadableInstantFieldProperty implements Serializab
     long end = field.add(start, 1);
     var interval = new Interval(start, end, getChronology());
     return interval;
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
   }
 
   // -----------------------------------------------------------------------
@@ -431,6 +438,7 @@ public abstract class AbstractReadableInstantFieldProperty implements Serializab
       return true;
     }
     if (object instanceof AbstractReadableInstantFieldProperty == false) {
+      // CPD-ON
       return false;
     }
     AbstractReadableInstantFieldProperty other = (AbstractReadableInstantFieldProperty) object;

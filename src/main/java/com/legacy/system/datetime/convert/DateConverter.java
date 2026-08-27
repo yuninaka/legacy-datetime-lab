@@ -31,7 +31,7 @@ final class DateConverter extends AbstractConverter implements InstantConverter,
   static final DateConverter INSTANCE = new DateConverter();
 
   /** Restricted constructor. */
-  protected DateConverter() {
+  DateConverter() {
     super();
   }
 
@@ -45,6 +45,8 @@ final class DateConverter extends AbstractConverter implements InstantConverter,
    * @throws NullPointerException if the object is null
    * @throws ClassCastException if the object is an invalid type
    */
+  // java.util.Date interop is this converter's entire purpose.
+  @SuppressWarnings("JavaUtilDate")
   @Override
   public long getInstantMillis(Object object, Chronology chrono) {
     Date date = (Date) object;
@@ -57,6 +59,7 @@ final class DateConverter extends AbstractConverter implements InstantConverter,
    *
    * @return Date.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return Date.class;
   }

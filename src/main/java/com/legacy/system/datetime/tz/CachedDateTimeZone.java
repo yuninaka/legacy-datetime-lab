@@ -27,7 +27,7 @@ import com.legacy.system.datetime.DateTimeZone;
  * @author Brian S O'Neill
  * @since 1.0
  */
-public class CachedDateTimeZone extends DateTimeZone {
+public final class CachedDateTimeZone extends DateTimeZone {
 
   private static final long serialVersionUID = 5472298452022250685L;
 
@@ -145,7 +145,7 @@ public class CachedDateTimeZone extends DateTimeZone {
     Info[] cache = iInfoCache;
     int index = period & cInfoCacheMask;
     Info info = cache[index];
-    if (info == null || (int) ((info.iPeriodStart >> 32)) != period) {
+    if (info == null || (int) (info.iPeriodStart >> 32) != period) {
       info = createInfo(millis);
       cache[index] = info;
     }

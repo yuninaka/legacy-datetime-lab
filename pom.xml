@@ -539,6 +539,19 @@
                 <include>**/Years.class</include>
                 <include>**/chrono/GregorianChronology.class</include>
                 <include>**/chrono/ISOChronology.class</include>
+                <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+                <include>**/base/AbstractPartial.class</include>
+                <include>**/base/AbstractPartial$*.class</include>
+                <include>**/Partial.class</include>
+                <include>**/Partial$*.class</include>
+                <include>**/TimeOfDay.class</include>
+                <include>**/TimeOfDay$*.class</include>
+                <include>**/MonthDay.class</include>
+                <include>**/MonthDay$*.class</include>
+                <include>**/YearMonth.class</include>
+                <include>**/YearMonth$*.class</include>
+                <include>**/YearMonthDay.class</include>
+                <include>**/YearMonthDay$*.class</include>
               </includes>
             </configuration>
           </execution>
@@ -717,6 +730,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -746,6 +772,79 @@
                NEW findings introduced after this guardrail was set up. -->
           <excludeFilterFile>${project.basedir}/spotbugs-exclude.xml</excludeFilterFile>
         </configuration>
+      </plugin>
+      <!-- Style guardrail -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <configuration>
+          <configLocation>${checkstyle.config.location}</configLocation>
+          <includeTestSourceDirectory>false</includeTestSourceDirectory>
+          <!-- Java code style only; not translation resource (.properties) formatting. -->
+          <includeResources>false</includeResources>
+          <includeTestResources>false</includeTestResources>
+          <violationSeverity>warning</violationSeverity>
+          <failOnViolation>true</failOnViolation>
+          <consoleOutput>true</consoleOutput>
+        </configuration>
+      </plugin>
+      <!-- Duplicate-code guardrail -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${maven-pmd-plugin.version}</version>
+        <configuration>
+          <minimumTokens>50</minimumTokens>
+          <includeTests>false</includeTests>
+          <failOnViolation>true</failOnViolation>
+          <printFailingErrors>true</printFailingErrors>
+        </configuration>
+      </plugin>
+      <!-- Strict compiler guardrail: -Xlint:all -Werror plus Google Error Prone -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <!-- Scoped to the default-compile (main sources) execution only: src/test/ is off
+             limits for this guardrail, so -Werror/Error Prone must not apply to testCompile,
+             or pre-existing test-code warnings would block the build with no way to fix them. -->
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <configuration>
+              <compilerArgs>
+                <arg>-Xlint:all</arg>
+                <arg>-Xmaxwarns</arg>
+                <arg>100000</arg>
+                <arg>-Werror</arg>
+                <arg>-XDcompilePolicy=simple</arg>
+                <arg>--should-stop=ifError=FLOW</arg>
+                <arg>-Xplugin:ErrorProne</arg>
+                <!-- Error Prone needs access to javac internals; requires maven.compiler.fork=true. -->
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+                <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+              </compilerArgs>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>com.google.errorprone</groupId>
+                  <artifactId>error_prone_core</artifactId>
+                  <version>2.24.1</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <!-- Manage plugin versions -->
@@ -952,6 +1051,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1068,6 +1180,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1255,6 +1380,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1337,6 +1475,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1362,7 +1513,7 @@
     <!-- Plugin version numbers -->
     <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
     <maven-changes-plugin.version>2.12.1</maven-changes-plugin.version>
-    <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+    <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
     <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
     <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>

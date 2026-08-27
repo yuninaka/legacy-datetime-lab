@@ -144,6 +144,7 @@ public interface ReadableInstant extends Comparable<ReadableInstant> {
    * @return true if millisecond and chronology are equal, false if not or the instant is null or of
    *     an incorrect type
    */
+  @Override
   boolean equals(Object readableInstant);
 
   /**
@@ -158,6 +159,7 @@ public interface ReadableInstant extends Comparable<ReadableInstant> {
    *
    * @return a hash code as defined above
    */
+  @Override
   int hashCode();
 
   // -----------------------------------------------------------------------
@@ -169,5 +171,6 @@ public interface ReadableInstant extends Comparable<ReadableInstant> {
    *
    * @return the value as an ISO8601 string
    */
+  @Override
   String toString();
 }

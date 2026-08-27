@@ -97,6 +97,7 @@ class ReadablePartialConverter extends AbstractConverter implements PartialConve
    *
    * @return ReadableInstant.class
    */
+  @Override
   public Class<?> getSupportedType() {
     return ReadablePartial.class;
   }
