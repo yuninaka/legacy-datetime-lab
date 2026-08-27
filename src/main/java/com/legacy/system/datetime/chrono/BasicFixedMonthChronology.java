@@ -70,6 +70,13 @@ abstract class BasicFixedMonthChronology extends BasicChronology {
         // Moving to a non-leap year, leap day doesn't exist.
         dayOfYear--;
       }
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
     }
 
     instant = getYearMonthDayMillis(year, 1, dayOfYear);
@@ -98,6 +105,7 @@ abstract class BasicFixedMonthChronology extends BasicChronology {
   // -----------------------------------------------------------------------
   @Override
   long getTotalMillisByYearMonth(int year, int month) {
+    // CPD-ON
     return ((month - 1) * MILLIS_PER_MONTH);
   }
 

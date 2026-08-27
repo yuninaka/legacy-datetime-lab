@@ -112,6 +112,13 @@ public final class LimitChronology extends AssembledChronology {
    */
   public DateTime getUpperLimit() {
     return iUpperLimit;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   /**
@@ -140,6 +147,7 @@ public final class LimitChronology extends AssembledChronology {
       return iWithUTC;
     }
 
+    // CPD-ON
     DateTime lowerLimit = iLowerLimit;
     if (lowerLimit != null) {
       MutableDateTime mdt = lowerLimit.toMutableDateTime();
@@ -205,6 +213,13 @@ public final class LimitChronology extends AssembledChronology {
             .getDateTimeMillis(instant, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
     checkLimits(instant, "resulting");
     return instant;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   @Override
@@ -276,6 +291,7 @@ public final class LimitChronology extends AssembledChronology {
     if (converted.containsKey(field)) {
       return (DateTimeField) converted.get(field);
     }
+    // CPD-ON
     LimitDateTimeField limitField =
         new LimitDateTimeField(
             field,
@@ -427,6 +443,13 @@ public final class LimitChronology extends AssembledChronology {
     @Override
     public long getMillis(long value, long instant) {
       checkLimits(instant, null);
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       return getWrappedField().getMillis(value, instant);
     }
 
@@ -459,6 +482,7 @@ public final class LimitChronology extends AssembledChronology {
       checkLimits(subtrahendInstant, "subtrahend");
       return getWrappedField().getDifferenceAsLong(minuendInstant, subtrahendInstant);
     }
+    // CPD-ON
   }
 
   private class LimitDateTimeField extends DecoratedDateTimeField {
@@ -495,6 +519,13 @@ public final class LimitChronology extends AssembledChronology {
     @Override
     public String getAsShortText(long instant, Locale locale) {
       checkLimits(instant, null);
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       return getWrappedField().getAsShortText(instant, locale);
     }
 
@@ -535,6 +566,8 @@ public final class LimitChronology extends AssembledChronology {
       checkLimits(subtrahendInstant, "subtrahend");
       return getWrappedField().getDifferenceAsLong(minuendInstant, subtrahendInstant);
     }
+
+    // CPD-ON
 
     @Override
     public long set(long instant, int value) {

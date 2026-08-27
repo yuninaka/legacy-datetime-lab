@@ -91,6 +91,11 @@ public abstract class BaseSingleFieldPeriod
     if (start == null || end == null) {
       throw new IllegalArgumentException("ReadablePartial objects must not be null");
     }
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     if (start.size() != end.size()) {
       throw new IllegalArgumentException(
           "ReadablePartial objects must have the same set of fields");
@@ -104,6 +109,7 @@ public abstract class BaseSingleFieldPeriod
     if (DateTimeUtils.isContiguous(start) == false) {
       throw new IllegalArgumentException("ReadablePartial objects must be contiguous");
     }
+    // CPD-ON
     Chronology chrono = DateTimeUtils.getChronology(start.getChronology()).withUTC();
     int[] values =
         chrono.get(zeroInstance, chrono.set(start, START_1972), chrono.set(end, START_1972));

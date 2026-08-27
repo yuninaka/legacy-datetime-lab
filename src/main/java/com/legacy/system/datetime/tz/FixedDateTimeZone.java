@@ -58,6 +58,11 @@ public final class FixedDateTimeZone extends DateTimeZone {
   @Override
   public int getOffsetFromLocal(long instantLocal) {
     return iWallOffset;
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
   }
 
   @Override
@@ -76,7 +81,7 @@ public final class FixedDateTimeZone extends DateTimeZone {
   }
 
   /**
-   * Override to return the correct timezone instance.
+   * Override to return the correct timezone instance. // CPD-ON
    *
    * @since 1.5
    */

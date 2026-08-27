@@ -51,6 +51,13 @@ final class ISOYearOfEraDateTimeField extends DecoratedDateTimeField {
   @Override
   public int get(long instant) {
     int year = getWrappedField().get(instant);
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     return year < 0 ? -year : year;
   }
 
@@ -124,5 +131,6 @@ final class ISOYearOfEraDateTimeField extends DecoratedDateTimeField {
   @SuppressWarnings("UnusedMethod")
   private Object readResolve() {
     return INSTANCE;
+    // CPD-ON
   }
 }

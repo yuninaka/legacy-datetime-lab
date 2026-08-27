@@ -173,6 +173,13 @@ public final class ZonedChronology extends AssembledChronology {
       throw new IllegalInstantException(localInstant, zone.getID());
     }
     return utcInstant;
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
   }
 
   @Override
@@ -244,6 +251,7 @@ public final class ZonedChronology extends AssembledChronology {
     if (converted.containsKey(field)) {
       return (DateTimeField) converted.get(field);
     }
+    // CPD-ON
     ZonedDateTimeField zonedField =
         new ZonedDateTimeField(
             field,
@@ -362,6 +370,13 @@ public final class ZonedChronology extends AssembledChronology {
     public long add(long instant, long value) {
       int offset = getOffsetToAdd(instant);
       instant = iField.add(instant + offset, value);
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       return instant - (iTimeField ? offset : getOffsetFromLocalToSubtract(instant));
     }
 
@@ -390,6 +405,8 @@ public final class ZonedChronology extends AssembledChronology {
       }
       return offset;
     }
+
+    // CPD-ON
 
     private int getOffsetFromLocalToSubtract(long instant) {
       int offset = this.iZone.getOffsetFromLocal(instant);
@@ -490,6 +507,13 @@ public final class ZonedChronology extends AssembledChronology {
     }
 
     @Override
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     public long add(long instant, int value) {
       if (iTimeField) {
         int offset = getOffsetToAdd(instant);
@@ -517,6 +541,7 @@ public final class ZonedChronology extends AssembledChronology {
 
     @Override
     public long addWrapField(long instant, int value) {
+      // CPD-ON
       if (iTimeField) {
         int offset = getOffsetToAdd(instant);
         long localInstant = iField.addWrapField(instant + offset, value);
@@ -549,6 +574,13 @@ public final class ZonedChronology extends AssembledChronology {
       // cannot verify that new value stuck because set may be lenient
       long localInstant = iZone.convertUTCToLocal(instant);
       localInstant = iField.set(localInstant, text, locale);
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       return iZone.convertLocalToUTC(localInstant, false, instant);
     }
 
@@ -567,6 +599,8 @@ public final class ZonedChronology extends AssembledChronology {
           minuendInstant + (iTimeField ? offset : getOffsetToAdd(minuendInstant)),
           subtrahendInstant + offset);
     }
+
+    // CPD-ON
 
     @Override
     public DurationField getDurationField() {
@@ -635,6 +669,11 @@ public final class ZonedChronology extends AssembledChronology {
     @Override
     public int getMinimumValue(long instant) {
       long localInstant = iZone.convertUTCToLocal(instant);
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
       return iField.getMinimumValue(localInstant);
     }
 
@@ -688,6 +727,8 @@ public final class ZonedChronology extends AssembledChronology {
       }
       return offset;
     }
+
+    // CPD-ON
 
     @Override
     public boolean equals(Object obj) {

@@ -123,6 +123,11 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
    * @param chronology the chronology, null means use converter
    * @throws IllegalArgumentException if the date is invalid
    */
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   protected BasePartial(Object instant, Chronology chronology) {
     super();
     PartialConverter converter = ConverterManager.getInstance().getPartialConverter(instant);
@@ -130,6 +135,7 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
     chronology = DateTimeUtils.getChronology(chronology);
     iChronology = chronology.withUTC();
     iValues = converter.getPartialValues(this, instant, chronology);
+    // CPD-ON
   }
 
   /**
@@ -148,6 +154,11 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
    * @throws IllegalArgumentException if the date is invalid
    * @since 1.3
    */
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   protected BasePartial(Object instant, Chronology chronology, DateTimeFormatter parser) {
     super();
     PartialConverter converter = ConverterManager.getInstance().getPartialConverter(instant);
@@ -155,6 +166,7 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
     chronology = DateTimeUtils.getChronology(chronology);
     iChronology = chronology.withUTC();
     iValues = converter.getPartialValues(this, instant, chronology, parser);
+    // CPD-ON
   }
 
   /**

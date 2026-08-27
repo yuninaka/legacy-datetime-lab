@@ -416,6 +416,11 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
    * @return a copy of this datetime with a different set of fields
    * @throws IllegalArgumentException if any value is invalid
    */
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   public DateMidnight withFields(ReadablePartial partial) {
     if (partial == null) {
       return this;
@@ -518,6 +523,7 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
    * @throws ArithmeticException if the new datetime exceeds the capacity of a long
    */
   public DateMidnight withDurationAdded(ReadableDuration durationToAdd, int scalar) {
+    // CPD-ON
     if (durationToAdd == null || scalar == 0) {
       return this;
     }

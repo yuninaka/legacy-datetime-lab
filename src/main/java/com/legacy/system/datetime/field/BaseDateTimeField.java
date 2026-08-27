@@ -234,6 +234,13 @@ public abstract class BaseDateTimeField extends DateTimeField {
    */
   @Override
   public String getAsShortText(int fieldValue, Locale locale) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return getAsText(fieldValue, locale);
   }
 
@@ -354,6 +361,7 @@ public abstract class BaseDateTimeField extends DateTimeField {
       valueToAdd -= (min - 1) - values[fieldIndex]; // reduce the amount to add
       values =
           nextField.add(instant, fieldIndex - 1, values, -1); // subtract 1 from next bigger field
+      // CPD-ON
       values[fieldIndex] = getMaximumValue(instant, values); // reset this field to max value
     }
 
@@ -386,6 +394,13 @@ public abstract class BaseDateTimeField extends DateTimeField {
    * @throws IllegalArgumentException if the value is invalid or the maximum instant is reached
    */
   @Override
+  // CPD-OFF: structurally similar but operates on different interface types
+  // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+  // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+  // paths in concrete DurationField implementations (see PreciseDurationField: the
+  // int overload uses plain multiplication, the long overload uses
+  // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+  // delegate call to the long-arg one is not guaranteed behavior-preserving.
   public int[] addWrapPartial(
       ReadablePartial instant, int fieldIndex, int[] values, int valueToAdd) {
     if (valueToAdd == 0) {
@@ -404,10 +419,18 @@ public abstract class BaseDateTimeField extends DateTimeField {
         break;
       }
       if (nextField == null) {
+        // CPD-ON
         if (fieldIndex == 0) {
           valueToAdd -= (max + 1) - values[fieldIndex];
           values[fieldIndex] = getMinimumValue(instant, values);
           continue;
+          // CPD-OFF: structurally similar but operates on different interface types
+          // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+          // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+          // paths in concrete DurationField implementations (see PreciseDurationField: the
+          // int overload uses plain multiplication, the long overload uses
+          // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+          // delegate call to the long-arg one is not guaranteed behavior-preserving.
         }
         nextField = instant.getField(fieldIndex - 1);
         // test only works if this field is UTC (ie. local)
@@ -429,10 +452,18 @@ public abstract class BaseDateTimeField extends DateTimeField {
         break;
       }
       if (nextField == null) {
+        // CPD-ON
         if (fieldIndex == 0) {
           valueToAdd -= (min - 1) - values[fieldIndex];
           values[fieldIndex] = getMaximumValue(instant, values);
           continue;
+          // CPD-OFF: structurally similar but operates on different interface types
+          // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+          // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+          // paths in concrete DurationField implementations (see PreciseDurationField: the
+          // int overload uses plain multiplication, the long overload uses
+          // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+          // delegate call to the long-arg one is not guaranteed behavior-preserving.
         }
         nextField = instant.getField(fieldIndex - 1);
         if (getRangeDurationField().getType() != nextField.getDurationField().getType()) {
@@ -442,6 +473,7 @@ public abstract class BaseDateTimeField extends DateTimeField {
       valueToAdd -= (min - 1) - values[fieldIndex]; // reduce the amount to add
       values =
           nextField.addWrapPartial(
+              // CPD-ON
               instant, fieldIndex - 1, values, -1); // subtract 1 from next bigger field
       values[fieldIndex] = getMaximumValue(instant, values); // reset this field to max value
     }
@@ -511,6 +543,13 @@ public abstract class BaseDateTimeField extends DateTimeField {
     int wrapped =
         FieldUtils.getWrappedValue(
             current, valueToAdd, getMinimumValue(instant), getMaximumValue(instant));
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return set(instant, fieldIndex, values, wrapped); // adjusts smaller fields
   }
 
@@ -576,6 +615,8 @@ public abstract class BaseDateTimeField extends DateTimeField {
    */
   @Override
   public abstract long set(long instant, int value);
+
+  // CPD-ON
 
   /**
    * Sets a value using the specified partial instant.

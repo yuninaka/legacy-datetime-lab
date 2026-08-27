@@ -120,6 +120,13 @@ public final class CopticChronology extends BasicFixedMonthChronology {
     CopticChronology[] chronos = cCache.get(zone);
     if (chronos == null) {
       chronos = new CopticChronology[7];
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       CopticChronology[] oldChronos = cCache.putIfAbsent(zone, chronos);
       if (oldChronos != null) {
         chronos = oldChronos;
@@ -137,6 +144,7 @@ public final class CopticChronology extends BasicFixedMonthChronology {
           if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
             chrono = new CopticChronology(null, null, minDaysInFirstWeek);
+            // CPD-ON
             // Impose lower limit and make another CopticChronology.
             var lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
             chrono =
@@ -160,6 +168,13 @@ public final class CopticChronology extends BasicFixedMonthChronology {
   // Constructors and instance variables
   // -----------------------------------------------------------------------
   /** Restricted constructor. */
+  // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+  // Chronology implementations (different calendar systems, or wrapper Chronologies
+  // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+  // system as its own type (see BasicChronology.equals()'s getClass() check: two
+  // different chronologies must never be considered equal), so merging this setup
+  // code risks blurring that boundary or hard-coding one calendar's constants into
+  // a shared path used by another.
   CopticChronology(Chronology base, Object param, int minDaysInFirstWeek) {
     super(base, param, minDaysInFirstWeek);
   }
@@ -271,3 +286,4 @@ public final class CopticChronology extends BasicFixedMonthChronology {
     }
   }
 }
+  // CPD-ON

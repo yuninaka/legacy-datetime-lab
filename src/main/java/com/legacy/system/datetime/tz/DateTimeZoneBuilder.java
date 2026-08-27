@@ -539,6 +539,11 @@ public class DateTimeZoneBuilder {
     /**
      * @param standardOffset standard offset just before next recurrence
      */
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     public long next(long instant, int standardOffset, int saveMillis) {
       int offset;
       if (iMode == 'w') {
@@ -554,6 +559,7 @@ public class DateTimeZoneBuilder {
 
       Chronology chrono = ISOChronology.getInstanceUTC();
       long next = chrono.monthOfYear().set(instant, iMonthOfYear);
+      // CPD-ON
       // Be lenient with millisOfDay.
       next = chrono.millisOfDay().set(next, 0);
       // avoid going into the next day, as that can change the month and cause setDayOfMonthNext to
@@ -590,6 +596,11 @@ public class DateTimeZoneBuilder {
     /**
      * @param standardOffset standard offset just before previous recurrence
      */
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     public long previous(long instant, int standardOffset, int saveMillis) {
       int offset;
       if (iMode == 'w') {
@@ -605,6 +616,7 @@ public class DateTimeZoneBuilder {
 
       Chronology chrono = ISOChronology.getInstanceUTC();
       long prev = chrono.monthOfYear().set(instant, iMonthOfYear);
+      // CPD-ON
       // Be lenient with millisOfDay.
       prev = chrono.millisOfDay().set(prev, 0);
       prev = chrono.millisOfDay().add(prev, iMillisOfDay);

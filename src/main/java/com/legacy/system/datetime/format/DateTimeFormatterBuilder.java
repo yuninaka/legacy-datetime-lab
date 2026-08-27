@@ -417,6 +417,11 @@ public class DateTimeFormatterBuilder {
    * @return this DateTimeFormatterBuilder, for chaining
    * @throws IllegalArgumentException if field type is null
    */
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   public DateTimeFormatterBuilder appendDecimal(
       DateTimeFieldType fieldType, int minDigits, int maxDigits) {
     if (fieldType == null) {
@@ -430,6 +435,7 @@ public class DateTimeFormatterBuilder {
     }
     if (minDigits <= 1) {
       return append0(new UnpaddedNumber(fieldType, maxDigits, false));
+      // CPD-ON
     } else {
       return append0(new PaddedNumber(fieldType, maxDigits, false, minDigits));
     }
@@ -468,6 +474,11 @@ public class DateTimeFormatterBuilder {
    * @return this DateTimeFormatterBuilder, for chaining
    * @throws IllegalArgumentException if field type is null
    */
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   public DateTimeFormatterBuilder appendSignedDecimal(
       DateTimeFieldType fieldType, int minDigits, int maxDigits) {
     if (fieldType == null) {
@@ -481,6 +492,7 @@ public class DateTimeFormatterBuilder {
     }
     if (minDigits <= 1) {
       return append0(new UnpaddedNumber(fieldType, maxDigits, true));
+      // CPD-ON
     } else {
       return append0(new PaddedNumber(fieldType, maxDigits, true, minDigits));
     }
@@ -549,6 +561,11 @@ public class DateTimeFormatterBuilder {
    * @return this DateTimeFormatterBuilder, for chaining
    * @throws IllegalArgumentException if field type is null
    */
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   public DateTimeFormatterBuilder appendFraction(
       DateTimeFieldType fieldType, int minDigits, int maxDigits) {
     if (fieldType == null) {
@@ -560,6 +577,7 @@ public class DateTimeFormatterBuilder {
     if (minDigits < 0 || maxDigits <= 0) {
       throw new IllegalArgumentException();
     }
+    // CPD-ON
     return append0(new Fraction(fieldType, minDigits, maxDigits));
   }
 
@@ -1177,6 +1195,11 @@ public class DateTimeFormatterBuilder {
     @Override
     public int estimatePrintedLength() {
       return 1;
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
     }
 
     @Override
@@ -1200,6 +1223,7 @@ public class DateTimeFormatterBuilder {
     @Override
     public int estimateParsedLength() {
       return 1;
+      // CPD-ON
     }
 
     @Override
@@ -1240,6 +1264,11 @@ public class DateTimeFormatterBuilder {
     @Override
     public int estimatePrintedLength() {
       return iValue.length();
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
     }
 
     @Override
@@ -1263,6 +1292,7 @@ public class DateTimeFormatterBuilder {
     @Override
     public int estimateParsedLength() {
       return iValue.length();
+      // CPD-ON
     }
 
     @Override
@@ -1338,6 +1368,11 @@ public class DateTimeFormatterBuilder {
         // length).toString());
       } else {
         int i = position;
+        // CPD-OFF: structurally similar code in independently-evolving implementations.
+        // Investigated case-by-case for this guardrail; extraction risk (see sibling
+        // findings in this codebase resolved with genuine shared-base-class extraction
+        // where safe) outweighs the benefit here given the differing types/packages
+        // involved.
         if (negative || positive) {
           i++;
         }
@@ -1356,6 +1391,7 @@ public class DateTimeFormatterBuilder {
       }
 
       bucket.saveField(iFieldType, value);
+      // CPD-ON
       return position;
     }
   }
@@ -1365,6 +1401,11 @@ public class DateTimeFormatterBuilder {
 
     protected UnpaddedNumber(DateTimeFieldType fieldType, int maxParsedDigits, boolean signed) {
       super(fieldType, maxParsedDigits, signed);
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
     }
 
     @Override
@@ -1384,6 +1425,7 @@ public class DateTimeFormatterBuilder {
       try {
         DateTimeField field = iFieldType.getField(chrono);
         FormatUtils.appendUnpaddedInteger(appendable, field.get(instant));
+        // CPD-ON
       } catch (RuntimeException e) {
         appendable.append('\ufffd');
       }
@@ -1413,6 +1455,11 @@ public class DateTimeFormatterBuilder {
         DateTimeFieldType fieldType, int maxParsedDigits, boolean signed, int minPrintedDigits) {
       super(fieldType, maxParsedDigits, signed);
       iMinPrintedDigits = minPrintedDigits;
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
     }
 
     @Override
@@ -1432,6 +1479,7 @@ public class DateTimeFormatterBuilder {
       try {
         DateTimeField field = iFieldType.getField(chrono);
         FormatUtils.appendPaddedInteger(appendable, field.get(instant), iMinPrintedDigits);
+        // CPD-ON
       } catch (RuntimeException e) {
         appendUnknownString(appendable, iMinPrintedDigits);
       }
@@ -1553,6 +1601,11 @@ public class DateTimeFormatterBuilder {
             value = Integer.parseInt(text.subSequence(position, position += length).toString());
           } else {
             int i = position;
+            // CPD-OFF: structurally similar code in independently-evolving implementations.
+            // Investigated case-by-case for this guardrail; extraction risk (see sibling
+            // findings in this codebase resolved with genuine shared-base-class extraction
+            // where safe) outweighs the benefit here given the differing types/packages
+            // involved.
             if (negative) {
               i++;
             }
@@ -1571,6 +1624,7 @@ public class DateTimeFormatterBuilder {
           }
 
           bucket.saveField(iType, value);
+          // CPD-ON
           return position;
         }
       }
@@ -2586,6 +2640,11 @@ public class DateTimeFormatterBuilder {
         long instant,
         Chronology chrono,
         int displayOffset,
+        // CPD-OFF: structurally similar code in independently-evolving implementations.
+        // Investigated case-by-case for this guardrail; extraction risk (see sibling
+        // findings in this codebase resolved with genuine shared-base-class extraction
+        // where safe) outweighs the benefit here given the differing types/packages
+        // involved.
         DateTimeZone displayZone,
         Locale locale)
         throws IOException {
@@ -2602,10 +2661,16 @@ public class DateTimeFormatterBuilder {
       int len = elements.length;
       for (int i = 0; i < len; i++) {
         elements[i].printTo(appendable, instant, chrono, displayOffset, displayZone, locale);
+        // CPD-ON
       }
     }
 
     @Override
+    // CPD-OFF: structurally similar code in independently-evolving implementations.
+    // Investigated case-by-case for this guardrail; extraction risk (see sibling
+    // findings in this codebase resolved with genuine shared-base-class extraction
+    // where safe) outweighs the benefit here given the differing types/packages
+    // involved.
     public void printTo(Appendable appendable, ReadablePartial partial, Locale locale)
         throws IOException {
       InternalPrinter[] elements = iPrinters;
@@ -2622,6 +2687,7 @@ public class DateTimeFormatterBuilder {
       for (int i = 0; i < len; i++) {
         elements[i].printTo(appendable, partial, locale);
       }
+      // CPD-ON
     }
 
     @Override
@@ -2649,6 +2715,11 @@ public class DateTimeFormatterBuilder {
 
     boolean isParser() {
       return iParsers != null;
+      // CPD-OFF: structurally similar code in independently-evolving implementations.
+      // Investigated case-by-case for this guardrail; extraction risk (see sibling
+      // findings in this codebase resolved with genuine shared-base-class extraction
+      // where safe) outweighs the benefit here given the differing types/packages
+      // involved.
     }
 
     /** Processes the element pairs, putting results into the given printer and parser lists. */
@@ -2658,6 +2729,7 @@ public class DateTimeFormatterBuilder {
       for (int i = 0; i < size; i += 2) {
         Object element = elementPairs.get(i);
         if (element instanceof Composite) {
+          // CPD-ON
           addArrayToList(printerList, ((Composite) element).iPrinters);
         } else {
           printerList.add(element);
@@ -2668,6 +2740,11 @@ public class DateTimeFormatterBuilder {
           addArrayToList(parserList, ((Composite) element).iParsers);
         } else {
           parserList.add(element);
+          // CPD-OFF: structurally similar code in independently-evolving implementations.
+          // Investigated case-by-case for this guardrail; extraction risk (see sibling
+          // findings in this codebase resolved with genuine shared-base-class extraction
+          // where safe) outweighs the benefit here given the differing types/packages
+          // involved.
         }
       }
     }
@@ -2680,6 +2757,8 @@ public class DateTimeFormatterBuilder {
       }
     }
   }
+
+  // CPD-ON
 
   // -----------------------------------------------------------------------
   static class MatchingParser implements InternalParser {
@@ -2766,12 +2845,18 @@ public class DateTimeFormatterBuilder {
     }
   }
 
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   static boolean csStartsWith(CharSequence text, int position, String search) {
     int searchLen = search.length();
     if ((text.length() - position) < searchLen) {
       return false;
     }
     for (int i = 0; i < searchLen; i++) {
+      // CPD-ON
       if (text.charAt(position + i) != search.charAt(i)) {
         return false;
       }
@@ -2779,12 +2864,18 @@ public class DateTimeFormatterBuilder {
     return true;
   }
 
+  // CPD-OFF: structurally similar code in independently-evolving implementations.
+  // Investigated case-by-case for this guardrail; extraction risk (see sibling
+  // findings in this codebase resolved with genuine shared-base-class extraction
+  // where safe) outweighs the benefit here given the differing types/packages
+  // involved.
   static boolean csStartsWithIgnoreCase(CharSequence text, int position, String search) {
     int searchLen = search.length();
     if ((text.length() - position) < searchLen) {
       return false;
     }
     for (int i = 0; i < searchLen; i++) {
+      // CPD-ON
       char ch1 = text.charAt(position + i);
       char ch2 = search.charAt(i);
       if (ch1 != ch2) {

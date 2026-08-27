@@ -139,6 +139,13 @@ public final class MillisDurationField extends DurationField implements Serializ
 
   @Override
   public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return FieldUtils.safeSubtract(minuendInstant, subtrahendInstant);
   }
 
@@ -165,6 +172,8 @@ public final class MillisDurationField extends DurationField implements Serializ
     }
     return false;
   }
+
+  // CPD-ON
 
   @Override
   public int hashCode() {

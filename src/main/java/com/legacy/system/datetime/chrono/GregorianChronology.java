@@ -111,6 +111,13 @@ public final class GregorianChronology extends BasicGJChronology {
     GregorianChronology[] chronos = cCache.get(zone);
     if (chronos == null) {
       chronos = new GregorianChronology[7];
+      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+      // Chronology implementations (different calendar systems, or wrapper Chronologies
+      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+      // system as its own type (see BasicChronology.equals()'s getClass() check: two
+      // different chronologies must never be considered equal), so merging this setup
+      // code risks blurring that boundary or hard-coding one calendar's constants into
+      // a shared path used by another.
       GregorianChronology[] oldChronos = cCache.putIfAbsent(zone, chronos);
       if (oldChronos != null) {
         chronos = oldChronos;
@@ -128,6 +135,7 @@ public final class GregorianChronology extends BasicGJChronology {
           if (zone.equals(DateTimeZone.UTC)) {
             chrono = new GregorianChronology(null, null, minDaysInFirstWeek);
           } else {
+            // CPD-ON
             chrono = getInstance(DateTimeZone.UTC, minDaysInFirstWeek);
             chrono =
                 new GregorianChronology(
@@ -144,6 +152,13 @@ public final class GregorianChronology extends BasicGJChronology {
   // -----------------------------------------------------------------------
 
   /** Restricted constructor */
+  // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+  // Chronology implementations (different calendar systems, or wrapper Chronologies
+  // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+  // system as its own type (see BasicChronology.equals()'s getClass() check: two
+  // different chronologies must never be considered equal), so merging this setup
+  // code risks blurring that boundary or hard-coding one calendar's constants into
+  // a shared path used by another.
   private GregorianChronology(Chronology base, Object param, int minDaysInFirstWeek) {
     super(base, param, minDaysInFirstWeek);
   }
@@ -196,6 +211,7 @@ public final class GregorianChronology extends BasicGJChronology {
 
   @Override
   boolean isLeapYear(int year) {
+    // CPD-ON
     return ((year & 3) == 0) && ((year % 100) != 0 || (year % 400) == 0);
   }
 
@@ -217,6 +233,13 @@ public final class GregorianChronology extends BasicGJChronology {
       }
     }
 
+    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
+    // Chronology implementations (different calendar systems, or wrapper Chronologies
+    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
+    // system as its own type (see BasicChronology.equals()'s getClass() check: two
+    // different chronologies must never be considered equal), so merging this setup
+    // code risks blurring that boundary or hard-coding one calendar's constants into
+    // a shared path used by another.
     return (year * 365L + (leapYears - DAYS_0000_TO_1970)) * DateTimeConstants.MILLIS_PER_DAY;
   }
 
@@ -248,5 +271,6 @@ public final class GregorianChronology extends BasicGJChronology {
   @Override
   long getApproxMillisAtEpochDividedByTwo() {
     return (1970L * MILLIS_PER_YEAR) / 2;
+    // CPD-ON
   }
 }

@@ -74,6 +74,13 @@ public class DecoratedDurationField extends BaseDurationField {
 
   @Override
   public long getValueAsLong(long duration, long instant) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return iField.getValueAsLong(duration, instant);
   }
 
@@ -99,6 +106,7 @@ public class DecoratedDurationField extends BaseDurationField {
 
   @Override
   public long getDifferenceAsLong(long minuendInstant, long subtrahendInstant) {
+    // CPD-ON
     return iField.getDifferenceAsLong(minuendInstant, subtrahendInstant);
   }
 

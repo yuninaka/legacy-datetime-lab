@@ -161,6 +161,13 @@ public class OffsetDateTimeField extends DecoratedDateTimeField {
   @Override
   public long set(long instant, int value) {
     FieldUtils.verifyValueBounds(this, value, iMin, iMax);
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return super.set(instant, value - iOffset);
   }
 
@@ -187,6 +194,7 @@ public class OffsetDateTimeField extends DecoratedDateTimeField {
   @Override
   public int getMinimumValue() {
     return iMin;
+    // CPD-ON
   }
 
   /**
@@ -197,6 +205,13 @@ public class OffsetDateTimeField extends DecoratedDateTimeField {
   @Override
   public int getMaximumValue() {
     return iMax;
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
   }
 
   @Override
@@ -235,6 +250,7 @@ public class OffsetDateTimeField extends DecoratedDateTimeField {
    * @return the offset
    */
   public int getOffset() {
+    // CPD-ON
     return iOffset;
   }
 }

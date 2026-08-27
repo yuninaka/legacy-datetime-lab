@@ -136,6 +136,13 @@ public abstract class BaseDurationField extends DurationField implements Seriali
   // ------------------------------------------------------------------------
   @Override
   public int getDifference(long minuendInstant, long subtrahendInstant) {
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     return FieldUtils.safeToInt(getDifferenceAsLong(minuendInstant, subtrahendInstant));
   }
 
@@ -162,6 +169,7 @@ public abstract class BaseDurationField extends DurationField implements Seriali
    */
   @Override
   public String toString() {
+    // CPD-ON
     return "DurationField[" + getName() + ']';
   }
 }

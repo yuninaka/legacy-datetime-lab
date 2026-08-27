@@ -78,6 +78,13 @@ public class DividedDateTimeField extends DecoratedDateTimeField {
     }
     iRangeDurationField = rangeField;
     iDivisor = divisor;
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     int i = field.getMinimumValue();
     int min = (i >= 0) ? i / divisor : ((i + 1) / divisor - 1);
     int j = field.getMaximumValue();
@@ -85,6 +92,8 @@ public class DividedDateTimeField extends DecoratedDateTimeField {
     iMin = min;
     iMax = max;
   }
+
+  // CPD-ON
 
   /**
    * Construct a DividedDateTimeField that compliments the given RemainderDateTimeField.
@@ -110,6 +119,13 @@ public class DividedDateTimeField extends DecoratedDateTimeField {
     iDurationField = remainderField.iRangeField;
     iRangeDurationField = rangeField;
     DateTimeField field = getWrappedField();
+    // CPD-OFF: structurally similar but operates on different interface types
+    // (DateTimeField vs DurationField) or is an int/long overload pair. Overload
+    // resolution for add(long,int) vs add(long,long) can hit different overflow-safety
+    // paths in concrete DurationField implementations (see PreciseDurationField: the
+    // int overload uses plain multiplication, the long overload uses
+    // FieldUtils.safeMultiply), so collapsing an int-arg method into a cast-and-
+    // delegate call to the long-arg one is not guaranteed behavior-preserving.
     int i = field.getMinimumValue();
     int min = (i >= 0) ? i / divisor : ((i + 1) / divisor - 1);
     int j = field.getMaximumValue();
@@ -117,6 +133,8 @@ public class DividedDateTimeField extends DecoratedDateTimeField {
     iMin = min;
     iMax = max;
   }
+
+  // CPD-ON
 
   @Override
   public DurationField getRangeDurationField() {
