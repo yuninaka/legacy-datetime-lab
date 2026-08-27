@@ -539,6 +539,19 @@
                 <include>**/Years.class</include>
                 <include>**/chrono/GregorianChronology.class</include>
                 <include>**/chrono/ISOChronology.class</include>
+                <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+                <include>**/base/AbstractPartial.class</include>
+                <include>**/base/AbstractPartial$*.class</include>
+                <include>**/Partial.class</include>
+                <include>**/Partial$*.class</include>
+                <include>**/TimeOfDay.class</include>
+                <include>**/TimeOfDay$*.class</include>
+                <include>**/MonthDay.class</include>
+                <include>**/MonthDay$*.class</include>
+                <include>**/YearMonth.class</include>
+                <include>**/YearMonth$*.class</include>
+                <include>**/YearMonthDay.class</include>
+                <include>**/YearMonthDay$*.class</include>
               </includes>
             </configuration>
           </execution>
@@ -717,6 +730,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1025,6 +1051,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1141,6 +1180,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1328,6 +1380,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
@@ -1410,6 +1475,19 @@
             <param>com.legacy.system.datetime.Years</param>
             <param>com.legacy.system.datetime.chrono.GregorianChronology</param>
             <param>com.legacy.system.datetime.chrono.ISOChronology</param>
+            <!-- withFieldXxx extraction coverage (PMD CPD follow-up) -->
+            <param>com.legacy.system.datetime.base.AbstractPartial</param>
+            <param>com.legacy.system.datetime.base.AbstractPartial$*</param>
+            <param>com.legacy.system.datetime.Partial</param>
+            <param>com.legacy.system.datetime.Partial$*</param>
+            <param>com.legacy.system.datetime.TimeOfDay</param>
+            <param>com.legacy.system.datetime.TimeOfDay$*</param>
+            <param>com.legacy.system.datetime.MonthDay</param>
+            <param>com.legacy.system.datetime.MonthDay$*</param>
+            <param>com.legacy.system.datetime.YearMonth</param>
+            <param>com.legacy.system.datetime.YearMonth$*</param>
+            <param>com.legacy.system.datetime.YearMonthDay</param>
+            <param>com.legacy.system.datetime.YearMonthDay$*</param>
           </targetClasses>
           <targetTests>
             <param>com.legacy.system.datetime.*Test</param>
