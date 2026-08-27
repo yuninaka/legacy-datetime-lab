@@ -361,7 +361,7 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
   }
 
   /**
-   * Always throws UnsupportedOperationException // CPD-ON
+   * Always throws UnsupportedOperationException
    *
    * @throws UnsupportedOperationException as this is not supported
    */
@@ -370,6 +370,8 @@ public final class UnsupportedDateTimeField extends DateTimeField implements Ser
       ReadablePartial instant, int fieldIndex, int[] values, String text, Locale locale) {
     throw unsupported();
   }
+
+  // CPD-ON
 
   /**
    * Even though this DateTimeField is unsupported, the duration field might be supported.

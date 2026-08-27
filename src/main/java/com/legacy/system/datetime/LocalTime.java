@@ -451,11 +451,13 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    *
    * @param hourOfDay the hour of the day, from 0 to 23
    * @param minuteOfHour the minute of the hour, from 0 to 59
-   * @param secondOfMinute the second of the minute, from 0 to 59 // CPD-ON
+   * @param secondOfMinute the second of the minute, from 0 to 59
    */
   public LocalTime(int hourOfDay, int minuteOfHour, int secondOfMinute) {
     this(hourOfDay, minuteOfHour, secondOfMinute, 0, ISOChronology.getInstanceUTC());
   }
+
+  // CPD-ON
 
   /**
    * Constructs an instance set to the specified time using <code>ISOChronology</code>.

@@ -442,7 +442,7 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
    *
    * <p>If the chronology is null, <code>ISOChronology</code> is used.
    *
-   * @param year the year, valid values defined by the chronology // CPD-ON
+   * @param year the year, valid values defined by the chronology
    * @param monthOfYear the month of the year, valid values defined by the chronology
    * @param dayOfMonth the day of the month, valid values defined by the chronology
    * @param chronology the chronology, null means ISOChronology in default zone
@@ -454,6 +454,8 @@ public final class LocalDate extends BaseLocal implements ReadablePartial, Seria
     iChronology = chronology;
     iLocalMillis = instant;
   }
+
+  // CPD-ON
 
   /**
    * Handle broken serialization from other tools.

@@ -471,21 +471,9 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @return a copy of this instance with the field set, never null
    * @throws IllegalArgumentException if the value is null or invalid
    */
-  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-  // the common base class without a larger, riskier generic/factory-method redesign
-  // that is out of scope for a duplicate-code cleanup.
   public YearMonth withField(DateTimeFieldType fieldType, int value) {
-    int index = indexOfSupported(fieldType);
-    if (value == getValue(index)) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).set(this, index, newValues, value);
-    return new YearMonth(this, newValues);
-    // CPD-ON
+    int[] newValues = withFieldValues(fieldType, value);
+    return newValues == null ? this : new YearMonth(this, newValues);
   }
 
   /**
@@ -507,21 +495,9 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @throws IllegalArgumentException if the value is null or invalid
    * @throws ArithmeticException if the new date-time exceeds the capacity
    */
-  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-  // the common base class without a larger, riskier generic/factory-method redesign
-  // that is out of scope for a duplicate-code cleanup.
   public YearMonth withFieldAdded(DurationFieldType fieldType, int amount) {
-    int index = indexOfSupported(fieldType);
-    if (amount == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    newValues = getField(index).add(this, index, newValues, amount);
-    return new YearMonth(this, newValues);
-    // CPD-ON
+    int[] newValues = withFieldAddedValues(fieldType, amount);
+    return newValues == null ? this : new YearMonth(this, newValues);
   }
 
   /**
@@ -539,28 +515,9 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
    * @return a copy of this instance with the period added, never null
    * @throws ArithmeticException if the new date-time exceeds the capacity
    */
-  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-  // the common base class without a larger, riskier generic/factory-method redesign
-  // that is out of scope for a duplicate-code cleanup.
   public YearMonth withPeriodAdded(ReadablePeriod period, int scalar) {
-    if (period == null || scalar == 0) {
-      return this;
-    }
-    int[] newValues = getValues();
-    for (int i = 0; i < period.size(); i++) {
-      DurationFieldType fieldType = period.getFieldType(i);
-      int index = indexOf(fieldType);
-      if (index >= 0) {
-        newValues =
-            getField(index)
-                .add(this, index, newValues, FieldUtils.safeMultiply(period.getValue(i), scalar));
-      }
-    }
-    return new YearMonth(this, newValues);
-    // CPD-ON
+    int[] newValues = withPeriodAddedValues(period, scalar);
+    return newValues == null ? this : new YearMonth(this, newValues);
   }
 
   // -----------------------------------------------------------------------

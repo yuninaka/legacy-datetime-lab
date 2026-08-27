@@ -81,7 +81,7 @@ public final class FixedDateTimeZone extends DateTimeZone {
   }
 
   /**
-   * Override to return the correct timezone instance. // CPD-ON
+   * Override to return the correct timezone instance.
    *
    * @since 1.5
    */
@@ -96,6 +96,8 @@ public final class FixedDateTimeZone extends DateTimeZone {
     // unusual offset, so setup a SimpleTimeZone as best we can
     return new java.util.SimpleTimeZone(iWallOffset, getID());
   }
+
+  // CPD-ON
 
   @Override
   public boolean equals(Object obj) {
