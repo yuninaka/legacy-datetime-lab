@@ -1,7 +1,7 @@
 ---
 slug: "legacy-ai-type-guardrails"
-title: "レガシーJavaの「リバースマイグレーション」をAIに任せてみた——ソースコードで実証できたこと、できなかったこと"
-emoji: "🧭"
+title: "AIの「やりました」は信用できるか——レガシーJavaのリバースマイグレーションで見た実証と限界"
+emoji: "🕵️"
 type: "tech"
 topics: ["claude", "java", "zenn", "ai駆動開発", "レガシーシステム"]
 published: true
