@@ -20,7 +20,6 @@ import com.legacy.system.datetime.chrono.ISOChronology;
 import com.legacy.system.datetime.convert.ConverterManager;
 import com.legacy.system.datetime.convert.PartialConverter;
 import com.legacy.system.datetime.field.AbstractReadableInstantFieldProperty;
-import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 import com.legacy.system.datetime.format.ISODateTimeFormat;
 import java.io.IOException;
@@ -510,12 +509,6 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
       return new LocalTime(iLocalMillis, iChronology.withUTC());
     }
     return this;
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
   }
 
   // -----------------------------------------------------------------------
@@ -550,65 +543,7 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
     };
   }
 
-  /**
-   * Gets the value of the field at the specified index.
-   *
-   * <p>This method is required to support the <code>ReadablePartial</code> interface. The supported
-   * fields are HourOfDay, MinuteOfHour, SecondOfMinute and MillisOfSecond.
-   *
-   * @param index the index, zero to three
-   * @return the value
-   * @throws IndexOutOfBoundsException if the index is invalid
-   */
-  @Override
-  public int getValue(int index) {
-    // CPD-ON
-    switch (index) {
-      case HOUR_OF_DAY:
-        return getChronology().hourOfDay().get(getLocalMillis());
-      case MINUTE_OF_HOUR:
-        return getChronology().minuteOfHour().get(getLocalMillis());
-      case SECOND_OF_MINUTE:
-        return getChronology().secondOfMinute().get(getLocalMillis());
-      case MILLIS_OF_SECOND:
-        // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-        // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-        // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-        // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-        // the common base class without a larger, riskier generic/factory-method redesign
-        // that is out of scope for a duplicate-code cleanup.
-        return getChronology().millisOfSecond().get(getLocalMillis());
-      default:
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-    }
-  }
-
   // -----------------------------------------------------------------------
-  /**
-   * Get the value of one of the fields of time.
-   *
-   * <p>This method gets the value of the specified field. For example:
-   *
-   * <pre>
-   * DateTime dt = new DateTime();
-   * int hourOfDay = dt.get(DateTimeFieldType.hourOfDay());
-   * </pre>
-   *
-   * @param fieldType a field type, usually obtained from DateTimeFieldType, not null
-   * @return the value of that field
-   * @throws IllegalArgumentException if the field type is null
-   */
-  @Override
-  public int get(DateTimeFieldType fieldType) {
-    if (fieldType == null) {
-      throw new IllegalArgumentException("The DateTimeFieldType must not be null");
-    }
-    if (isSupported(fieldType) == false) {
-      throw new IllegalArgumentException("Field '" + fieldType + "' is not supported");
-    }
-    return fieldType.getField(getChronology()).get(getLocalMillis());
-  }
-
   /**
    * Checks if the field type specified is supported by this local time and chronology. This can be
    * used to avoid exceptions in {@link #get(DateTimeFieldType)}.
@@ -635,6 +570,7 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    * @param type a duration type, usually obtained from DurationFieldType
    * @return true if the field type is supported
    */
+  @Override
   public boolean isSupported(DurationFieldType type) {
     if (type == null) {
       return false;
@@ -800,21 +736,8 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    * @return a copy of this time with the field set
    * @throws IllegalArgumentException if the value is null or invalid
    */
-  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-  // the common base class without a larger, riskier generic/factory-method redesign
-  // that is out of scope for a duplicate-code cleanup.
   public LocalTime withField(DateTimeFieldType fieldType, int value) {
-    if (fieldType == null) {
-      throw new IllegalArgumentException("Field must not be null");
-    }
-    if (isSupported(fieldType) == false) {
-      throw new IllegalArgumentException("Field '" + fieldType + "' is not supported");
-    }
-    long instant = fieldType.getField(getChronology()).set(getLocalMillis(), value);
-    return withLocalMillis(instant);
+    return withLocalMillis(computeFieldSet(fieldType, value));
   }
 
   /**
@@ -839,17 +762,8 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
    * @throws ArithmeticException if the result exceeds the internal capacity
    */
   public LocalTime withFieldAdded(DurationFieldType fieldType, int amount) {
-    if (fieldType == null) {
-      throw new IllegalArgumentException("Field must not be null");
-    }
-    if (isSupported(fieldType) == false) {
-      throw new IllegalArgumentException("Field '" + fieldType + "' is not supported");
-    }
-    if (amount == 0) {
-      return this;
-    }
-    long instant = fieldType.getField(getChronology()).add(getLocalMillis(), amount);
-    return withLocalMillis(instant);
+    Long newMillis = computeFieldAdded(fieldType, amount);
+    return newMillis == null ? this : withLocalMillis(newMillis);
   }
 
   // -----------------------------------------------------------------------
@@ -871,7 +785,6 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
     if (period == null || scalar == 0) {
       return this;
     }
-    // CPD-ON
     long instant = getChronology().add(period, getLocalMillis(), scalar);
     return withLocalMillis(instant);
   }
@@ -1336,43 +1249,7 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
   @Override
   @ToString
   public String toString() {
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.time().print(this);
-  }
-
-  /**
-   * Output the time using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @return the formatted output, not null
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).print(this);
-  }
-
-  /**
-   * Output the time using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @param locale Locale to use, null means default
-   * @return the formatted output, not null
-   * @throws IllegalArgumentException if the pattern is invalid
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern, Locale locale) throws IllegalArgumentException {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 
   // -----------------------------------------------------------------------
@@ -1409,7 +1286,6 @@ public final class LocalTime extends BaseLocal implements ReadablePartial, Seria
     /** Serialization version */
     private static final long serialVersionUID = -325842547277223L;
 
-    // CPD-ON
     /** The instant this property is working against */
     private transient LocalTime iInstant;
 

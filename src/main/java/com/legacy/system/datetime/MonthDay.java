@@ -396,36 +396,18 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
   }
 
   /**
-   * Gets the field for a specific index in the chronology specified.
-   *
-   * <p>This method must not use any instance variables.
-   *
-   * @param index the index to retrieve
-   * @param chrono the chronology to use
-   * @return the field, never null
-   */
-  @Override
-  protected DateTimeField getField(int index, Chronology chrono) {
-    return switch (index) {
-        // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-        // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-        // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-        // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-        // the common base class without a larger, riskier generic/factory-method redesign
-        // that is out of scope for a duplicate-code cleanup.
-      case MONTH_OF_YEAR -> chrono.monthOfYear();
-      case DAY_OF_MONTH -> chrono.dayOfMonth();
-      default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
-    };
-  }
-
-  /**
    * Gets the field type at the specified index.
    *
    * @param index the index to retrieve
    * @return the field at the specified index, never null
    * @throws IndexOutOfBoundsException if the index is invalid
    */
+  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
+  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
+  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
+  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
+  // the common base class without a larger, riskier generic/factory-method redesign
+  // that is out of scope for a duplicate-code cleanup.
   @Override
   public DateTimeFieldType getFieldType(int index) {
     return FIELD_TYPES[index];
@@ -770,42 +752,7 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
     List<DateTimeFieldType> fields = new ArrayList<DateTimeFieldType>();
     fields.add(DateTimeFieldType.monthOfYear());
     fields.add(DateTimeFieldType.dayOfMonth());
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.forFields(fields, true, true).print(this);
-  }
-
-  /**
-   * Output the month-day using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  @Override
-  public String toString(String pattern) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).print(this);
-  }
-
-  /**
-   * Output the month-day using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @param locale Locale to use, null means default
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  @Override
-  public String toString(String pattern, Locale locale) throws IllegalArgumentException {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 
   // -----------------------------------------------------------------------
@@ -824,8 +771,6 @@ public final class MonthDay extends BasePartial implements ReadablePartial, Seri
 
     /** The partial */
     private final MonthDay iBase;
-
-    // CPD-ON
 
     /** The field index */
     private final int iFieldIndex;

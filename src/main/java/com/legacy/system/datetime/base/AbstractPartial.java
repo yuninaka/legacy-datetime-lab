@@ -25,7 +25,9 @@ import com.legacy.system.datetime.ReadableInstant;
 import com.legacy.system.datetime.ReadablePartial;
 import com.legacy.system.datetime.ReadablePeriod;
 import com.legacy.system.datetime.field.FieldUtils;
+import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * AbstractPartial provides a standard base implementation of most methods in the ReadablePartial
@@ -66,7 +68,9 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
    * @return the field
    * @throws IndexOutOfBoundsException if the index is invalid
    */
-  protected abstract DateTimeField getField(int index, Chronology chrono);
+  protected DateTimeField getField(int index, Chronology chrono) {
+    return getFieldType(index).getField(chrono);
+  }
 
   // -----------------------------------------------------------------------
   /**
@@ -511,5 +515,36 @@ public abstract class AbstractPartial implements ReadablePartial, Comparable<Rea
       return toString();
     }
     return formatter.print(this);
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Output this partial using the specified format pattern.
+   *
+   * @param pattern the pattern specification, null means use <code>toString</code>
+   * @return the formatted output, not null
+   * @see org.joda.time.format.DateTimeFormat
+   */
+  public String toString(String pattern) {
+    if (pattern == null) {
+      return toString();
+    }
+    return DateTimeFormat.forPattern(pattern).print(this);
+  }
+
+  /**
+   * Output this partial using the specified format pattern.
+   *
+   * @param pattern the pattern specification, null means use <code>toString</code>
+   * @param locale Locale to use, null means default
+   * @return the formatted output, not null
+   * @throws IllegalArgumentException if the pattern is invalid
+   * @see org.joda.time.format.DateTimeFormat
+   */
+  public String toString(String pattern, Locale locale) throws IllegalArgumentException {
+    if (pattern == null) {
+      return toString();
+    }
+    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 }

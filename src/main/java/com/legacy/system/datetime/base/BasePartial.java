@@ -21,10 +21,8 @@ import com.legacy.system.datetime.DateTimeUtils;
 import com.legacy.system.datetime.ReadablePartial;
 import com.legacy.system.datetime.convert.ConverterManager;
 import com.legacy.system.datetime.convert.PartialConverter;
-import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 import java.io.Serializable;
-import java.util.Locale;
 
 /**
  * BasePartial is an abstract implementation of ReadablePartial that stores data in array and <code>
@@ -288,36 +286,5 @@ public abstract class BasePartial extends AbstractPartial implements ReadablePar
   protected void setValues(int[] values) {
     getChronology().validate(this, values);
     System.arraycopy(values, 0, iValues, 0, iValues.length);
-  }
-
-  // -----------------------------------------------------------------------
-  /**
-   * Output the date using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @return the formatted output, not null
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).print(this);
-  }
-
-  /**
-   * Output the date using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @param locale Locale to use, null means default
-   * @return the formatted output, not null
-   * @throws IllegalArgumentException if the pattern is invalid
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern, Locale locale) throws IllegalArgumentException {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 }

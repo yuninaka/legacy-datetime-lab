@@ -300,12 +300,6 @@ public final class YearMonthDay extends BasePartial implements ReadablePartial, 
    */
   YearMonthDay(YearMonthDay partial, Chronology chrono) {
     super(partial, chrono);
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
   }
 
   // -----------------------------------------------------------------------
@@ -317,25 +311,6 @@ public final class YearMonthDay extends BasePartial implements ReadablePartial, 
   @Override
   public int size() {
     return 3;
-  }
-
-  /**
-   * Gets the field for a specific index in the chronology specified.
-   *
-   * <p>This method must not use any instance variables.
-   *
-   * @param index the index to retrieve
-   * @param chrono the chronology to use
-   * @return the field
-   */
-  @Override
-  protected DateTimeField getField(int index, Chronology chrono) {
-    return switch (index) {
-      case YEAR -> chrono.year();
-      case MONTH_OF_YEAR -> chrono.monthOfYear();
-      case DAY_OF_MONTH -> chrono.dayOfMonth();
-      default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
-    };
   }
 
   /**
@@ -378,7 +353,6 @@ public final class YearMonthDay extends BasePartial implements ReadablePartial, 
    * @throws IllegalArgumentException if the values are invalid for the new chronology
    */
   public YearMonthDay withChronologyRetainFields(Chronology newChronology) {
-    // CPD-ON
     newChronology = DateTimeUtils.getChronology(newChronology);
     newChronology = newChronology.withUTC();
     if (newChronology == getChronology()) {

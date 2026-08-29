@@ -19,7 +19,6 @@ import com.legacy.system.datetime.base.BasePartial;
 import com.legacy.system.datetime.chrono.ISOChronology;
 import com.legacy.system.datetime.field.AbstractPartialFieldProperty;
 import com.legacy.system.datetime.field.FieldUtils;
-import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 import com.legacy.system.datetime.format.ISODateTimeFormat;
 import java.io.Serializable;
@@ -381,24 +380,6 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
   @Override
   public int size() {
     return 2;
-  }
-
-  /**
-   * Gets the field for a specific index in the chronology specified.
-   *
-   * <p>This method must not use any instance variables.
-   *
-   * @param index the index to retrieve
-   * @param chrono the chronology to use
-   * @return the field, never null
-   */
-  @Override
-  protected DateTimeField getField(int index, Chronology chrono) {
-    return switch (index) {
-      case YEAR -> chrono.year();
-      case MONTH_OF_YEAR -> chrono.monthOfYear();
-      default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
-    };
   }
 
   /**
@@ -770,42 +751,7 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
   @Override
   @ToString
   public String toString() {
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.yearMonth().print(this);
-  }
-
-  /**
-   * Output the year-month using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  @Override
-  public String toString(String pattern) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).print(this);
-  }
-
-  /**
-   * Output the year-month using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @param locale Locale to use, null means default
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  @Override
-  public String toString(String pattern, Locale locale) throws IllegalArgumentException {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 
   // -----------------------------------------------------------------------
@@ -824,8 +770,6 @@ public final class YearMonth extends BasePartial implements ReadablePartial, Ser
 
     /** The partial */
     private final YearMonth iBase;
-
-    // CPD-ON
 
     /** The field index */
     private final int iFieldIndex;
