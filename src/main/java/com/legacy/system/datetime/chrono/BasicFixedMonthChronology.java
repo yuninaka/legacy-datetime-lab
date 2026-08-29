@@ -17,6 +17,8 @@ package com.legacy.system.datetime.chrono;
 
 import com.legacy.system.datetime.Chronology;
 import com.legacy.system.datetime.DateTimeConstants;
+import com.legacy.system.datetime.DateTimeField;
+import com.legacy.system.datetime.field.SkipDateTimeField;
 
 /**
  * Abstract implementation of a calendar system based around fixed length months.
@@ -44,6 +46,27 @@ abstract class BasicFixedMonthChronology extends BasicChronology {
   /** The length of the month in millis. */
   static final long MILLIS_PER_MONTH = ((long) MONTH_LENGTH) * DateTimeConstants.MILLIS_PER_DAY;
 
+  /**
+   * Number of days between January 1st of {@link #iEpochYear} and this calendar system's Java epoch
+   * reference date (1970-01-01 Gregorian), shared by every fixed-month calendar in this codebase
+   * since each one's reference date was chosen to fall the same distance into the year.
+   */
+  private static final long EPOCH_REFERENCE_DAY_OF_YEAR = 112;
+
+  private final int iMinYear;
+  private final int iMaxYear;
+
+  /**
+   * The year, relative to which {@link #calculateFirstDayOfYearMillis(int)} and {@link
+   * #getApproxMillisAtEpochDividedByTwo()} measure elapsed days; chosen close to this calendar's
+   * Java epoch reference date.
+   */
+  private final int iEpochYear;
+
+  // Not serializable (see BasicSingleEraDateTimeField); harmless to drop since every concrete
+  // subclass's readResolve() discards the raw deserialized instance for a freshly-built one.
+  private final transient DateTimeField iEraField;
+
   // -----------------------------------------------------------------------
   /**
    * Restricted constructor.
@@ -51,9 +74,25 @@ abstract class BasicFixedMonthChronology extends BasicChronology {
    * @param base the base chronology
    * @param param the init parameter
    * @param minDaysInFirstWeek the minimum days in the first week
+   * @param minYear the lowest year that can be fully supported
+   * @param maxYear the highest year that can be fully supported
+   * @param epochYear the year relative to which epoch millis are calculated; see {@link
+   *     #iEpochYear}
+   * @param eraField this calendar's singleton era field
    */
-  BasicFixedMonthChronology(Chronology base, Object param, int minDaysInFirstWeek) {
+  BasicFixedMonthChronology(
+      Chronology base,
+      Object param,
+      int minDaysInFirstWeek,
+      int minYear,
+      int maxYear,
+      int epochYear,
+      DateTimeField eraField) {
     super(base, param, minDaysInFirstWeek);
+    iMinYear = minYear;
+    iMaxYear = maxYear;
+    iEpochYear = epochYear;
+    iEraField = eraField;
   }
 
   // -----------------------------------------------------------------------
@@ -64,48 +103,18 @@ abstract class BasicFixedMonthChronology extends BasicChronology {
     int dayOfYear = getDayOfYear(instant, thisYear);
     int millisOfDay = getMillisOfDay(instant);
 
-    if (dayOfYear > 365) {
-      // Current year is leap, and day is leap.
-      if (!isLeapYear(year)) {
-        // Moving to a non-leap year, leap day doesn't exist.
-        dayOfYear--;
-      }
-      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-      // Chronology implementations (different calendar systems, or wrapper Chronologies
-      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-      // system as its own type (see BasicChronology.equals()'s getClass() check: two
-      // different chronologies must never be considered equal), so merging this setup
-      // code risks blurring that boundary or hard-coding one calendar's constants into
-      // a shared path used by another.
+    // Current year is leap, and day is leap.
+    if (dayOfYear > 365 && !isLeapYear(year)) {
+      // Moving to a non-leap year, leap day doesn't exist.
+      dayOfYear--;
     }
 
-    instant = getYearMonthDayMillis(year, 1, dayOfYear);
-    instant += millisOfDay;
-    return instant;
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  long getYearDifference(long minuendInstant, long subtrahendInstant) {
-    // optimsed implementation of getDifference, due to fixed months
-    int minuendYear = getYear(minuendInstant);
-    int subtrahendYear = getYear(subtrahendInstant);
-
-    // Inlined remainder method to avoid duplicate calls to get.
-    long minuendRem = minuendInstant - getYearMillis(minuendYear);
-    long subtrahendRem = subtrahendInstant - getYearMillis(subtrahendYear);
-
-    int difference = minuendYear - subtrahendYear;
-    if (minuendRem < subtrahendRem) {
-      difference--;
-    }
-    return difference;
+    return setYearDayMillis(year, dayOfYear, millisOfDay);
   }
 
   // -----------------------------------------------------------------------
   @Override
   long getTotalMillisByYearMonth(int year, int month) {
-    // CPD-ON
     return ((month - 1) * MILLIS_PER_MONTH);
   }
 
@@ -175,5 +184,71 @@ abstract class BasicFixedMonthChronology extends BasicChronology {
   @Override
   long getAverageMillisPerMonth() {
     return MILLIS_PER_MONTH;
+  }
+
+  // -----------------------------------------------------------------------
+  @Override
+  int getMinYear() {
+    return iMinYear;
+  }
+
+  // -----------------------------------------------------------------------
+  @Override
+  int getMaxYear() {
+    return iMaxYear;
+  }
+
+  // -----------------------------------------------------------------------
+  @Override
+  long getApproxMillisAtEpochDividedByTwo() {
+    return ((long) (iEpochYear - 1) * MILLIS_PER_YEAR
+            + EPOCH_REFERENCE_DAY_OF_YEAR * DateTimeConstants.MILLIS_PER_DAY)
+        / 2;
+  }
+
+  // -----------------------------------------------------------------------
+  @Override
+  long calculateFirstDayOfYearMillis(int year) {
+    // Calculate relative to the nearest leap year and account for the difference later.
+    int relativeYear = year - iEpochYear;
+    int leapYears;
+    if (relativeYear <= 0) {
+      // Add 3 before shifting right since /4 and >>2 behave differently on negative numbers.
+      leapYears = (relativeYear + 3) >> 2;
+    } else {
+      leapYears = relativeYear >> 2;
+      // An adjustment is needed after the epoch year, as Jan 1st is before the leap day.
+      if (!isLeapYear(year)) {
+        leapYears++;
+      }
+    }
+
+    long millis = (relativeYear * 365L + leapYears) * (long) DateTimeConstants.MILLIS_PER_DAY;
+
+    // Adjust to account for the difference between Jan 1st of the epoch year and this
+    // calendar's Java epoch reference date.
+    return millis + (365L - EPOCH_REFERENCE_DAY_OF_YEAR) * DateTimeConstants.MILLIS_PER_DAY;
+  }
+
+  // -----------------------------------------------------------------------
+  @Override
+  boolean isLeapDay(long instant) {
+    return dayOfMonth().get(instant) == 6 && monthOfYear().isLeap(instant);
+  }
+
+  // -----------------------------------------------------------------------
+  @Override
+  protected void assemble(Fields fields) {
+    if (getBase() == null) {
+      super.assemble(fields);
+
+      // Fixed-month calendars in this codebase have no year zero.
+      fields.year = new SkipDateTimeField(this, fields.year);
+      fields.weekyear = new SkipDateTimeField(this, fields.weekyear);
+
+      fields.era = iEraField;
+      fields.monthOfYear = new BasicMonthOfYearDateTimeField(this, 13);
+      fields.months = fields.monthOfYear.getDurationField();
+    }
   }
 }

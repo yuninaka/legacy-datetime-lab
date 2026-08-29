@@ -20,7 +20,6 @@ import com.legacy.system.datetime.DateTime;
 import com.legacy.system.datetime.DateTimeConstants;
 import com.legacy.system.datetime.DateTimeField;
 import com.legacy.system.datetime.DateTimeZone;
-import com.legacy.system.datetime.field.SkipDateTimeField;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -63,6 +62,12 @@ public final class CopticChronology extends BasicFixedMonthChronology {
 
   /** The highest year that can be fully supported. */
   private static final int MAX_YEAR = 292272708;
+
+  /**
+   * Year 1687 is the closest Coptic year, relative to which 1970-01-01 (Gregorian), the Java epoch,
+   * falls 1686-04-23 (Coptic).
+   */
+  private static final int EPOCH_YEAR = 1687;
 
   /** Cache of zone to chronology arrays */
   private static final ConcurrentHashMap<DateTimeZone, CopticChronology[]> cCache =
@@ -143,7 +148,9 @@ public final class CopticChronology extends BasicFixedMonthChronology {
         if (chrono == null) {
           if (zone.equals(DateTimeZone.UTC)) {
             // First create without a lower limit.
-            chrono = new CopticChronology(null, null, minDaysInFirstWeek);
+            chrono =
+                new CopticChronology(
+                    null, null, minDaysInFirstWeek, MIN_YEAR, MAX_YEAR, EPOCH_YEAR, ERA_FIELD);
             // CPD-ON
             // Impose lower limit and make another CopticChronology.
             var lowerLimit = new DateTime(1, 1, 1, 0, 0, 0, 0, chrono);
@@ -151,12 +158,22 @@ public final class CopticChronology extends BasicFixedMonthChronology {
                 new CopticChronology(
                     LimitChronology.getInstance(chrono, lowerLimit, null),
                     null,
-                    minDaysInFirstWeek);
+                    minDaysInFirstWeek,
+                    MIN_YEAR,
+                    MAX_YEAR,
+                    EPOCH_YEAR,
+                    ERA_FIELD);
           } else {
             chrono = getInstance(DateTimeZone.UTC, minDaysInFirstWeek);
             chrono =
                 new CopticChronology(
-                    ZonedChronology.getInstance(chrono, zone), null, minDaysInFirstWeek);
+                    ZonedChronology.getInstance(chrono, zone),
+                    null,
+                    minDaysInFirstWeek,
+                    MIN_YEAR,
+                    MAX_YEAR,
+                    EPOCH_YEAR,
+                    ERA_FIELD);
           }
           chronos[minDaysInFirstWeek - 1] = chrono;
         }
@@ -168,122 +185,31 @@ public final class CopticChronology extends BasicFixedMonthChronology {
   // Constructors and instance variables
   // -----------------------------------------------------------------------
   /** Restricted constructor. */
-  // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-  // Chronology implementations (different calendar systems, or wrapper Chronologies
-  // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-  // system as its own type (see BasicChronology.equals()'s getClass() check: two
-  // different chronologies must never be considered equal), so merging this setup
-  // code risks blurring that boundary or hard-coding one calendar's constants into
-  // a shared path used by another.
-  CopticChronology(Chronology base, Object param, int minDaysInFirstWeek) {
-    super(base, param, minDaysInFirstWeek);
+  CopticChronology(
+      Chronology base,
+      Object param,
+      int minDaysInFirstWeek,
+      int minYear,
+      int maxYear,
+      int epochYear,
+      DateTimeField eraField) {
+    super(base, param, minDaysInFirstWeek, minYear, maxYear, epochYear, eraField);
   }
 
   /** Serialization singleton. */
   private Object readResolve() {
-    Chronology base = getBase();
-    int minDays = getMinimumDaysInFirstWeek();
-    minDays = (minDays == 0 ? 4 : minDays); // handle rename of BaseGJChronology
-    return base == null
-        ? getInstance(DateTimeZone.UTC, minDays)
-        : getInstance(base.getZone(), minDays);
+    return resolveByZoneAndMinDays(CopticChronology::getInstance);
   }
 
   // Conversion
   // -----------------------------------------------------------------------
-  /**
-   * Gets the Chronology in the UTC time zone.
-   *
-   * @return the chronology in UTC
-   */
   @Override
-  public Chronology withUTC() {
+  protected Chronology getCachedInstanceUTC() {
     return INSTANCE_UTC;
   }
 
-  /**
-   * Gets the Chronology in a specific time zone.
-   *
-   * @param zone the zone to get the chronology in, null is default
-   * @return the chronology
-   */
   @Override
-  public Chronology withZone(DateTimeZone zone) {
-    if (zone == null) {
-      zone = DateTimeZone.getDefault();
-    }
-    if (zone.equals(getZone())) {
-      return this;
-    }
+  protected Chronology getCachedInstance(DateTimeZone zone) {
     return getInstance(zone);
   }
-
-  // -----------------------------------------------------------------------
-  @Override
-  boolean isLeapDay(long instant) {
-    return dayOfMonth().get(instant) == 6 && monthOfYear().isLeap(instant);
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  long calculateFirstDayOfYearMillis(int year) {
-    // Java epoch is 1970-01-01 Gregorian which is 1686-04-23 Coptic.
-    // Calculate relative to the nearest leap year and account for the
-    // difference later.
-
-    int relativeYear = year - 1687;
-    int leapYears;
-    if (relativeYear <= 0) {
-      // Add 3 before shifting right since /4 and >>2 behave differently
-      // on negative numbers.
-      leapYears = (relativeYear + 3) >> 2;
-    } else {
-      leapYears = relativeYear >> 2;
-      // For post 1687 an adjustment is needed as jan1st is before leap day
-      if (!isLeapYear(year)) {
-        leapYears++;
-      }
-    }
-
-    long millis = (relativeYear * 365L + leapYears) * (long) DateTimeConstants.MILLIS_PER_DAY;
-
-    // Adjust to account for difference between 1687-01-01 and 1686-04-23.
-
-    return millis + (365L - 112) * DateTimeConstants.MILLIS_PER_DAY;
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  int getMinYear() {
-    return MIN_YEAR;
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  int getMaxYear() {
-    return MAX_YEAR;
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  long getApproxMillisAtEpochDividedByTwo() {
-    return (1686L * MILLIS_PER_YEAR + 112L * DateTimeConstants.MILLIS_PER_DAY) / 2;
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  protected void assemble(Fields fields) {
-    if (getBase() == null) {
-      super.assemble(fields);
-
-      // Coptic, like Julian, has no year zero.
-      fields.year = new SkipDateTimeField(this, fields.year);
-      fields.weekyear = new SkipDateTimeField(this, fields.weekyear);
-
-      fields.era = ERA_FIELD;
-      fields.monthOfYear = new BasicMonthOfYearDateTimeField(this, 13);
-      fields.months = fields.monthOfYear.getDurationField();
-    }
-  }
 }
-  // CPD-ON

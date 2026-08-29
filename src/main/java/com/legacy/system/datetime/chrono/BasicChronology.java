@@ -32,6 +32,7 @@ import com.legacy.system.datetime.field.PreciseDurationField;
 import com.legacy.system.datetime.field.RemainderDateTimeField;
 import com.legacy.system.datetime.field.ZeroIsMaxDateTimeField;
 import java.util.Locale;
+import java.util.function.BiFunction;
 
 /**
  * Abstract implementation for calendar systems that use a typical day/month/year/leapYear model.
@@ -143,36 +144,27 @@ abstract class BasicChronology extends AssembledChronology {
       return base.getZone();
     }
     return DateTimeZone.UTC;
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
   }
 
   @Override
   public long getDateTimeMillis(int year, int monthOfYear, int dayOfMonth, int millisOfDay)
       throws IllegalArgumentException {
-    Chronology base;
-    if ((base = getBase()) != null) {
-      return base.getDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
+    Long baseMillis = getBaseDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
+    if (baseMillis != null) {
+      return baseMillis;
     }
-    // CPD-ON
 
     FieldUtils.verifyValueBounds(
         DateTimeFieldType.millisOfDay(), millisOfDay, 0, DateTimeConstants.MILLIS_PER_DAY - 1);
     return getDateTimeMillis0(year, monthOfYear, dayOfMonth, millisOfDay);
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
   }
 
+  // CPD-OFF: the base-delegation preamble here matches GJChronology's 7-arg getDateTimeMillis
+  // override byte-for-byte (both call the shared AssembledChronology.getBaseDateTimeMillis
+  // helper the same way), but the two methods' post-preamble bodies diverge completely, so
+  // sharing just the preamble would need a template-method hook across all AssembledChronology
+  // subclasses' getDateTimeMillis overloads - the same class of redesign already deferred for
+  // the decorator chronologies' assemble() hooks.
   @Override
   public long getDateTimeMillis(
       int year,
@@ -183,10 +175,11 @@ abstract class BasicChronology extends AssembledChronology {
       int secondOfMinute,
       int millisOfSecond)
       throws IllegalArgumentException {
-    Chronology base;
-    if ((base = getBase()) != null) {
-      return base.getDateTimeMillis(
-          year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
+    Long baseMillis =
+        getBaseDateTimeMillis(
+            year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
+    if (baseMillis != null) {
+      return baseMillis;
     }
     // CPD-ON
 
@@ -222,6 +215,24 @@ abstract class BasicChronology extends AssembledChronology {
 
   public int getMinimumDaysInFirstWeek() {
     return iMinDaysInFirstWeek;
+  }
+
+  /**
+   * Computes the {@code readResolve()} replacement instance for chronologies that maintain a static
+   * per-zone-and-minDaysInFirstWeek singleton cache, normalizing a legacy minDaysInFirstWeek of 0
+   * (from deserializing pre-1.3 BaseGJChronology instances) to the default of 4.
+   *
+   * @param instanceForZone the calendar-system's own static getInstance(zone, minDays) factory
+   * @return the resolved singleton instance
+   */
+  final Object resolveByZoneAndMinDays(
+      BiFunction<DateTimeZone, Integer, ? extends Chronology> instanceForZone) {
+    Chronology base = getBase();
+    int minDays = getMinimumDaysInFirstWeek();
+    minDays = (minDays == 0 ? 4 : minDays); // handle rename of BaseGJChronology
+    return base == null
+        ? instanceForZone.apply(DateTimeZone.UTC, minDays)
+        : instanceForZone.apply(base.getZone(), minDays);
   }
 
   // -----------------------------------------------------------------------
@@ -682,7 +693,20 @@ abstract class BasicChronology extends AssembledChronology {
    * @param subtrahendInstant the second instant
    * @return the difference
    */
-  abstract long getYearDifference(long minuendInstant, long subtrahendInstant);
+  long getYearDifference(long minuendInstant, long subtrahendInstant) {
+    int minuendYear = getYear(minuendInstant);
+    int subtrahendYear = getYear(subtrahendInstant);
+
+    // Inlined remainder method to avoid duplicate calls to get.
+    long minuendRem = minuendInstant - getYearMillis(minuendYear);
+    long subtrahendRem = subtrahendInstant - getYearMillis(subtrahendYear);
+
+    int difference = minuendYear - subtrahendYear;
+    if (minuendRem < subtrahendRem) {
+      difference--;
+    }
+    return difference;
+  }
 
   /**
    * Is the specified year a leap year?
@@ -810,6 +834,22 @@ abstract class BasicChronology extends AssembledChronology {
    * @return the updated millis
    */
   abstract long setYear(long instant, int year);
+
+  /**
+   * Computes the millisecond instant for the given year and day-of-year, preserving the given
+   * time-of-day component. Intended for use by setYear() implementations, after they have adjusted
+   * dayOfYear to account for a leap day that doesn't exist in the target year.
+   *
+   * @param year the target year
+   * @param dayOfYear the (possibly adjusted) day of year to set
+   * @param millisOfDay the time-of-day component to preserve
+   * @return the updated millis
+   */
+  final long setYearDayMillis(int year, int dayOfYear, int millisOfDay) {
+    long instant = getYearMonthDayMillis(year, 1, dayOfYear);
+    instant += millisOfDay;
+    return instant;
+  }
 
   // -----------------------------------------------------------------------
   // Although accessed by multiple threads, this method doesn't need to be synchronized.

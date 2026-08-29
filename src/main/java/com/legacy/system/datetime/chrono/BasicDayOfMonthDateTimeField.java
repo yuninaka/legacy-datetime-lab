@@ -18,6 +18,7 @@ package com.legacy.system.datetime.chrono;
 import com.legacy.system.datetime.DateTimeFieldType;
 import com.legacy.system.datetime.DurationField;
 import com.legacy.system.datetime.ReadablePartial;
+import com.legacy.system.datetime.field.FieldUtils;
 import com.legacy.system.datetime.field.PreciseDurationDateTimeField;
 
 /**
@@ -77,33 +78,21 @@ final class BasicDayOfMonthDateTimeField extends PreciseDurationDateTimeField {
       }
       return iChronology.getDaysInMonthMax(month);
     }
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
     return getMaximumValue();
   }
 
   @Override
   public int getMaximumValue(ReadablePartial partial, int[] values) {
-    int size = partial.size();
-    for (int i = 0; i < size; i++) {
-      if (partial.getFieldType(i) == DateTimeFieldType.monthOfYear()) {
-        // CPD-ON
-        int month = values[i];
-        for (int j = 0; j < size; j++) {
-          if (partial.getFieldType(j) == DateTimeFieldType.year()) {
-            int year = values[j];
-            return iChronology.getDaysInYearMonth(year, month);
-          }
-        }
-        return iChronology.getDaysInMonthMax(month);
-      }
+    int monthIndex = FieldUtils.getPartialFieldIndex(partial, DateTimeFieldType.monthOfYear());
+    if (monthIndex < 0) {
+      return getMaximumValue();
     }
-    return getMaximumValue();
+    int month = values[monthIndex];
+    int yearIndex = FieldUtils.getPartialFieldIndex(partial, DateTimeFieldType.year());
+    if (yearIndex < 0) {
+      return iChronology.getDaysInMonthMax(month);
+    }
+    return iChronology.getDaysInYearMonth(values[yearIndex], month);
   }
 
   @Override

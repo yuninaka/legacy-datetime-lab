@@ -346,42 +346,14 @@ public final class IslamicChronology extends BasicChronology {
     if (dayOfYear > 354 && !isLeapYear(year)) {
       // Moving to a non-leap year, leap day doesn't exist.
       dayOfYear--;
-      // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-      // Chronology implementations (different calendar systems, or wrapper Chronologies
-      // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-      // system as its own type (see BasicChronology.equals()'s getClass() check: two
-      // different chronologies must never be considered equal), so merging this setup
-      // code risks blurring that boundary or hard-coding one calendar's constants into
-      // a shared path used by another.
     }
 
-    instant = getYearMonthDayMillis(year, 1, dayOfYear);
-    instant += millisOfDay;
-    return instant;
-  }
-
-  // -----------------------------------------------------------------------
-  @Override
-  long getYearDifference(long minuendInstant, long subtrahendInstant) {
-    // optimsed implementation of getDifference, due to fixed months
-    int minuendYear = getYear(minuendInstant);
-    int subtrahendYear = getYear(subtrahendInstant);
-
-    // Inlined remainder method to avoid duplicate calls to get.
-    long minuendRem = minuendInstant - getYearMillis(minuendYear);
-    long subtrahendRem = subtrahendInstant - getYearMillis(subtrahendYear);
-
-    int difference = minuendYear - subtrahendYear;
-    if (minuendRem < subtrahendRem) {
-      difference--;
-    }
-    return difference;
+    return setYearDayMillis(year, dayOfYear, millisOfDay);
   }
 
   // -----------------------------------------------------------------------
   @Override
   long getTotalMillisByYearMonth(int year, int month) {
-    // CPD-ON
     if (--month % 2 == 1) {
       month /= 2;
       return month * MILLIS_PER_MONTH_PAIR + MILLIS_PER_LONG_MONTH;

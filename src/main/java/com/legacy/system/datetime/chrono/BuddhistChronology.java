@@ -137,42 +137,18 @@ public final class BuddhistChronology extends AssembledChronology {
   /** Serialization singleton */
   private Object readResolve() {
     Chronology base = getBase();
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
     return base == null ? getInstanceUTC() : getInstance(base.getZone());
   }
 
   // Conversion
   // -----------------------------------------------------------------------
-  /**
-   * Gets the Chronology in the UTC time zone.
-   *
-   * @return the chronology in UTC
-   */
   @Override
-  public Chronology withUTC() {
+  protected Chronology getCachedInstanceUTC() {
     return INSTANCE_UTC;
   }
 
-  /**
-   * Gets the Chronology in a specific time zone.
-   *
-   * @param zone the zone to get the chronology in, null is default
-   * @return the chronology
-   */
   @Override
-  public Chronology withZone(DateTimeZone zone) {
-    if (zone == null) {
-      zone = DateTimeZone.getDefault();
-    }
-    if (zone.equals(getZone())) {
-      return this;
-    }
+  protected Chronology getCachedInstance(DateTimeZone zone) {
     return getInstance(zone);
   }
 
@@ -190,7 +166,6 @@ public final class BuddhistChronology extends AssembledChronology {
       return true;
     }
     if (obj instanceof BuddhistChronology chrono) {
-      // CPD-ON
       return getZone().equals(chrono.getZone());
     }
     return false;
