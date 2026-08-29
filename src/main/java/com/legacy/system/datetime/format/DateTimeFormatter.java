@@ -923,39 +923,13 @@ public class DateTimeFormatter {
    * @throws UnsupportedOperationException if parsing is not supported
    * @throws IllegalArgumentException if the text to parse is invalid
    */
-  // CPD-OFF: structurally similar code in independently-evolving implementations.
-  // Investigated case-by-case for this guardrail; extraction risk (see sibling
-  // findings in this codebase resolved with genuine shared-base-class extraction
-  // where safe) outweighs the benefit here given the differing types/packages
-  // involved.
   public DateTime parseDateTime(String text) {
-    InternalParser parser = requireParser();
-
-    Chronology chrono = selectChronology(null);
-    DateTimeParserBucket bucket =
-        new DateTimeParserBucket(0, chrono, iLocale, iPivotYear, iDefaultYear);
-    int newPos = parser.parseInto(bucket, text, 0);
-    if (newPos >= 0) {
-      if (newPos >= text.length()) {
-        long millis = bucket.computeMillis(true, text);
-        if (iOffsetParsed && bucket.getOffsetInteger() != null) {
-          int parsedOffset = bucket.getOffsetInteger();
-          DateTimeZone parsedZone = DateTimeZone.forOffsetMillis(parsedOffset);
-          chrono = chrono.withZone(parsedZone);
-        } else if (bucket.getZone() != null) {
-          chrono = chrono.withZone(bucket.getZone());
-        }
-        var dt = new DateTime(millis, chrono);
-        // CPD-ON
-        if (iZone != null) {
-          dt = dt.withZone(iZone);
-        }
-        return dt;
-      }
-    } else {
-      newPos = ~newPos;
+    ParsedInstant parsed = parseToInstant(text);
+    var dt = new DateTime(parsed.millis, parsed.chronology);
+    if (iZone != null) {
+      dt = dt.withZone(iZone);
     }
-    throw new IllegalArgumentException(FormatUtils.createErrorMessage(text, newPos));
+    return dt;
   }
 
   /**
@@ -974,12 +948,28 @@ public class DateTimeFormatter {
    * @throws UnsupportedOperationException if parsing is not supported
    * @throws IllegalArgumentException if the text to parse is invalid
    */
-  // CPD-OFF: structurally similar code in independently-evolving implementations.
-  // Investigated case-by-case for this guardrail; extraction risk (see sibling
-  // findings in this codebase resolved with genuine shared-base-class extraction
-  // where safe) outweighs the benefit here given the differing types/packages
-  // involved.
   public MutableDateTime parseMutableDateTime(String text) {
+    ParsedInstant parsed = parseToInstant(text);
+    var dt = new MutableDateTime(parsed.millis, parsed.chronology);
+    if (iZone != null) {
+      dt.setZone(iZone);
+    }
+    return dt;
+  }
+
+  /**
+   * Shared by {@link #parseDateTime} and {@link #parseMutableDateTime}: both build a {@code
+   * DateTimeParserBucket}, resolve the parsed offset/zone into the chronology, then hand the result
+   * to their own constructor (a {@code DateTime} vs a {@code MutableDateTime}) - only that final
+   * construction step differs, so this returns the raw (millis, chronology) pair rather than either
+   * concrete type.
+   *
+   * @param text the text to parse, not null
+   * @return the parsed millis and resolved chronology
+   * @throws UnsupportedOperationException if parsing is not supported
+   * @throws IllegalArgumentException if the text to parse is invalid
+   */
+  private ParsedInstant parseToInstant(String text) {
     InternalParser parser = requireParser();
 
     Chronology chrono = selectChronology(null);
@@ -996,17 +986,23 @@ public class DateTimeFormatter {
         } else if (bucket.getZone() != null) {
           chrono = chrono.withZone(bucket.getZone());
         }
-        var dt = new MutableDateTime(millis, chrono);
-        // CPD-ON
-        if (iZone != null) {
-          dt.setZone(iZone);
-        }
-        return dt;
+        return new ParsedInstant(millis, chrono);
       }
     } else {
       newPos = ~newPos;
     }
     throw new IllegalArgumentException(FormatUtils.createErrorMessage(text, newPos));
+  }
+
+  /** Holds the (millis, chronology) pair {@link #parseToInstant} resolves. */
+  private static final class ParsedInstant {
+    private final long millis;
+    private final Chronology chronology;
+
+    private ParsedInstant(long millis, Chronology chronology) {
+      this.millis = millis;
+      this.chronology = chronology;
+    }
   }
 
   /**
