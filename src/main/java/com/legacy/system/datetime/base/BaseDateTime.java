@@ -16,8 +16,10 @@
 package com.legacy.system.datetime.base;
 
 import com.legacy.system.datetime.Chronology;
+import com.legacy.system.datetime.DateTimeFieldType;
 import com.legacy.system.datetime.DateTimeUtils;
 import com.legacy.system.datetime.DateTimeZone;
+import com.legacy.system.datetime.DurationFieldType;
 import com.legacy.system.datetime.ReadableDateTime;
 import com.legacy.system.datetime.chrono.ISOChronology;
 import com.legacy.system.datetime.convert.ConverterManager;
@@ -345,5 +347,40 @@ public abstract class BaseDateTime extends AbstractDateTime
    */
   protected void setChronology(Chronology chronology) {
     iChronology = checkChronology(chronology);
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Computes the millis resulting from setting the given field to the given value.
+   *
+   * @param fieldType the field type to set, not null
+   * @param value the value to set
+   * @return the resulting millis
+   * @throws IllegalArgumentException if the field is null
+   */
+  protected long computeFieldSet(DateTimeFieldType fieldType, int value) {
+    if (fieldType == null) {
+      throw new IllegalArgumentException("Field must not be null");
+    }
+    return fieldType.getField(getChronology()).set(getMillis(), value);
+  }
+
+  /**
+   * Computes the millis resulting from adding the given amount to the given field, or null if the
+   * amount is zero (the "no change" case, left for the caller to turn into {@code this}).
+   *
+   * @param fieldType the field type to add to, not null
+   * @param amount the amount to add
+   * @return the resulting millis, or null if the amount is zero
+   * @throws IllegalArgumentException if the field is null
+   */
+  protected Long computeFieldAdded(DurationFieldType fieldType, int amount) {
+    if (fieldType == null) {
+      throw new IllegalArgumentException("Field must not be null");
+    }
+    if (amount == 0) {
+      return null;
+    }
+    return fieldType.getField(getChronology()).add(getMillis(), amount);
   }
 }
