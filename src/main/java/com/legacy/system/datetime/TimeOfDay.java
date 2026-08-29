@@ -416,12 +416,6 @@ public final class TimeOfDay extends BasePartial implements ReadablePartial, Ser
    */
   TimeOfDay(TimeOfDay partial, Chronology chrono) {
     super(partial, chrono);
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
   }
 
   // -----------------------------------------------------------------------
@@ -436,26 +430,6 @@ public final class TimeOfDay extends BasePartial implements ReadablePartial, Ser
   }
 
   /**
-   * Gets the field for a specific index in the chronology specified.
-   *
-   * <p>This method must not use any instance variables.
-   *
-   * @param index the index to retrieve
-   * @param chrono the chronology to use
-   * @return the field
-   */
-  @Override
-  protected DateTimeField getField(int index, Chronology chrono) {
-    return switch (index) {
-      case HOUR_OF_DAY -> chrono.hourOfDay();
-      case MINUTE_OF_HOUR -> chrono.minuteOfHour();
-      case SECOND_OF_MINUTE -> chrono.secondOfMinute();
-      case MILLIS_OF_SECOND -> chrono.millisOfSecond();
-      default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
-    };
-  }
-
-  /**
    * Gets the field type at the specified index.
    *
    * @param index the index to retrieve
@@ -466,8 +440,6 @@ public final class TimeOfDay extends BasePartial implements ReadablePartial, Ser
   public DateTimeFieldType getFieldType(int index) {
     return FIELD_TYPES[index];
   }
-
-  // CPD-ON
 
   /**
    * Gets an array of the field type of each of the fields that this partial supports.

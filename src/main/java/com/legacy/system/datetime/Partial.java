@@ -17,7 +17,6 @@ package com.legacy.system.datetime;
 
 import com.legacy.system.datetime.base.AbstractPartial;
 import com.legacy.system.datetime.field.AbstractPartialFieldProperty;
-import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 import com.legacy.system.datetime.format.ISODateTimeFormat;
 import java.io.Serializable;
@@ -370,19 +369,6 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
   @Override
   public Chronology getChronology() {
     return iChronology;
-  }
-
-  /**
-   * Gets the field for a specific index in the chronology specified.
-   *
-   * @param index the index to retrieve
-   * @param chrono the chronology to use
-   * @return the field
-   * @throws IndexOutOfBoundsException if the index is invalid
-   */
-  @Override
-  protected DateTimeField getField(int index, Chronology chrono) {
-    return iTypes[index].getField(chrono);
   }
 
   /**
@@ -802,37 +788,6 @@ public final class Partial extends AbstractPartial implements ReadablePartial, S
     }
     buf.append(']');
     return buf.toString();
-  }
-
-  /**
-   * Output the date using the specified format pattern. Unsupported fields will appear as special
-   * unicode characters.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @return the formatted output, not null
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).print(this);
-  }
-
-  /**
-   * Output the date using the specified format pattern. Unsupported fields will appear as special
-   * unicode characters.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @param locale Locale to use, null means default
-   * @return the formatted output, not null
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern, Locale locale) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 
   // -----------------------------------------------------------------------

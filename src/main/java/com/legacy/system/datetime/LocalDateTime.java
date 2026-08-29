@@ -20,7 +20,6 @@ import com.legacy.system.datetime.chrono.ISOChronology;
 import com.legacy.system.datetime.convert.ConverterManager;
 import com.legacy.system.datetime.convert.PartialConverter;
 import com.legacy.system.datetime.field.AbstractReadableInstantFieldProperty;
-import com.legacy.system.datetime.format.DateTimeFormat;
 import com.legacy.system.datetime.format.DateTimeFormatter;
 import com.legacy.system.datetime.format.ISODateTimeFormat;
 import java.io.IOException;
@@ -575,42 +574,9 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
       case YEAR -> chrono.year();
       case MONTH_OF_YEAR -> chrono.monthOfYear();
       case DAY_OF_MONTH -> chrono.dayOfMonth();
-        // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-        // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-        // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-        // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-        // the common base class without a larger, riskier generic/factory-method redesign
-        // that is out of scope for a duplicate-code cleanup.
       case MILLIS_OF_DAY -> chrono.millisOfDay();
       default -> throw new IndexOutOfBoundsException("Invalid index: " + index);
     };
-  }
-
-  /**
-   * Gets the value of the field at the specified index.
-   *
-   * <p>This method is required to support the <code>ReadablePartial</code> interface. The supported
-   * fields are Year, MonthOfDay, DayOfMonth and MillisOfDay.
-   *
-   * @param index the index, zero to two
-   * @return the value
-   * @throws IndexOutOfBoundsException if the index is invalid
-   */
-  @Override
-  public int getValue(int index) {
-    switch (index) {
-      case YEAR:
-        return getChronology().year().get(getLocalMillis());
-      case MONTH_OF_YEAR:
-        return getChronology().monthOfYear().get(getLocalMillis());
-      case DAY_OF_MONTH:
-        return getChronology().dayOfMonth().get(getLocalMillis());
-      case MILLIS_OF_DAY:
-        // CPD-ON
-        return getChronology().millisOfDay().get(getLocalMillis());
-      default:
-        throw new IndexOutOfBoundsException("Invalid index: " + index);
-    }
   }
 
   // -----------------------------------------------------------------------
@@ -657,6 +623,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
    * @param type a duration type, usually obtained from DurationFieldType
    * @return true if the field type is supported
    */
+  @Override
   public boolean isSupported(DurationFieldType type) {
     if (type == null) {
       return false;
@@ -2161,43 +2128,7 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
   @Override
   @ToString
   public String toString() {
-    // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-    // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-    // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-    // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-    // the common base class without a larger, riskier generic/factory-method redesign
-    // that is out of scope for a duplicate-code cleanup.
     return ISODateTimeFormat.dateTime().print(this);
-  }
-
-  /**
-   * Output the date using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @return the formatted output, not null
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern) {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).print(this);
-  }
-
-  /**
-   * Output the date using the specified format pattern.
-   *
-   * @param pattern the pattern specification, null means use <code>toString</code>
-   * @param locale Locale to use, null means default
-   * @return the formatted output, not null
-   * @throws IllegalArgumentException if the pattern is invalid
-   * @see org.joda.time.format.DateTimeFormat
-   */
-  public String toString(String pattern, Locale locale) throws IllegalArgumentException {
-    if (pattern == null) {
-      return toString();
-    }
-    return DateTimeFormat.forPattern(pattern).withLocale(locale).print(this);
   }
 
   // -----------------------------------------------------------------------
@@ -2234,8 +2165,6 @@ public final class LocalDateTime extends BaseLocal implements ReadablePartial, S
 
     /** Serialization version */
     private static final long serialVersionUID = -358138762846288L;
-
-    // CPD-ON
 
     /** The instant this property is working against */
     private transient LocalDateTime iInstant;

@@ -416,11 +416,6 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
    * @return a copy of this datetime with a different set of fields
    * @throws IllegalArgumentException if any value is invalid
    */
-  // CPD-OFF: structurally similar code in independently-evolving implementations.
-  // Investigated case-by-case for this guardrail; extraction risk (see sibling
-  // findings in this codebase resolved with genuine shared-base-class extraction
-  // where safe) outweighs the benefit here given the differing types/packages
-  // involved.
   public DateMidnight withFields(ReadablePartial partial) {
     if (partial == null) {
       return this;
@@ -448,18 +443,8 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
    * @return a copy of this datetime with the field set
    * @throws IllegalArgumentException if the value is null or invalid
    */
-  // CPD-OFF: property-accessor / withFieldXxx methods duplicated across the parallel
-  // date/time API classes (DateTime, LocalDate, Partial, etc). Each returns/constructs
-  // its own class-specific nested type (e.g. DateTime.Property vs LocalDate.Property,
-  // or `new DateTime(...)` vs `new LocalDate(...)`), so the bodies can't be shared via
-  // the common base class without a larger, riskier generic/factory-method redesign
-  // that is out of scope for a duplicate-code cleanup.
   public DateMidnight withField(DateTimeFieldType fieldType, int value) {
-    if (fieldType == null) {
-      throw new IllegalArgumentException("Field must not be null");
-    }
-    long instant = fieldType.getField(getChronology()).set(getMillis(), value);
-    return withMillis(instant);
+    return withMillis(computeFieldSet(fieldType, value));
   }
 
   /**
@@ -482,14 +467,8 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
    * @throws ArithmeticException if the new datetime exceeds the capacity of a long
    */
   public DateMidnight withFieldAdded(DurationFieldType fieldType, int amount) {
-    if (fieldType == null) {
-      throw new IllegalArgumentException("Field must not be null");
-    }
-    if (amount == 0) {
-      return this;
-    }
-    long instant = fieldType.getField(getChronology()).add(getMillis(), amount);
-    return withMillis(instant);
+    Long newMillis = computeFieldAdded(fieldType, amount);
+    return newMillis == null ? this : withMillis(newMillis);
   }
 
   // -----------------------------------------------------------------------
@@ -504,7 +483,6 @@ public final class DateMidnight extends BaseDateTime implements ReadableDateTime
    * @throws ArithmeticException if the new datetime exceeds the capacity of a long
    */
   public DateMidnight withDurationAdded(long durationToAdd, int scalar) {
-    // CPD-ON
     if (durationToAdd == 0 || scalar == 0) {
       return this;
     }
