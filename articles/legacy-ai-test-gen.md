@@ -102,8 +102,9 @@ Claude Codeは `pom.xml`・150以上のソースファイル・JaCoCoのXMLレ�
 
 ---
 
-**本記事は全3回シリーズの第1弾です。**
+**本記事は全4回シリーズの第1弾です。**
 
 1. OSSライブラリで検証：仕様書ゼロからClaude Codeでテスト網羅率93%を達成した話（本記事）
 2. [AIの「やりました」は信用できるか——レガシーJavaのリバースマイグレーションで見た実証と限界](https://zenn.dev/yuninaka/articles/legacy-ai-type-guardrails)
 3. [なぜAgentic Loopに「静的ガードレール」が必要なのか——実測で見えた、トークン肥大化の正体と「止まれる」設計の価値](https://zenn.dev/yuninaka/articles/agentic-loop-static-guardrails)
+4. [「全件は見なくていい」をどこまで信じるか——PMD CPD抑制135件を掘り直し、AI監査委譲を標準化するまで](https://zenn.dev/yuninaka/articles/delegated-audit-workflow)
