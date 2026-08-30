@@ -11,7 +11,7 @@ published: true
 
 [レガシーJavaライブラリの検証プロジェクト](https://github.com/yuninaka/legacy-datetime-lab)で、PMD CPD（重複コード検知）の抑制コメント8件を監査するタスクを、コーディネーター役のエージェントに任せました。実際の監査作業はそのコーディネーターがさらに別のサブエージェントへ委譲する、2階層構成です。
 
-サブエージェントは実際に8クラスタ全件を監査し、CI検証まで完走して、詳細な最終報告を返していました——これは私（依頼元）には確認できていました。ところが、コーディネーター自身に「報告はちゃんと届いているか」と直接尋ねたところ、返ってきたのは意外な答えでした。
+サブエージェントは実際に8クラスタ全件を監査し、CI検証まで完走して、詳細な最終報告を返していました——これは最上位セッション側では確認できていました。ところが、コーディネーター自身に「報告はちゃんと届いているか」と直接尋ねたところ、返ってきたのは意外な答えでした。
 
 > Status check, answered honestly and without further digging: ... So right now I am not relaying a report at all — I have no report to relay yet, verified or otherwise.
 
@@ -40,7 +40,7 @@ https://github.com/yuninaka/claude-code-agent-delegation-repro
 
 **条件A**：コーディネーターへの指示で、サブエージェントに「まず『待機中です』とだけ先に報告し、フォローアップの催促を待ってから本回答を出せ」と明示。実務タスクで起きた構造をそのまま再現する狙いです。
 
-結果、サブエージェント自身は正しい値（3325）を算出し、その報告は私の会話には直接届きました。しかしコーディネーターへ強制的に状態確認をしたところ——
+結果、サブエージェント自身は正しい値（3325）を算出し、その報告は最上位セッションの会話には直接届きました。しかしコーディネーターへ強制的に状態確認をしたところ——
 
 > Current state: I launched the subagent, received its first status update ("I've started the command and am standing by for it to finish"), then sent it a follow-up message asking for the actual result... I have not yet received a reply.
 
@@ -64,7 +64,7 @@ https://github.com/yuninaka/claude-code-agent-delegation-repro
 
 > I attempted to use TaskOutput with block: true exactly as instructed, but that tool does not exist in this environment. I ran ToolSearch three times with different queries... none returned a TaskOutput tool.
 
-**`TaskOutput`というツール自体が、コーディネーター役のサブエージェントの手元には存在しませんでした。** 実行時の失敗ではなく、ツール発見の時点での失敗です。これは、セッションの最上位（この記事の筆者側）が持つツール一覧と、ネストされたサブエージェントが持つツール一覧が同一ではない、という副次的な発見でもあります。
+**`TaskOutput`というツール自体が、コーディネーター役のサブエージェントの手元には存在しませんでした。** 実行時の失敗ではなく、ツール発見の時点での失敗です。これは、最上位セッションが持つツール一覧と、ネストされたサブエージェントが持つツール一覧が同一ではない、という副次的な発見でもあります。
 
 ## 4. 分かったこと
 
