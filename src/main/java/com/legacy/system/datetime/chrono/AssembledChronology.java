@@ -108,6 +108,38 @@ public abstract class AssembledChronology extends BaseChronology {
     return null;
   }
 
+  /**
+   * Returns this chronology's own UTC singleton instance, for use by the default {@link #withUTC()}
+   * below. Overridden by concrete calendar-system Chronologies that maintain their own static
+   * per-zone singleton cache; subclasses that override {@link #withUTC()} directly instead (wrapper
+   * Chronologies such as Limit/Zoned/Lenient/Strict/GJ) need not override this.
+   */
+  protected Chronology getCachedInstanceUTC() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Returns this chronology's own singleton instance for the given non-null zone. See {@link
+   * #getCachedInstanceUTC()}; used by the default {@link #withZone(DateTimeZone)} below.
+   */
+  protected Chronology getCachedInstance(DateTimeZone zone) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Chronology withUTC() {
+    return getCachedInstanceUTC();
+  }
+
+  @Override
+  public Chronology withZone(DateTimeZone zone) {
+    DateTimeZone targetZone = (zone == null) ? DateTimeZone.getDefault() : zone;
+    if (targetZone.equals(getZone())) {
+      return this;
+    }
+    return getCachedInstance(targetZone);
+  }
+
   @Override
   public long getDateTimeMillis(int year, int monthOfYear, int dayOfMonth, int millisOfDay)
       throws IllegalArgumentException {
@@ -352,6 +384,39 @@ public abstract class AssembledChronology extends BaseChronology {
    */
   protected final Object getParam() {
     return iParam;
+  }
+
+  /**
+   * Delegates to the base chronology's {@link Chronology#getDateTimeMillis(int, int, int, int)}, if
+   * a base chronology is configured for this instance.
+   *
+   * @return the base chronology's result, or null if no base chronology is configured
+   */
+  protected final Long getBaseDateTimeMillis(
+      int year, int monthOfYear, int dayOfMonth, int millisOfDay) {
+    Chronology base = getBase();
+    return base == null ? null : base.getDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
+  }
+
+  /**
+   * Delegates to the base chronology's {@link Chronology#getDateTimeMillis(int, int, int, int, int,
+   * int, int)}, if a base chronology is configured for this instance.
+   *
+   * @return the base chronology's result, or null if no base chronology is configured
+   */
+  protected final Long getBaseDateTimeMillis(
+      int year,
+      int monthOfYear,
+      int dayOfMonth,
+      int hourOfDay,
+      int minuteOfHour,
+      int secondOfMinute,
+      int millisOfSecond) {
+    Chronology base = getBase();
+    return base == null
+        ? null
+        : base.getDateTimeMillis(
+            year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
   }
 
   private void setFields() {

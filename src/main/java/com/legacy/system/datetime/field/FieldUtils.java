@@ -18,6 +18,7 @@ package com.legacy.system.datetime.field;
 import com.legacy.system.datetime.DateTimeField;
 import com.legacy.system.datetime.DateTimeFieldType;
 import com.legacy.system.datetime.IllegalFieldValueException;
+import com.legacy.system.datetime.ReadablePartial;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -366,5 +367,24 @@ public final class FieldUtils {
       return false;
     }
     return object1.equals(object2);
+  }
+
+  // -----------------------------------------------------------------------
+  /**
+   * Finds the index of the given field type within a partial's supported fields.
+   *
+   * @param partial the partial to search, not null
+   * @param fieldType the field type to look for, not null
+   * @return the index of the field, or -1 if the partial does not support it
+   * @since 2.14
+   */
+  public static int getPartialFieldIndex(ReadablePartial partial, DateTimeFieldType fieldType) {
+    int size = partial.size();
+    for (int i = 0; i < size; i++) {
+      if (partial.getFieldType(i) == fieldType) {
+        return i;
+      }
+    }
+    return -1;
   }
 }

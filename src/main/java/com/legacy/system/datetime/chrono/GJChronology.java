@@ -269,13 +269,6 @@ public final class GJChronology extends AssembledChronology {
       return base.getZone();
     }
     return DateTimeZone.UTC;
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
   }
 
   // Conversion
@@ -310,11 +303,10 @@ public final class GJChronology extends AssembledChronology {
   @Override
   public long getDateTimeMillis(int year, int monthOfYear, int dayOfMonth, int millisOfDay)
       throws IllegalArgumentException {
-    Chronology base;
-    if ((base = getBase()) != null) {
-      return base.getDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
+    Long baseMillis = getBaseDateTimeMillis(year, monthOfYear, dayOfMonth, millisOfDay);
+    if (baseMillis != null) {
+      return baseMillis;
     }
-    // CPD-ON
 
     // Assume date is Gregorian.
     long instant =
@@ -328,15 +320,14 @@ public final class GJChronology extends AssembledChronology {
       }
     }
     return instant;
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
   }
 
+  // CPD-OFF: the base-delegation preamble here matches BasicChronology's 7-arg getDateTimeMillis
+  // override byte-for-byte (both call the shared AssembledChronology.getBaseDateTimeMillis
+  // helper the same way), but the two methods' post-preamble bodies diverge completely, so
+  // sharing just the preamble would need a template-method hook across all AssembledChronology
+  // subclasses' getDateTimeMillis overloads - the same class of redesign already deferred for
+  // the decorator chronologies' assemble() hooks.
   @Override
   public long getDateTimeMillis(
       int year,
@@ -347,10 +338,11 @@ public final class GJChronology extends AssembledChronology {
       int secondOfMinute,
       int millisOfSecond)
       throws IllegalArgumentException {
-    Chronology base;
-    if ((base = getBase()) != null) {
-      return base.getDateTimeMillis(
-          year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
+    Long baseMillis =
+        getBaseDateTimeMillis(
+            year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
+    if (baseMillis != null) {
+      return baseMillis;
     }
     // CPD-ON
 

@@ -128,17 +128,7 @@ public abstract class BaseChronology extends Chronology implements Serializable 
     long instant = year().set(0, year);
     instant = monthOfYear().set(instant, monthOfYear);
     instant = dayOfMonth().set(instant, dayOfMonth);
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
-    instant = hourOfDay().set(instant, hourOfDay);
-    instant = minuteOfHour().set(instant, minuteOfHour);
-    instant = secondOfMinute().set(instant, secondOfMinute);
-    return millisOfSecond().set(instant, millisOfSecond);
+    return getDateTimeMillis(instant, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
   }
 
   /**

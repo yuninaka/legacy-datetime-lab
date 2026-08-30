@@ -18,6 +18,7 @@ package com.legacy.system.datetime.chrono;
 import com.legacy.system.datetime.DateTimeFieldType;
 import com.legacy.system.datetime.DurationField;
 import com.legacy.system.datetime.ReadablePartial;
+import com.legacy.system.datetime.field.FieldUtils;
 import com.legacy.system.datetime.field.PreciseDurationDateTimeField;
 
 /**
@@ -79,27 +80,16 @@ final class BasicDayOfYearDateTimeField extends PreciseDurationDateTimeField {
       int year = partial.get(DateTimeFieldType.year());
       return iChronology.getDaysInYear(year);
     }
-    // CPD-OFF: near-identical assemble()/field-setup code across distinct concrete
-    // Chronology implementations (different calendar systems, or wrapper Chronologies
-    // like Limit/Zoned/Lenient/Strict). This codebase deliberately keeps each calendar
-    // system as its own type (see BasicChronology.equals()'s getClass() check: two
-    // different chronologies must never be considered equal), so merging this setup
-    // code risks blurring that boundary or hard-coding one calendar's constants into
-    // a shared path used by another.
     return iChronology.getDaysInYearMax();
   }
 
   @Override
   public int getMaximumValue(ReadablePartial partial, int[] values) {
-    int size = partial.size();
-    for (int i = 0; i < size; i++) {
-      if (partial.getFieldType(i) == DateTimeFieldType.year()) {
-        // CPD-ON
-        int year = values[i];
-        return iChronology.getDaysInYear(year);
-      }
+    int yearIndex = FieldUtils.getPartialFieldIndex(partial, DateTimeFieldType.year());
+    if (yearIndex < 0) {
+      return iChronology.getDaysInYearMax();
     }
-    return iChronology.getDaysInYearMax();
+    return iChronology.getDaysInYear(values[yearIndex]);
   }
 
   @Override
